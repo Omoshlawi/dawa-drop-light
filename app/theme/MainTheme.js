@@ -13,9 +13,14 @@ const MainTheme = ({ children }) => {
         colors: {
           primary: "#00ACA9",
           accent: "#00353C",
-          background: "#ECF7F7",
+          background: "#fff",
           onPrimary: "#FFF",
+          disabled: "#AAC8C8",
+          error: "#FF1616",
+          outline: "#54F7F4",
+          secondary: "#54F7F4",
         },
+        roundness: 10,
       }}
     >
       {children}

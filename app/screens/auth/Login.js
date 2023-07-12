@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import Logo from "../../components/Logo";
 import { screenWidth } from "../../utils/contants";
 import { Form, FormField, FormSubmitButton } from "../../components/forms";
 import * as Yup from "yup";
+import { Text } from "react-native-paper";
 
 const initialValues = {
   username: "",
@@ -32,11 +33,13 @@ const Login = ({ navigation }) => {
             placeholder="Enter Username"
             label="Username"
             name="username"
+            icon="account"
           />
           <FormField
             placeholder="Enter Password"
             label="Password"
             name="password"
+            icon="lock"
             password
           />
           <FormSubmitButton
@@ -44,6 +47,8 @@ const Login = ({ navigation }) => {
             mode="contained"
             style={styles.btn}
           />
+
+          <Text>Don't have an account?</Text>
         </Form>
       </View>
     </View>
