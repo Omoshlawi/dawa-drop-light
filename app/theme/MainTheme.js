@@ -21,6 +21,7 @@ const MainTheme = ({ children }) => {
           outline: "#54F7F4",
           secondary: "#54F7F4",
           white: "#fff",
+          surface: "#fff",
         },
         roundness: 10,
       }}

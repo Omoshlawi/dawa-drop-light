@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { SafeArea } from "../../../components/layout";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
-    <View>
-      <Text>Home</Text>
-    </View>
+    <SafeArea>
+      <Text>Home screen</Text>
+    </SafeArea>
   );
 };
 
