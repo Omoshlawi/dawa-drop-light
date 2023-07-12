@@ -59,6 +59,9 @@ const BottomTabNavigation = () => {
             <MaterialCommunityIcons name="account" {...props} />
           ),
           tabBarLabel: "Account",
+          headerTitle: "Account Settings",
+          headerShown: true,
+          headerTitleAlign: "center",
         }}
       />
     </Navigator>
