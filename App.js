@@ -2,12 +2,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import AuthNavigation from "./app/navigation/AuthNavigation";
+import { PaperProvider } from "react-native-paper";
+import MainTheme from "./app/theme/MainTheme";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AuthNavigation />
-    </NavigationContainer>
+    <MainTheme>
+      <NavigationContainer>
+        <AuthNavigation />
+      </NavigationContainer>
+    </MainTheme>
   );
 }
 
