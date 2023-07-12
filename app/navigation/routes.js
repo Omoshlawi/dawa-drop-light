@@ -6,4 +6,6 @@ export default Object.freeze({
 
   BTAB_NAVIGATION: "Bottom Tab Nav",
   BTAB_HOME_SCREEN: "Home Screen",
+  BTAB_ACCOUNT_SCREEN: "Account Screen",
+  BTAB_ACTION_SCREEN: "Actions Screen",
 });

@@ -19,6 +19,7 @@ const MainTheme = ({ children }) => {
           error: "#FF1616",
           outline: "#54F7F4",
           secondary: "#54F7F4",
+          white: "#fff",
         },
         roundness: 10,
       }}
