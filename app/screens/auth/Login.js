@@ -1,10 +1,13 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../../components/Logo";
 import { screenWidth } from "../../utils/contants";
 import { Form, FormField, FormSubmitButton } from "../../components/forms";
 import * as Yup from "yup";
-import { Text } from "react-native-paper";
+import { useAuth } from "../../api";
+import { useUserContext } from "../../context/hooks";
+import LinkedText from "../../components/LinkedText";
+import routes from "../../navigation/routes";
 
 const initialValues = {
   username: "",
@@ -17,8 +20,22 @@ const validationSchemer = Yup.object().shape({
 });
 
 const Login = ({ navigation }) => {
+  const { login } = useAuth();
+  const { setToken } = useUserContext();
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (values, { setFieldError }) => {
-    console.log(values);
+    setLoading(true);
+    const response = await login(values);
+    setLoading(false);
+    if (response.ok) {
+      const token = response.headers["x-auth-token"];
+      setToken(token);
+    } else {
+      if (response.status === 400) {
+        setFieldError("username", " ");
+        setFieldError("password", response.data.detail);
+      }
+    }
   };
   return (
     <View style={styles.screen}>
@@ -34,6 +51,7 @@ const Login = ({ navigation }) => {
             label="Username"
             name="username"
             icon="account"
+            autoCapitalize="none"
           />
           <FormField
             placeholder="Enter Password"
@@ -41,14 +59,20 @@ const Login = ({ navigation }) => {
             name="password"
             icon="lock"
             password
+            autoCapitalize="none"
           />
           <FormSubmitButton
             title="Sign In"
             mode="contained"
+            loading={loading}
+            disabled={loading}
             style={styles.btn}
           />
-
-          <Text>Don't have an account?</Text>
+          <LinkedText
+            text="Dont have an account? "
+            link="Create"
+            onPress={() => navigation.navigate(routes.AUTH_REGISTER_SCREEN)}
+          />
         </Form>
       </View>
     </View>
