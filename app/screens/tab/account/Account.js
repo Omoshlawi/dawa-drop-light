@@ -16,8 +16,9 @@ import {
 import { useAuth, useUser } from "../../../api";
 import { Alert } from "react-native";
 import Dialog from "../../../components/dialog/Dialog";
+import routes from "../../../navigation/routes";
 
-const Account = () => {
+const Account = ({ navigation }) => {
   const { getUser, logout } = useUser();
   const { colors } = useTheme();
   const [user, setUser] = useState(null);
@@ -45,7 +46,13 @@ const Account = () => {
           right={(props) => <IconButton {...props} icon="chevron-right" />}
         />
       )}
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(routes.USER_NAVIGATION, {
+            screen: routes.USER_CHANGE_PWD_SCREEN,
+          });
+        }}
+      >
         <Card.Title
           style={[styles.listItem, { backgroundColor: colors.surface }]}
           subtitle="Change Password"
@@ -82,6 +89,7 @@ const Account = () => {
           )}
         />
       </TouchableOpacity>
+
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.surface }]}
         title="Logout"

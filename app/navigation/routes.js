@@ -8,4 +8,7 @@ export default Object.freeze({
   BTAB_HOME_SCREEN: "Home Screen",
   BTAB_ACCOUNT_SCREEN: "Account Screen",
   BTAB_ACTION_SCREEN: "Actions Screen",
+
+  USER_NAVIGATION: "User Nav",
+  USER_CHANGE_PWD_SCREEN: "Change Password",
 });

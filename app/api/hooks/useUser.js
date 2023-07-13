@@ -12,7 +12,9 @@ const useUser = () => {
   }
   const getUser = () => apiClient.get("auth/profile");
   const logout = () => clearToken(true);
-  return { getUser, logout };
+  const changePassword = (data) =>
+    apiClient.post("/auth/change-password", data);
+  return { getUser, logout, changePassword };
 };
 
 export default useUser;

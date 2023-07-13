@@ -3,7 +3,7 @@ import { create } from "apisauce";
 // http://192.168.100.5:8000/properties/
 // http://applemaster.co.ke:8000/
 // http://192.168.100.5:8000/
-const apiClient = create({ baseURL: "http://192.168.100.5:5000/" });
-
+// const apiClient = create({ baseURL: "http://192.168.100.5:5000/" });
+const apiClient = create({ baseURL: "http://192.168.0.102:5000/" });
 
 export default apiClient;
