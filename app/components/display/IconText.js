@@ -1,18 +1,15 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
-import colors from "../../utils/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const IconText = ({
   icon,
   text,
-  color = colors.primary,
   size,
   fontWeight,
   left = true,
   onPress,
   disabled = false,
-  disabledColor = colors.medium,
   forceEnable = false,
 }) => {
   const disableBtn =
@@ -27,13 +24,7 @@ const IconText = ({
       onPress={onPress}
       disabled={disableBtn}
     >
-      {icon && (
-        <MaterialCommunityIcons
-          name={icon}
-          size={size}
-          color={disableBtn ? disabledColor : color}
-        />
-      )}
+      {icon && <MaterialCommunityIcons name={icon} size={size} />}
       {text && (
         <Text
           numberOfLines={1}
@@ -42,7 +33,6 @@ const IconText = ({
             {
               fontSize: size,
               fontWeight,
-              color: disableBtn ? disabledColor : color,
             },
           ]}
         >

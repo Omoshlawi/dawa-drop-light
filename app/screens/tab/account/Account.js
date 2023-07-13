@@ -1,8 +1,6 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../../components/layout";
-import jwtDecode from "jwt-decode";
-import { useUserContext } from "../../../context/hooks";
 import { useFocusEffect } from "@react-navigation/native";
 import {
   Avatar,
@@ -13,7 +11,7 @@ import {
   Button,
   Text,
 } from "react-native-paper";
-import { useAuth, useUser } from "../../../api";
+import { useUser } from "../../../api";
 import { Alert } from "react-native";
 import Dialog from "../../../components/dialog/Dialog";
 import routes from "../../../navigation/routes";
@@ -38,14 +36,23 @@ const Account = ({ navigation }) => {
   return (
     <SafeArea>
       {user && (
-        <Card.Title
-          title={user.username}
-          titleVariant="titleLarge"
-          left={(props) => <Avatar.Icon icon="account" {...props} />}
-          subtitle={user.email}
-          style={[styles.listItem, { backgroundColor: colors.surface }]}
-          right={(props) => <IconButton {...props} icon="chevron-right" />}
-        />
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(routes.USER_NAVIGATION, {
+              screen: routes.USER_CHANGE_PROFILE_UPDATE_SCREEN,
+              params: user,
+            })
+          }
+        >
+          <Card.Title
+            title={user.username}
+            titleVariant="titleLarge"
+            left={(props) => <Avatar.Icon icon="account" {...props} />}
+            subtitle={user.email}
+            style={[styles.listItem, { backgroundColor: colors.surface }]}
+            right={(props) => <IconButton {...props} icon="chevron-right" />}
+          />
+        </TouchableOpacity>
       )}
       <CardTitle
         text="Change Password"

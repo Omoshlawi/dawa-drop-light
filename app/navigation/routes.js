@@ -11,4 +11,5 @@ export default Object.freeze({
 
   USER_NAVIGATION: "User Nav",
   USER_CHANGE_PWD_SCREEN: "Change Password",
+  USER_CHANGE_PROFILE_UPDATE_SCREEN: "Update Profile",
 });
