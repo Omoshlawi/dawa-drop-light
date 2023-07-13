@@ -6,8 +6,8 @@ import { Form, FormField, FormSubmitButton } from "../../components/forms";
 import * as Yup from "yup";
 import { useAuth } from "../../api";
 import { useUserContext } from "../../context/hooks";
-import LinkedText from "../../components/LinkedText";
 import routes from "../../navigation/routes";
+import { LinkedText } from "../../components/display";
 
 const initialValues = {
   username: "",

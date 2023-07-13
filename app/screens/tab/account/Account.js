@@ -17,6 +17,7 @@ import { useAuth, useUser } from "../../../api";
 import { Alert } from "react-native";
 import Dialog from "../../../components/dialog/Dialog";
 import routes from "../../../navigation/routes";
+import { CardTitle } from "../../../components/common";
 
 const Account = ({ navigation }) => {
   const { getUser, logout } = useUser();
@@ -46,50 +47,21 @@ const Account = ({ navigation }) => {
           right={(props) => <IconButton {...props} icon="chevron-right" />}
         />
       )}
-      <TouchableOpacity
+      <CardTitle
+        text="Change Password"
         onPress={() => {
           navigation.navigate(routes.USER_NAVIGATION, {
             screen: routes.USER_CHANGE_PWD_SCREEN,
           });
         }}
-      >
-        <Card.Title
-          style={[styles.listItem, { backgroundColor: colors.surface }]}
-          subtitle="Change Password"
-          subtitleVariant="bodyLarge"
-          left={(props) => (
-            <Avatar.Icon style={styles.icon} {...props} icon="key" />
-          )}
-          right={(props) => (
-            <IconButton {...props} icon="chevron-right" disabled />
-          )}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {}}>
-        <Card.Title
-          style={[styles.listItem, { backgroundColor: colors.surface }]}
-          subtitle="Settings"
-          subtitleVariant="bodyLarge"
-          left={(props) => <Avatar.Icon {...props} icon="cogs" />}
-          right={(props) => (
-            <IconButton {...props} icon="chevron-right" disabled />
-          )}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => setShowAbout(true)}>
-        <Card.Title
-          style={[styles.listItem, { backgroundColor: colors.surface }]}
-          subtitle="About"
-          subtitleVariant="bodyLarge"
-          left={(props) => (
-            <Avatar.Icon {...props} icon="information-variant" />
-          )}
-          right={(props) => (
-            <IconButton {...props} icon="chevron-right" disabled />
-          )}
-        />
-      </TouchableOpacity>
-
+        icon="key"
+      />
+      <CardTitle text="Settings" onPress={() => {}} icon="cogs" />
+      <CardTitle
+        text="About"
+        onPress={() => setShowAbout(true)}
+        icon="information-variant"
+      />
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.surface }]}
         title="Logout"
