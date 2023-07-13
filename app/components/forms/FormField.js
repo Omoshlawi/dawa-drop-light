@@ -18,10 +18,10 @@ const FormField = ({
   const {
     colors: { secondary },
   } = useTheme();
-  const [hide, setHide] = useState(true);
   const {
     colors: { error },
   } = useTheme();
+  const [hide, setHide] = useState(true);
   return (
     <View>
       <TextInput
