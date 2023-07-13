@@ -1,12 +1,12 @@
 import { Image, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import React, { useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../../utils/colors";
 import {
   launchImageLibraryAsync,
   MediaTypeOptions,
   useMediaLibraryPermissions,
 } from "expo-image-picker";
+import { useTheme } from "react-native-paper";
 
 const ImageInput = ({
   size = 100,
@@ -14,6 +14,7 @@ const ImageInput = ({
   radiusScaleFactor = 0.5,
   localImage,
 }) => {
+  const { colors } = useTheme();
   const [status, requestPermision] = useMediaLibraryPermissions();
   const handleOnClick = async () => {
     if (localImage) {
@@ -83,7 +84,6 @@ const ImageInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.light,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",

@@ -2,11 +2,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../../utils/colors";
-import { IconButton } from "react-native-paper";
+import { IconButton, useTheme } from "react-native-paper";
 import { Modal } from "react-native";
 
-const AppPicker = ({
+const ModalPicker = ({
   icon,
   data = [],
   valueExtractor,
@@ -21,6 +20,7 @@ const AppPicker = ({
   titleStyle,
   contentContainerStyle,
 }) => {
+  const { colors } = useTheme();
   const [showModal, setShowModal] = useState(false);
   const current = data.find((item) => valueExtractor(item) === value);
   return (
@@ -76,14 +76,13 @@ const AppPicker = ({
   );
 };
 
-export default AppPicker;
+export default ModalPicker;
 
 const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     margin: 5,
     paddingHorizontal: 5,
-    backgroundColor: colors.white,
     borderRadius: 20,
     alignItems: "center",
   },
@@ -92,7 +91,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   mordal: {
-    backgroundColor: colors.light1,
     flex: 1,
   },
   close: {
@@ -104,17 +102,11 @@ const styles = StyleSheet.create({
   title: {
     padding: 10,
     textAlign: "center",
-    color: colors.primary,
   },
 
   listItem: {
-    backgroundColor: colors.white,
     marginTop: 8,
   },
-  itemDescription: {
-    color: colors.medium,
-  },
-  itemTitle: {
-    color: colors.black,
-  },
+  itemDescription: {},
+  itemTitle: {},
 });

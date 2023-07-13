@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import ImageInput from "../input/ImageInput";
+import { ImageInput } from "../input";
 import { useFormikContext } from "formik";
-import AppErrorMessage from "./AppErrorMessage";
 
-const FormImagePicker = ({ name }) => {
+const FormImagePickerer31 = ({ name }) => {
   const { values, setFieldValue, errors, touched } = useFormikContext();
+  const {
+    colors: { secondary, error },
+  } = useTheme();
   return (
     <>
       <ImageInput
@@ -18,11 +20,13 @@ const FormImagePicker = ({ name }) => {
           }
         }}
       />
-      <AppErrorMessage error={errors[name]} visible={touched[name]} />
+      {errors[name] && touched && (
+        <Text style={{ color: error, paddingLeft: 5 }}>{errors[name]}</Text>
+      )}
     </>
   );
 };
 
-export default FormImagePicker;
+export default FormImagePickerer31;
 
 const styles = StyleSheet.create({});

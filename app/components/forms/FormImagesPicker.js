@@ -1,17 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { ImageInputList } from "../input";
-import AppErrorMessage from "./AppErrorMessage";
 import { useFormikContext } from "formik";
 import { useTheme } from "react-native-paper";
 
 const FormImagesPicker = ({ name }) => {
   const { values, setFieldValue, errors, touched } = useFormikContext();
   const {
-    colors: { secondary },
-  } = useTheme();
-  const {
-    colors: { error },
+    colors: { secondary, error },
   } = useTheme();
   return (
     <>

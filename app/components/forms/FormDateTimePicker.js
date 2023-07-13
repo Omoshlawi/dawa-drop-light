@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useFormikContext } from "formik";
-import AppErrorMessage from "./AppErrorMessage";
 import { DateTimePicker } from "../input";
 
 const FormDateTimePicker = ({ name, ...otherProps }) => {
   const { setFieldTouched, handleChange, touched, errors, values } =
     useFormikContext();
+  const {
+    colors: { secondary, error },
+  } = useTheme();
   return (
     <>
       <DateTimePicker
@@ -17,7 +19,9 @@ const FormDateTimePicker = ({ name, ...otherProps }) => {
         }}
         {...otherProps}
       />
-      <AppErrorMessage error={errors[name]} visible={touched[name]} />
+      {errors[name] && touched && (
+        <Text style={{ color: error, paddingLeft: 5 }}>{errors[name]}</Text>
+      )}
     </>
   );
 };

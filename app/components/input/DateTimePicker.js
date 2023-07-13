@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { default as ExpoDateTimePicker } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { Button, IconButton } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -40,7 +40,7 @@ const DateTimePicker = ({
         value={date.toDateString()}
       />
       {show && (
-        <DateTimePicker
+        <ExpoDateTimePicker
           testID="dateTimePicker"
           value={date}
           mode={mode}

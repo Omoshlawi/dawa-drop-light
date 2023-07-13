@@ -16,10 +16,7 @@ const FormField = ({
   const { setFieldTouched, handleChange, touched, errors, values } =
     useFormikContext();
   const {
-    colors: { secondary },
-  } = useTheme();
-  const {
-    colors: { error },
+    colors: { secondary, error },
   } = useTheme();
   const [hide, setHide] = useState(true);
   return (
