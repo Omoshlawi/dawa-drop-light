@@ -15,14 +15,15 @@ const MainTheme = ({ children }) => {
           accent: "#00353C",
           background: "#E1EDED", //"#F0FFFF"->light
           medium: "#AAC8C8",
-          onPrimary: "#FFF",
+          onPrimary: "#000",
           disabled: "#AAC8C8",
           error: "#FF1616",
           outline: "#54F7F4",
           secondary: "#54F7F4",
           white: "#fff",
           surface: "#fff",
-          onSurface: "#AAC8C8",
+          onSurface: "#00353C",
+          waningLight: "#FBF0DC",
         },
         roundness: 10,
       }}
