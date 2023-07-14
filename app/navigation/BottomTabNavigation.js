@@ -2,11 +2,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View, StyleSheet, Image } from "react-native";
 import { useEffect, useState } from "react";
-import { Home } from "../screens/tab";
+import { Home, Account, ActionsMenu } from "../screens/tab";
 import routes from "./routes";
-import Account from "../screens/tab/account/Account";
 import { useTheme } from "react-native-paper";
-import ActionsMenu from "../screens/tab/actions/ActionsMenu";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 const BottomTabNavigation = () => {
