@@ -2,8 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { ImageInput } from "../input";
 import { useFormikContext } from "formik";
+import { useTheme } from "react-native-paper";
 
-const FormImagePickerer31 = ({ name }) => {
+const FormImagePickerer = ({ name }) => {
   const { values, setFieldValue, errors, touched } = useFormikContext();
   const {
     colors: { secondary, error },
@@ -27,6 +28,6 @@ const FormImagePickerer31 = ({ name }) => {
   );
 };
 
-export default FormImagePickerer31;
+export default FormImagePickerer;
 
 const styles = StyleSheet.create({});

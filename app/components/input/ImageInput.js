@@ -65,7 +65,12 @@ const ImageInput = ({
       <View
         style={[
           styles.container,
-          { width: size, height: size, borderRadius: size * radiusScaleFactor },
+          {
+            width: size,
+            height: size,
+            borderRadius: size * radiusScaleFactor,
+            backgroundColor: colors.accent,
+          },
         ]}
       >
         {localImage ? (

@@ -1,3 +1,5 @@
+import { BASE_URL } from "./contants";
+
 const _ = require("lodash");
 export const zip = (ar1, ar2) => {
   if (
@@ -58,3 +60,6 @@ export const pickX = (obj, paths) =>
     },
     {}
   );
+
+export const getImageUrl = (path, defaultValue = null) =>
+  path ? `${BASE_URL}${path}` : defaultValue;

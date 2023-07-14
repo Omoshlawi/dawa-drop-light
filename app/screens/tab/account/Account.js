@@ -16,6 +16,7 @@ import { Alert } from "react-native";
 import Dialog from "../../../components/dialog/Dialog";
 import routes from "../../../navigation/routes";
 import { CardTitle } from "../../../components/common";
+import { getImageUrl } from "../../../utils/helpers";
 
 const Account = ({ navigation }) => {
   const { getUser, logout } = useUser();
@@ -47,7 +48,16 @@ const Account = ({ navigation }) => {
           <Card.Title
             title={user.username}
             titleVariant="titleLarge"
-            left={(props) => <Avatar.Icon icon="account" {...props} />}
+            left={(props) =>
+              user.image ? (
+                <Avatar.Image
+                  {...props}
+                  source={{ uri: getImageUrl(user.image) }}
+                />
+              ) : (
+                <Avatar.Icon icon="account" {...props} />
+              )
+            }
             subtitle={user.email}
             style={[styles.listItem, { backgroundColor: colors.surface }]}
             right={(props) => <IconButton {...props} icon="chevron-right" />}
