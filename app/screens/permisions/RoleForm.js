@@ -4,20 +4,28 @@ import { SafeArea } from "../../components/layout";
 import * as Yup from "yup";
 import { useAuthorize } from "../../api";
 import Logo from "../../components/Logo";
-import { Form, FormField, FormSubmitButton } from "../../components/forms";
+import {
+  Form,
+  FormDropDown,
+  FormField,
+  FormSubmitButton,
+} from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
 import { Button, Text } from "react-native-paper";
+import { DropDown } from "../../components/input";
 
 const validationSchemer = Yup.object().shape({
   name: Yup.string().label("Role Name").required(),
   description: Yup.string().label("Role Description").required(),
+  menuOptions: Yup.string().label("Role Menu Options").required(),
+  privileges: Yup.string().label("Role Privileges").required(),
 });
 const RoleForm = ({ navigation, route }) => {
   const { addRoles, updateRole } = useAuthorize();
   const [loading, setLoading] = useState(false);
-  const defaultValues = route.params;
+  const { role: defaultValues, menuOptions, privileges } = route.params;
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message: "Role Added Successfully!",
@@ -60,10 +68,22 @@ const RoleForm = ({ navigation, route }) => {
           <Form
             initialValues={
               defaultValues
-                ? pickX(defaultValues, ["name", "description"])
+                ? pickX(
+                    {
+                      ...defaultValues,
+                      privileges: defaultValues.privileges.map(
+                        ({ _id }) => _id
+                      ),
+                      menuOptions: defaultValues.menuOptions.map(
+                        ({ _id }) => _id
+                      ),
+                    },
+                    ["name", "description", "privileges", "menuOptions"]
+                  )
                 : {
                     name: "",
                     description: "",
+                    privileges: [],
                   }
             }
             validationSchema={validationSchemer}
@@ -82,6 +102,20 @@ const RoleForm = ({ navigation, route }) => {
               icon="information-variant"
               multiline
               numberOfLines={10}
+            />
+            <FormDropDown
+              name="privileges"
+              items={privileges}
+              schemaMapper={(item) => ({ label: item.name, value: item._id })}
+              placeholder="Select Privileges"
+              multiple
+            />
+            <FormDropDown
+              name="menuOptions"
+              items={menuOptions}
+              schemaMapper={(item) => ({ label: item.label, value: item._id })}
+              placeholder="Select Menu Options"
+              multiple
             />
             <FormSubmitButton
               title={defaultValues ? "Update Role" : "Add Role"}
@@ -102,7 +136,6 @@ const RoleForm = ({ navigation, route }) => {
             style={styles.img}
             source={getDialogIcon(dialogInfo.success ? "success" : "error")}
           />
-          {console.log({ getDialogIcon })}
           <Text style={styles.text}>{dialogInfo.message}</Text>
           <Button
             mode="outlined"

@@ -51,7 +51,6 @@ const ActionsMenu = ({ navigation }) => {
             <TouchableOpacity
               key={index}
               onPress={() => {
-                console.log({ route, screen, params });
                 navigation.navigate(route, { screen, params });
               }}
             >

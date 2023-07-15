@@ -69,3 +69,33 @@ export const getRandomElementFromArray = (array) => {
   return array[randomIndex];
 };
 
+export const callNumber = (phone) => {
+  console.log("callNumber ----> ", phone);
+  let phoneNumber = phone;
+  if (Platform.OS !== "android") {
+    phoneNumber = `telprompt:${phone}`;
+  } else {
+    phoneNumber = `tel:${phone}`;
+  }
+  Linking.canOpenURL(phoneNumber)
+    .then((supported) => {
+      if (!supported) {
+        Alert.alert("Phone number is not available");
+      } else {
+        return Linking.openURL(phoneNumber);
+      }
+    })
+    .catch((err) => console.log(err));
+};
+
+export function getRandomColor() {
+  // Generate random RGB values between 0 and 255
+  var r = Math.floor(Math.random() * 256);
+  var g = Math.floor(Math.random() * 256);
+  var b = Math.floor(Math.random() * 256);
+
+  // Create the CSS color string in RGB format
+  var color = "rgb(" + r + ", " + g + ", " + b + ")";
+
+  return color;
+}

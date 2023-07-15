@@ -8,8 +8,10 @@ import { Avatar, Card, FAB, List, useTheme } from "react-native-paper";
 import routes from "../../navigation/routes";
 
 const Roles = ({ navigation }) => {
-  const { getRoles } = useAuthorize();
+  const { getRoles, getPrivileges, getMenuOptions } = useAuthorize();
   const [roles, setRoles] = useState([]);
+  const [privileges, setPrivileges] = useState([]);
+  const [menuOptions, setMenuOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const { colors } = useTheme();
   useFocusEffect(
@@ -21,14 +23,24 @@ const Roles = ({ navigation }) => {
   const handleFetchRoles = async () => {
     setLoading(true);
     const response = await getRoles();
+    const pResponse = await getPrivileges();
+    const mResponse = await getMenuOptions();
     setLoading(false);
     if (response.ok) {
       setRoles(response.data.results);
+    }
+    if (pResponse.ok) {
+      setPrivileges(pResponse.data.results);
+    }
+    if (mResponse.ok) {
+      setMenuOptions(mResponse.data.results);
     }
   };
   return (
     <SafeArea>
       <FlatList
+        refreshing={loading}
+        onRefresh={handleFetchRoles}
         data={roles}
         keyExtractor={({ _id }) => _id}
         renderItem={({ item }) => {
@@ -38,7 +50,7 @@ const Roles = ({ navigation }) => {
               onPress={() =>
                 navigation.navigate(routes.ACTION_NAVIGATION, {
                   screen: routes.ACTION_ROLE_FORM_SCREEN,
-                  params: item,
+                  params: { privileges, menuOptions, role: item },
                 })
               }
             >
@@ -72,6 +84,7 @@ const Roles = ({ navigation }) => {
         onPress={() =>
           navigation.navigate(routes.ACTION_NAVIGATION, {
             screen: routes.ACTION_ROLE_FORM_SCREEN,
+            params: { privileges, menuOptions },
           })
         }
         color={colors.surface}
