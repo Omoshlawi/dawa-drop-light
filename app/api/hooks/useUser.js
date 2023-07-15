@@ -1,15 +1,10 @@
 import { useUserContext } from "../../context/hooks";
 import apiClient from "../client";
+import { addTokenInterceptor } from "../helpers";
 
 const useUser = () => {
-  const { token, clearToken } = useUserContext();
-  if (token) {
-    apiClient.addRequestTransform((request) => {
-      // Add the authentication token to the request header.
-      request.headers["x-auth-token"] = token;
-      return request;
-    });
-  }
+  const { clearToken } = useUserContext();
+  addTokenInterceptor();
   const getUser = () => apiClient.get("auth/profile");
   const logout = () => clearToken(true);
   const changePassword = (data) => apiClient.post("auth/change-password", data);

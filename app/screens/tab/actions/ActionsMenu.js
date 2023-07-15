@@ -35,7 +35,6 @@ const ActionsMenu = ({ navigation }) => {
         contentContainerStyle={styles.itemsContainer}
         numColumns={2}
         renderItem={({ item, index }) => {
-          console.log(item);
           const { title, image, destination } = item;
           return (
             <TouchableOpacity

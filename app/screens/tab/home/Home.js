@@ -1,25 +1,37 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../../components/layout";
 import { IconButton, Text, useTheme } from "react-native-paper";
-import { useUser } from "../../../api";
+import { usePatient, useUser } from "../../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { ServiceCard } from "../../../components/common";
 import HomeAdvert from "../../../components/HomeAdvert";
+import AppointmentCard from "../../../components/AppointmentCard";
 
 const Home = ({ navigation }) => {
   const { getUser } = useUser();
+  const { getAppointments } = usePatient();
   const { colors, roundness } = useTheme();
   const [user, setUser] = useState(null);
+  const [appointments, setAppointments] = useState([]);
   useFocusEffect(
     useCallback(() => {
       handleFetchUser();
+      handleFetchAppoitments();
     }, [])
   );
   const handleFetchUser = async () => {
     const response = await getUser();
     if (response.ok) {
       setUser(response.data);
+    }
+  };
+  const handleFetchAppoitments = async () => {
+    const response = await getAppointments();
+    if (response.ok) {
+      setAppointments(response.data.results);
+    } else {
+      // if(response.stat)
     }
   };
 
@@ -45,8 +57,8 @@ const Home = ({ navigation }) => {
         <Text variant="titleMedium">Services</Text>
         <ServiceCard
           image={require("../../../assets/pills.png")}
-          title="Drug Order"
-          subTitle="Order drugs and have them delivered to your doorstep"
+          title="Medication Orders"
+          subTitle="Order, dispension and delivery of medication to the patient"
         />
         <ServiceCard
           image={require("../../../assets/conversation.png")}
@@ -55,6 +67,13 @@ const Home = ({ navigation }) => {
         />
         <HomeAdvert />
         <Text variant="titleMedium">Recent and Upcoming Appointments</Text>
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          data={appointments}
+          horizontal
+          keyExtractor={({ id }) => id}
+          renderItem={({ item, index }) => <AppointmentCard {...item} />}
+        />
       </View>
     </SafeArea>
   );
@@ -74,6 +93,7 @@ const styles = StyleSheet.create({
   body: {
     paddingHorizontal: 30,
     flex: 1,
+    paddingBottom: 30,
   },
   greetings: {
     marginBottom: 20,

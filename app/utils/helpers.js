@@ -63,3 +63,9 @@ export const pickX = (obj, paths) =>
 
 export const getImageUrl = (path, defaultValue = null) =>
   path ? `${BASE_URL}${path}` : defaultValue;
+
+export const getRandomElementFromArray = (array) => {
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
+};
+
