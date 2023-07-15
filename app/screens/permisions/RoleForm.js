@@ -8,19 +8,20 @@ import {
   Form,
   FormDropDown,
   FormField,
+  FormModalPicker,
   FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
 import { Button, Text } from "react-native-paper";
-import { DropDown } from "../../components/input";
+import { DropDown, ModalPicker } from "../../components/input";
 
 const validationSchemer = Yup.object().shape({
   name: Yup.string().label("Role Name").required(),
   description: Yup.string().label("Role Description").required(),
-  menuOptions: Yup.string().label("Role Menu Options").required(),
-  privileges: Yup.string().label("Role Privileges").required(),
+  menuOptions: Yup.array().label("Role Menu Options").required(),
+  privileges: Yup.array().label("Role Privileges").required(),
 });
 const RoleForm = ({ navigation, route }) => {
   const { addRoles, updateRole } = useAuthorize();
@@ -33,6 +34,7 @@ const RoleForm = ({ navigation, route }) => {
   });
 
   const handleSubmit = async (values, { setErrors, errors }) => {
+    console.log(values);
     setLoading(true);
     let response;
     if (defaultValues) {
@@ -109,6 +111,8 @@ const RoleForm = ({ navigation, route }) => {
               schemaMapper={(item) => ({ label: item.name, value: item._id })}
               placeholder="Select Privileges"
               multiple
+              zIndex={3000}
+              zIndexInverse={1000}
             />
             <FormDropDown
               name="menuOptions"
@@ -116,6 +120,15 @@ const RoleForm = ({ navigation, route }) => {
               schemaMapper={(item) => ({ label: item.label, value: item._id })}
               placeholder="Select Menu Options"
               multiple
+              zIndex={2000}
+              zIndexInverse={2000}
+            />
+            <FormModalPicker
+              name="menuOptions"
+              data={menuOptions}
+              labelExtractor={(item) => item.label}
+              renderItem={({ item, index }) => <Text>{item.label}</Text>}
+              valueExtractor={(item) => item._id}
             />
             <FormSubmitButton
               title={defaultValues ? "Update Role" : "Add Role"}
@@ -124,6 +137,7 @@ const RoleForm = ({ navigation, route }) => {
               loading={loading}
               disabled={loading}
             />
+            <View style={{ flex: 1 }} />
           </Form>
         </View>
       </View>
@@ -162,6 +176,7 @@ const styles = StyleSheet.create({
   form: {
     width: "100%",
     padding: 10,
+    flex: 1,
   },
   btn: {
     marginVertical: 20,

@@ -5,17 +5,24 @@ import { useFormikContext } from "formik";
 import { useTheme } from "react-native-paper";
 
 const FormDropDown = ({ name, ...otherprops }) => {
-  const { values, handleChange, touched, errors, setFieldTouched } =
-    useFormikContext();
+  const {
+    values,
+    handleChange,
+    touched,
+    errors,
+    setFieldTouched,
+    setFieldValue,
+  } = useFormikContext();
   const {
     colors: { error },
   } = useTheme();
-  console.log(values);
   return (
     <View style={styles.container}>
       <DropDown
         defaultValue={values[name]}
-        onChangeValue={handleChange(name)}
+        onChangeValue={(value) => {
+          setFieldValue(name, value);
+        }}
         {...otherprops}
       />
       {errors[name] && touched && (

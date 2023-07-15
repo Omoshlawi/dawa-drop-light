@@ -5,3 +5,4 @@ export { default as FormDateTimePicker } from "./FormDateTimePicker";
 export { default as FormImagesPicker } from "./FormImagesPicker";
 export { default as FormImagePicker } from "./FormImagePicker";
 export { default as FormDropDown } from "./FormDropDown";
+export { default as FormModalPicker } from "./FormModalPicker";

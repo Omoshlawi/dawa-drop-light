@@ -28,6 +28,8 @@ const DropDown = ({
   multiple,
   items = [],
   searchPlacholder,
+  zIndex,
+  zIndexInverse,
 }) => {
   const { colors } = useTheme();
   const [open, setOpen] = useState(false);
@@ -55,7 +57,7 @@ const DropDown = ({
           backgroundColor: colors.background,
           borderColor: colors.outline,
         }}
-        containerStyle={{ backgroundColor: "red" }}
+        containerStyle={{}}
         listItemContainerStyle={{ backgroundColor: colors.surface }}
         searchContainerStyle={{ backgroundColor: colors.background }}
         searchPlaceholder={searchPlacholder}
@@ -63,6 +65,8 @@ const DropDown = ({
         itemSeparator
         stickyHeader
         autoScroll
+        zIndex={zIndex}
+        zIndexInverse={zIndexInverse}
       />
     </View>
   );
@@ -72,10 +76,9 @@ export default DropDown;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginTop: 10,
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1,
-    marginVertical: 10,
   },
 });
