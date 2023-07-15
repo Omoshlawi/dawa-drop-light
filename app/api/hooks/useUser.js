@@ -12,7 +12,8 @@ const useUser = () => {
     apiClient.post("auth/profile", data, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-  return { getUser, logout, changePassword, updateProfile };
+  const getMenuOptions = () => apiClient.get("/auth/my-menu-options");
+  return { getUser, logout, changePassword, updateProfile, getMenuOptions };
 };
 
 export default useUser;
