@@ -5,9 +5,13 @@ const mapping = {
     route: routes.ACTION_NAVIGATION,
     screen: routes.ACTION_ROLES_SCREEN,
   },
+  Appointments: {
+    screen: routes.ACTION_APPOINTMENTS_SCREEN,
+    route: routes.ACTION_NAVIGATION
+  }
 };
 
-const get = (link) => {
+export const get = (link) => {
   let nav = mapping[link];
   if (!nav) {
     nav = {
@@ -17,5 +21,3 @@ const get = (link) => {
   }
   return nav;
 };
-
-exports.get = get;

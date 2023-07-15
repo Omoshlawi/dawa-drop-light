@@ -6,8 +6,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import { ACTIONS } from "../../../utils/contants";
 import { getImageUrl } from "../../../utils/helpers";
+import { get } from "../../../navigation";
 const itemWidth = Dimensions.get("window").width / 2 - 5;
 const ActionsMenu = ({ navigation }) => {
   const { getUser, getMenuOptions } = useUser();
@@ -46,8 +46,15 @@ const ActionsMenu = ({ navigation }) => {
         numColumns={2}
         renderItem={({ item, index }) => {
           const { label, image, link } = item;
+          const { screen, route, params } = get(link);
           return (
-            <TouchableOpacity key={index} onPress={() => {}}>
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                console.log({ route, screen, params });
+                navigation.navigate(route, { screen, params });
+              }}
+            >
               <View style={[styles.item, { backgroundColor: colors.surface }]}>
                 <Image
                   resizeMode="contain"
