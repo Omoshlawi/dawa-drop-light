@@ -4,7 +4,7 @@ import Logo from "../../components/Logo";
 import { screenWidth } from "../../utils/contants";
 import { Form, FormField, FormSubmitButton } from "../../components/forms";
 import * as Yup from "yup";
-import { useAuth } from "../../api";
+import { useAuthenticate } from "../../api";
 import { useUserContext } from "../../context/hooks";
 import routes from "../../navigation/routes";
 import { LinkedText } from "../../components/display";
@@ -20,7 +20,7 @@ const validationSchemer = Yup.object().shape({
 });
 
 const Login = ({ navigation }) => {
-  const { login } = useAuth();
+  const { login } = useAuthenticate();
   const { setToken } = useUserContext();
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (values, { setFieldError }) => {
