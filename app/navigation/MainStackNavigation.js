@@ -4,6 +4,7 @@ import AuthNavigation from "./AuthNavigation";
 import BottomTabNavigation from "./BottomTabNavigation";
 import routes from "./routes";
 import UserNavigation from "./UserNavigation";
+import ActionsNavigation from "./ActionsNavigation";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -11,26 +12,21 @@ const MainStackNavigation = () => {
   const { token } = useUserContext();
   const isLoggedIn = Boolean(token);
   return (
-    <Navigator>
+    <Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn ? (
         <>
           <Screen
             name={routes.BTAB_NAVIGATION}
             component={BottomTabNavigation}
-            options={{ headerShown: false }}
           />
+          <Screen name={routes.USER_NAVIGATION} component={UserNavigation} />
           <Screen
-            name={routes.USER_NAVIGATION}
-            component={UserNavigation}
-            options={{ headerShown: false }}
+            name={routes.ACTION_NAVIGATION}
+            component={ActionsNavigation}
           />
         </>
       ) : (
-        <Screen
-          name={routes.AUTH_NAVIGATION}
-          component={AuthNavigation}
-          options={{ headerShown: false }}
-        />
+        <Screen name={routes.AUTH_NAVIGATION} component={AuthNavigation} />
       )}
     </Navigator>
   );
