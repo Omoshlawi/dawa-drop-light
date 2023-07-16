@@ -117,6 +117,7 @@ const RoleForm = ({ navigation, route }) => {
               renderItem={({ item }) => <List.Item title={item.name} />}
               itemContainerStyle={styles.itemContainer}
               icon="format-list-checks"
+              label="Role Privileges"
             />
             <FormItemPicker
               name="menuOptions"
@@ -128,6 +129,7 @@ const RoleForm = ({ navigation, route }) => {
               valueExtractor={(item) => item._id}
               multiple
               icon="format-list-checks"
+              label="Role Menu Options"
             />
             <FormSubmitButton
               title={defaultValues ? "Update Role" : "Add Role"}

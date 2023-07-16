@@ -1,10 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { IconButton, useTheme } from "react-native-paper";
+import { IconButton, useTheme, Text } from "react-native-paper";
 import { Modal } from "react-native";
 import { getRandomColor } from "../../utils/helpers";
+import _ from "lodash";
 const ItemPicker = ({
   icon,
   data = [],
@@ -23,6 +24,8 @@ const ItemPicker = ({
   multiple = false,
   activeBackgroundColor,
   inactiveBackgroundColor,
+  outline = true,
+  label,
 }) => {
   const { colors, roundness } = useTheme();
   const [showModal, setShowModal] = useState(false);
@@ -31,8 +34,27 @@ const ItemPicker = ({
     : data.find((item) => valueExtractor(item) === value);
 
   return (
-    <>
-      <View style={[styles.inputContainer, {}]}>
+    <View style={styles.container}>
+      {outline && label && !_.isEmpty(current) && (
+        <Text
+          variant="labelSmall"
+          style={[styles.label, { backgroundColor: colors.background }]}
+        >
+          {label}
+        </Text>
+      )}
+      <View
+        style={[
+          styles.inputContainer,
+          outline
+            ? {
+                borderWidth: 1,
+                borderColor: colors.outline,
+                borderRadius: roundness,
+              }
+            : {},
+        ]}
+      >
         {icon && (
           <MaterialCommunityIcons
             name={icon}
@@ -43,47 +65,51 @@ const ItemPicker = ({
 
         {multiple ? (
           <View style={styles.inputMultiple}>
-            <FlatList
-              horizontal
-              data={current}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => (
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: colors.disabled,
-                    borderRadius: roundness,
-                    paddingVertical: 5,
-                    paddingHorizontal: 10,
-                    marginHorizontal: 3,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                  onPress={() => {
-                    if (onValueChange instanceof Function) {
-                      let values = current.map((cur) => valueExtractor(cur));
-                      if (values.includes(valueExtractor(item))) {
-                        // remove
-                        values = values.filter(
-                          (v) => v !== valueExtractor(item)
-                        );
-                      }
-                      onValueChange(values);
-                    }
-                  }}
-                >
-                  <View
+            {_.isEmpty(current) ? (
+              <Text style={styles.input}>{label}</Text>
+            ) : (
+              <FlatList
+                horizontal
+                data={current}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity
                     style={{
-                      backgroundColor: getRandomColor(),
-                      width: 10,
-                      height: 10,
-                      borderRadius: 5,
+                      backgroundColor: colors.disabled,
+                      borderRadius: roundness,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
                       marginHorizontal: 3,
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
-                  />
-                  <Text key={index}>{labelExtractor(item)}</Text>
-                </TouchableOpacity>
-              )}
-            />
+                    onPress={() => {
+                      if (onValueChange instanceof Function) {
+                        let values = current.map((cur) => valueExtractor(cur));
+                        if (values.includes(valueExtractor(item))) {
+                          // remove
+                          values = values.filter(
+                            (v) => v !== valueExtractor(item)
+                          );
+                        }
+                        onValueChange(values);
+                      }
+                    }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: getRandomColor(),
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        marginHorizontal: 3,
+                      }}
+                    />
+                    <Text key={index}>{labelExtractor(item)}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
           </View>
         ) : (
           <Text
@@ -157,19 +183,27 @@ const ItemPicker = ({
           />
         </View>
       </Modal>
-    </>
+    </View>
   );
 };
 
 export default ItemPicker;
 
 const styles = StyleSheet.create({
+  container: { marginTop: 5 },
+  label: {
+    position: "absolute",
+    top: 0,
+    left: 10,
+    zIndex: 1,
+    verticalAlign: "middle",
+    paddingHorizontal: 5,
+  },
   inputContainer: {
     flexDirection: "row",
-    margin: 5,
-    paddingHorizontal: 5,
-    borderRadius: 20,
+    paddingHorizontal: 10,
     alignItems: "center",
+    marginTop: 5,
   },
   input: {
     flex: 1,
