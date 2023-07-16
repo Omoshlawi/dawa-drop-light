@@ -8,14 +8,15 @@ import {
   Form,
   FormDropDown,
   FormField,
+  FormItemPicker,
   FormModalPicker,
   FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
-import { Button, Text } from "react-native-paper";
-import { DropDown, ModalPicker } from "../../components/input";
+import { Button, List, Text, useTheme } from "react-native-paper";
+import { DropDown, ItemPicker, ModalPicker } from "../../components/input";
 
 const validationSchemer = Yup.object().shape({
   name: Yup.string().label("Role Name").required(),
@@ -32,6 +33,7 @@ const RoleForm = ({ navigation, route }) => {
     message: "Role Added Successfully!",
     success: true,
   });
+  const { colors } = useTheme();
 
   const handleSubmit = async (values, { setErrors, errors }) => {
     console.log(values);
@@ -105,30 +107,27 @@ const RoleForm = ({ navigation, route }) => {
               multiline
               numberOfLines={10}
             />
-            <FormDropDown
+            <FormItemPicker
               name="privileges"
-              items={privileges}
-              schemaMapper={(item) => ({ label: item.name, value: item._id })}
+              data={privileges}
+              labelExtractor={(item) => item.name}
               placeholder="Select Privileges"
               multiple
-              zIndex={3000}
-              zIndexInverse={1000}
+              valueExtractor={(item) => item._id}
+              renderItem={({ item }) => <List.Item title={item.name} />}
+              itemContainerStyle={styles.itemContainer}
+              icon="format-list-checks"
             />
-            <FormDropDown
-              name="menuOptions"
-              items={menuOptions}
-              schemaMapper={(item) => ({ label: item.label, value: item._id })}
-              placeholder="Select Menu Options"
-              multiple
-              zIndex={2000}
-              zIndexInverse={2000}
-            />
-            <FormModalPicker
+            <FormItemPicker
               name="menuOptions"
               data={menuOptions}
+              placeholder="Select Menu Options"
               labelExtractor={(item) => item.label}
-              renderItem={({ item, index }) => <Text>{item.label}</Text>}
+              itemContainerStyle={styles.itemContainer}
+              renderItem={({ item }) => <List.Item title={item.label} />}
               valueExtractor={(item) => item._id}
+              multiple
+              icon="format-list-checks"
             />
             <FormSubmitButton
               title={defaultValues ? "Update Role" : "Add Role"}
@@ -192,5 +191,9 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "center",
     padding: 10,
+  },
+  itemContainer: {
+    marginBottom: 5,
+    // padding: 10,
   },
 });
