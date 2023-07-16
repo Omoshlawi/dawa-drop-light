@@ -88,6 +88,7 @@ const RoleForm = ({ navigation, route }) => {
                     name: "",
                     description: "",
                     privileges: [],
+                    menuOptions: [],
                   }
             }
             validationSchema={validationSchemer}

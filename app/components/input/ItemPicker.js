@@ -38,7 +38,13 @@ const ItemPicker = ({
       {outline && label && !_.isEmpty(current) && (
         <Text
           variant="labelSmall"
-          style={[styles.label, { backgroundColor: colors.background }]}
+          style={[
+            styles.label,
+            {
+              backgroundColor: colors.background,
+              color: colors.onSurfaceVariant,
+            },
+          ]}
         >
           {label}
         </Text>

@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
-import { RoleForm, Roles } from "../screens/permisions";
+import { RoleDetail, RoleForm, Roles } from "../screens/permisions";
 import { Appointments } from "../screens/orders";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -22,6 +22,12 @@ const ActionsNavigation = () => {
         name={routes.ACTION_APPOINTMENTS_SCREEN}
         component={Appointments}
         options={{ title: "Appointments" }}
+      />
+      <Screen
+        name={routes.ACTION_ROLE_DETAIL_SCREEN}
+        component={RoleDetail}
+        // options={({ route }) => ({ title: `${route.params.name} role` })}
+        options={{ headerShown: false }}
       />
     </Navigator>
   );

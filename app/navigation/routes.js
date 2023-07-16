@@ -17,6 +17,7 @@ export default Object.freeze({
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_ROLES_SCREEN: "Roles Screen",
   ACTION_ROLE_FORM_SCREEN: "RolesForm Screen",
+  ACTION_ROLE_DETAIL_SCREEN: "Roles Detail Screen",
 
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
 });

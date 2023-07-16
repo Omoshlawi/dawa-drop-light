@@ -8,7 +8,15 @@ const useAuthorize = () => {
   const updateRole = (_id, data) => apiClient.put(`auth/roles/${_id}`, data);
   const getPrivileges = (params) => apiClient.get("auth/privileges", params);
   const getMenuOptions = (params) => apiClient.get("auth/menu-options", params);
-  return { getRoles, getPrivileges, addRoles, updateRole, getMenuOptions };
+  const getUsers = (params) => apiClient.get("auth/users", params);
+  return {
+    getRoles,
+    getPrivileges,
+    addRoles,
+    updateRole,
+    getMenuOptions,
+    getUsers,
+  };
 };
 
 export default useAuthorize;

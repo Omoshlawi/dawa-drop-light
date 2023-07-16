@@ -49,8 +49,8 @@ const Roles = ({ navigation }) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate(routes.ACTION_NAVIGATION, {
-                  screen: routes.ACTION_ROLE_FORM_SCREEN,
-                  params: { privileges, menuOptions, role: item },
+                  screen: routes.ACTION_ROLE_DETAIL_SCREEN,
+                  params: item,
                 })
               }
             >

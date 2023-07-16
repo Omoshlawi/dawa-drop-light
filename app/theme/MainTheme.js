@@ -24,8 +24,11 @@ const MainTheme = ({ children }) => {
           surface: "#fff",
           onSurface: "#00353C",
           waningLight: "#FBF0DC",
+          // onSurfaceVariant: "red",
+          surfaceVariant: "red",
         },
         roundness: 10,
+        
       }}
     >
       {children}
