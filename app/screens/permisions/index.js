@@ -4,3 +4,6 @@ export { default as RoleDetail } from "./RoleDetail";
 export { default as Privileges } from "./Privileges";
 export { default as PrivilegeDetail } from "./PrivilegeDetail";
 export { default as PrivilegeForm } from "./PrivilegeForm";
+export { default as MenuOptiions } from "./MenuOptiions";
+export { default as MenuOptionDetail } from "./MenuOptionDetail";
+export { default as MenuOptionForm } from "./MenuOptionForm";

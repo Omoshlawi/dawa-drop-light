@@ -24,6 +24,10 @@ export default Object.freeze({
   PERMISIONS_PRIVILEGE_DETAIL_SCREEN: "PrivilegeDetail Screen",
   PERMISIONS_PRIVILEGE_FORM_SCREEN: "PrivilegeForm Screen",
 
+  PERMISIONS_MENU_OPTIONS_SCREEN: "MenuOptions Screen",
+  PERMISIONS_MENU_OPTION_DETAIL_SCREEN: "MenuOptionDetail Screen",
+  PERMISIONS_MENU_OPTION_FORM_SCREEN: "MenuOptionForm Screen",
+
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
 });

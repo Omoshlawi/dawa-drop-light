@@ -7,6 +7,9 @@ import {
   Roles,
   PrivilegeForm,
   PrivilegeDetail,
+  MenuOptiions,
+  MenuOptionDetail,
+  MenuOptionForm,
 } from "../screens/permisions";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -43,6 +46,21 @@ const PermisionsNavigation = () => {
       <Screen
         name={routes.PERMISIONS_PRIVILEGE_FORM_SCREEN}
         component={PrivilegeForm}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name={routes.PERMISIONS_MENU_OPTIONS_SCREEN}
+        component={MenuOptiions}
+        options={{ title: "Manage Menu Options" }}
+      />
+      <Screen
+        name={routes.PERMISIONS_MENU_OPTION_DETAIL_SCREEN}
+        component={MenuOptionDetail}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name={routes.PERMISIONS_MENU_OPTION_FORM_SCREEN}
+        component={MenuOptionForm}
         options={{ headerShown: false }}
       />
     </Navigator>
