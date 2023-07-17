@@ -22,6 +22,7 @@ export default Object.freeze({
 
   PERMISIONS_PRIVILEGES_SCREEN: "Privileges Screen",
   PERMISIONS_PRIVILEGE_DETAIL_SCREEN: "PrivilegeDetail Screen",
+  PERMISIONS_PRIVILEGE_FORM_SCREEN: "PrivilegeForm Screen",
 
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",

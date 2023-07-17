@@ -1,7 +1,13 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
-import { Privileges, RoleDetail, RoleForm, Roles } from "../screens/permisions";
-import PrivilegeDetail from "../screens/permisions/PrivilegeDetail";
+import {
+  Privileges,
+  RoleDetail,
+  RoleForm,
+  Roles,
+  PrivilegeForm,
+  PrivilegeDetail,
+} from "../screens/permisions";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -32,6 +38,11 @@ const PermisionsNavigation = () => {
       <Screen
         name={routes.PERMISIONS_PRIVILEGE_DETAIL_SCREEN}
         component={PrivilegeDetail}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name={routes.PERMISIONS_PRIVILEGE_FORM_SCREEN}
+        component={PrivilegeForm}
         options={{ headerShown: false }}
       />
     </Navigator>

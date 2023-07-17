@@ -80,8 +80,8 @@ const PrivilegeDetail = ({ navigation, route }) => {
               icon="square-edit-outline"
               onPress={() =>
                 navigation.navigate(routes.PERMISIONS_NAVIGATION, {
-                  screen: routes.PERMISIONS_ROLE_FORM_SCREEN,
-                  params: { menuOptions, privileges, role },
+                  screen: routes.PERMISIONS_PRIVILEGE_FORM_SCREEN,
+                  params: privilege,
                 })
               }
             >

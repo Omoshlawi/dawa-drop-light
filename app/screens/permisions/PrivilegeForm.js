@@ -19,18 +19,18 @@ import { Button, List, Text, useTheme } from "react-native-paper";
 import { DropDown, ItemPicker, ModalPicker } from "../../components/input";
 
 const validationSchemer = Yup.object().shape({
-  name: Yup.string().label("Role Name").required(),
-  description: Yup.string().label("Role Description").required(),
-  menuOptions: Yup.array().label("Role Menu Options").required(),
-  privileges: Yup.array().label("Role Privileges").required(),
+  name: Yup.string().label("Privilege Name").required(),
+  description: Yup.string().label("Privilege Description").required(),
+  action: Yup.string().label("Privilege Action code").required(),
 });
-const RoleForm = ({ navigation, route }) => {
-  const { addRoles, updateRole } = useAuthorize();
+
+const PrivilegeForm = ({ navigation, route }) => {
+  const { addPrivilege, updatePrivilege } = useAuthorize();
+  const privilege = route.params;
   const [loading, setLoading] = useState(false);
-  const { role: defaultValues, menuOptions, privileges } = route.params;
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Role Added Successfully!",
+    message: "Privilege Added Successfully!",
     success: true,
   });
   const { colors } = useTheme();
@@ -38,10 +38,10 @@ const RoleForm = ({ navigation, route }) => {
   const handleSubmit = async (values, { setErrors, errors }) => {
     setLoading(true);
     let response;
-    if (defaultValues) {
-      response = await updateRole(defaultValues._id, values);
+    if (privilege) {
+      response = await updatePrivilege(privilege._id, values);
     } else {
-      response = await addRoles(values);
+      response = await addPrivilege(values);
     }
     setLoading(false);
     if (response.ok) {
@@ -62,7 +62,6 @@ const RoleForm = ({ navigation, route }) => {
       }
     }
   };
-
   return (
     <SafeArea>
       <View style={styles.screen}>
@@ -70,69 +69,40 @@ const RoleForm = ({ navigation, route }) => {
         <View style={styles.form}>
           <Form
             initialValues={
-              defaultValues
-                ? pickX(
-                    {
-                      ...defaultValues,
-                      privileges: defaultValues.privileges.map(
-                        ({ _id }) => _id
-                      ),
-                      menuOptions: defaultValues.menuOptions.map(
-                        ({ _id }) => _id
-                      ),
-                    },
-                    ["name", "description", "privileges", "menuOptions"]
-                  )
+              privilege
+                ? pickX(privilege, ["name", "description", "action"])
                 : {
                     name: "",
                     description: "",
-                    privileges: [],
-                    menuOptions: [],
+                    action: "",
                   }
             }
             validationSchema={validationSchemer}
             onSubmit={handleSubmit}
           >
             <FormField
-              placeholder="Enter Role name"
-              label="Role name"
+              placeholder="Enter Privilege name"
+              label="Privilege name"
               name="name"
               icon="account-group"
             />
             <FormField
-              placeholder="Enter Role Description"
-              label="Role description"
+              placeholder="Enter Privilege Description"
+              label="Previlege description"
               name="description"
               icon="information-variant"
               multiline
               numberOfLines={10}
             />
-            <FormItemPicker
-              name="privileges"
-              data={privileges}
-              labelExtractor={(item) => item.name}
-              placeholder="Select Privileges"
-              multiple
-              valueExtractor={(item) => item._id}
-              renderItem={({ item }) => <List.Item title={item.name} />}
-              itemContainerStyle={styles.itemContainer}
-              icon="format-list-checks"
-              label="Role Privileges"
+            <FormField
+              placeholder="Enter Privilege Action id"
+              label="Action Id"
+              name="action"
+              icon="checkbox-marked-circle"
             />
-            <FormItemPicker
-              name="menuOptions"
-              data={menuOptions}
-              placeholder="Select Menu Options"
-              labelExtractor={(item) => item.label}
-              itemContainerStyle={styles.itemContainer}
-              renderItem={({ item }) => <List.Item title={item.label} />}
-              valueExtractor={(item) => item._id}
-              multiple
-              icon="format-list-checks"
-              label="Role Menu Options"
-            />
+
             <FormSubmitButton
-              title={defaultValues ? "Update Role" : "Add Role"}
+              title={privilege ? "Update Privilege" : "Add Privilege"}
               mode="contained"
               style={styles.btn}
               loading={loading}
@@ -156,7 +126,7 @@ const RoleForm = ({ navigation, route }) => {
             mode="outlined"
             onPress={() => {
               setDialogInfo({ ...dialogInfo, show: false });
-              if (dialogInfo.success) navigation.goBack();
+              if (dialogInfo.success) navigation.pop(2);
             }}
           >
             Ok
@@ -167,7 +137,7 @@ const RoleForm = ({ navigation, route }) => {
   );
 };
 
-export default RoleForm;
+export default PrivilegeForm;
 
 const styles = StyleSheet.create({
   screen: {

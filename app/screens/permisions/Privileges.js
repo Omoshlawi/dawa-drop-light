@@ -73,8 +73,8 @@ const Privileges = ({ navigation }) => {
         icon="plus"
         style={[styles.fab, { backgroundColor: colors.secondary }]}
         onPress={() =>
-          navigation.navigate(routes.ACTION_NAVIGATION, {
-            screen: routes.PERMISIONS_ROLE_FORM_SCREEN,
+          navigation.navigate(routes.PERMISIONS_NAVIGATION, {
+            screen: routes.PERMISIONS_PRIVILEGE_FORM_SCREEN,
           })
         }
         color={colors.surface}
