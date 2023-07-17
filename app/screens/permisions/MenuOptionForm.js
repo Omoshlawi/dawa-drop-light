@@ -92,12 +92,15 @@ const MenuOptionForm = ({ navigation, route }) => {
             validationSchema={validationSchemer}
             onSubmit={handleSubmit}
           >
-            <FormImagePicker name="image" />
+            <View style={{ alignItems: "center", padding: 10 }}>
+              <FormImagePicker name="image" />
+              <Text>Menu Icon</Text>
+            </View>
             <FormField
               placeholder="Enter Menu Label"
               label="Menu label"
               name="label"
-              icon="account-group"
+              icon="apps"
             />
             <FormField
               placeholder="Enter Menu Description"
@@ -112,7 +115,7 @@ const MenuOptionForm = ({ navigation, route }) => {
               placeholder="Enter menu link"
               label="Menu link"
               name="link"
-              icon="checkbox-marked-circle"
+              icon="link-variant"
             />
 
             <FormSubmitButton

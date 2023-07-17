@@ -5,3 +5,4 @@ export { default as ModalPicker } from "./ModalPicker";
 export { default as CheckBox } from "./CheckBox";
 export { default as DropDown } from "./DropDown";
 export { default as ItemPicker } from "./ItemPicker";
+export { default as SearchHeader } from "./SearchHeader";

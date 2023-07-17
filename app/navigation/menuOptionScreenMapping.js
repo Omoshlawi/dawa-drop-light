@@ -13,6 +13,10 @@ const mapping = {
     route: routes.PERMISIONS_NAVIGATION,
     screen: routes.PERMISIONS_MENU_OPTIONS_SCREEN,
   },
+  UserRoles: {
+    route: routes.PERMISIONS_NAVIGATION,
+    screen: routes.PERMISIONS_USER_ROLES_SCREEN,
+  },
   Appointments: {
     screen: routes.ACTION_APPOINTMENTS_SCREEN,
     route: routes.ACTION_NAVIGATION,
