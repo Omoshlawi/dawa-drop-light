@@ -9,25 +9,9 @@ const ActionsNavigation = () => {
   return (
     <Navigator>
       <Screen
-        name={routes.PERMISION_ROLES_SCREEN}
-        component={Roles}
-        options={{ title: "Roles and Privileges" }}
-      />
-      <Screen
-        name={routes.PERMISIONS_ROLE_FORM_SCREEN}
-        component={RoleForm}
-        options={{ title: "" }}
-      />
-      <Screen
         name={routes.ACTION_APPOINTMENTS_SCREEN}
         component={Appointments}
         options={{ title: "Appointments" }}
-      />
-      <Screen
-        name={routes.PERMISIONS_ROLE_DETAIL_SCREEN}
-        component={RoleDetail}
-        // options={({ route }) => ({ title: `${route.params.name} role` })}
-        options={{ headerShown: false }}
       />
     </Navigator>
   );

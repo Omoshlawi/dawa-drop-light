@@ -7,11 +7,9 @@ import { FlatList } from "react-native";
 import { Avatar, Card, FAB, List, useTheme } from "react-native-paper";
 import routes from "../../navigation/routes";
 
-const Roles = ({ navigation }) => {
-  const { getRoles, getPrivileges, getMenuOptions } = useAuthorize();
-  const [roles, setRoles] = useState([]);
+const Privileges = ({ navigation }) => {
+  const { getPrivileges } = useAuthorize();
   const [privileges, setPrivileges] = useState([]);
-  const [menuOptions, setMenuOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const { colors } = useTheme();
   useFocusEffect(
@@ -22,18 +20,11 @@ const Roles = ({ navigation }) => {
 
   const handleFetchRoles = async () => {
     setLoading(true);
-    const response = await getRoles();
     const pResponse = await getPrivileges();
-    const mResponse = await getMenuOptions();
     setLoading(false);
-    if (response.ok) {
-      setRoles(response.data.results);
-    }
+
     if (pResponse.ok) {
       setPrivileges(pResponse.data.results);
-    }
-    if (mResponse.ok) {
-      setMenuOptions(mResponse.data.results);
     }
   };
   return (
@@ -41,7 +32,7 @@ const Roles = ({ navigation }) => {
       <FlatList
         refreshing={loading}
         onRefresh={handleFetchRoles}
-        data={roles}
+        data={privileges}
         keyExtractor={({ _id }) => _id}
         renderItem={({ item }) => {
           const { name, description } = item;
@@ -49,8 +40,8 @@ const Roles = ({ navigation }) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate(routes.PERMISIONS_NAVIGATION, {
-                  screen: routes.PERMISIONS_ROLE_DETAIL_SCREEN,
-                  params: { role: item, menuOptions, privileges },
+                  screen: routes.PERMISIONS_PRIVILEGE_DETAIL_SCREEN,
+                  params: item,
                 })
               }
             >
@@ -63,7 +54,7 @@ const Roles = ({ navigation }) => {
                 subtitleNumberOfLines={3}
                 subtitleStyle={{ color: colors.disabled }}
                 left={(props) => (
-                  <Avatar.Icon {...props} icon="account-group" />
+                  <Avatar.Icon {...props} icon="shield-lock-outline" />
                 )}
                 right={(props) => (
                   <Avatar.Icon
@@ -84,7 +75,6 @@ const Roles = ({ navigation }) => {
         onPress={() =>
           navigation.navigate(routes.ACTION_NAVIGATION, {
             screen: routes.PERMISIONS_ROLE_FORM_SCREEN,
-            params: { privileges, menuOptions },
           })
         }
         color={colors.surface}
@@ -93,7 +83,7 @@ const Roles = ({ navigation }) => {
   );
 };
 
-export default Roles;
+export default Privileges;
 
 const styles = StyleSheet.create({
   listItem: {

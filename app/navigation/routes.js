@@ -20,6 +20,9 @@ export default Object.freeze({
   PERMISIONS_ROLE_FORM_SCREEN: "RolesForm Screen",
   PERMISIONS_ROLE_DETAIL_SCREEN: "Roles Detail Screen",
 
+  PERMISIONS_PRIVILEGES_SCREEN: "Privileges Screen",
+  PERMISIONS_PRIVILEGE_DETAIL_SCREEN: "PrivilegeDetail Screen",
+
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
 });
