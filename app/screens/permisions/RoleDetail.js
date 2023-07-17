@@ -8,10 +8,16 @@ import { getDialogIcon } from "../../components/dialog";
 import { screenWidth } from "../../utils/contants";
 import { useAuthorize } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
+import routes from "../../navigation/routes";
 
 const RoleDetail = ({ navigation, route }) => {
-  const role = route.params;
-  const { name, description, privileges, menuOptions } = role;
+  const { role, privileges, menuOptions } = route.params;
+  const {
+    name,
+    description,
+    privileges: rolePrivileges,
+    menuOptions: roleMenuOptions,
+  } = role;
   const { colors } = useTheme();
   const { getUsers } = useAuthorize();
   const [users, setUsers] = useState([]);
@@ -49,7 +55,7 @@ const RoleDetail = ({ navigation, route }) => {
                 title="Privileges/Permisions"
                 left={(props) => <List.Icon {...props} icon="check-decagram" />}
               >
-                {privileges.map(({ _id, name, description }) => (
+                {rolePrivileges.map(({ _id, name, description }) => (
                   <List.Item
                     title={name}
                     descriptionStyle={{ color: colors.disabled }}
@@ -69,21 +75,23 @@ const RoleDetail = ({ navigation, route }) => {
                 title="Menu Options"
                 left={(props) => <List.Icon {...props} icon="apps" />}
               >
-                {menuOptions.map(({ _id, label, description, image, link }) => (
-                  <List.Item
-                    title={label}
-                    key={_id}
-                    description={description}
-                    descriptionStyle={{ color: colors.disabled }}
-                    left={(props) => (
-                      <List.Image
-                        style={styles.img}
-                        {...props}
-                        source={{ uri: getImageUrl(image) }}
-                      />
-                    )}
-                  />
-                ))}
+                {roleMenuOptions.map(
+                  ({ _id, label, description, image, link }) => (
+                    <List.Item
+                      title={label}
+                      key={_id}
+                      description={description}
+                      descriptionStyle={{ color: colors.disabled }}
+                      left={(props) => (
+                        <List.Image
+                          style={styles.img}
+                          {...props}
+                          source={{ uri: getImageUrl(image) }}
+                        />
+                      )}
+                    />
+                  )
+                )}
               </List.Accordion>
             </List.Section>
           </Card.Content>
@@ -92,7 +100,17 @@ const RoleDetail = ({ navigation, route }) => {
             <Button icon="trash-can" textColor={colors.error}>
               Delete
             </Button>
-            <Button icon="square-edit-outline">Edit</Button>
+            <Button
+              icon="square-edit-outline"
+              onPress={() =>
+                navigation.navigate(routes.PERMISIONS_NAVIGATION, {
+                  screen: routes.PERMISIONS_ROLE_FORM_SCREEN,
+                  params: { menuOptions, privileges, role },
+                })
+              }
+            >
+              Edit
+            </Button>
           </Card.Actions>
         </Card>
         <Card

@@ -1,14 +1,14 @@
 import routes from "./routes";
 
 const mapping = {
-  Permisions: {
-    route: routes.ACTION_NAVIGATION,
-    screen: routes.ACTION_ROLES_SCREEN,
+  Roles: {
+    route: routes.PERMISIONS_NAVIGATION,
+    screen: routes.PERMISION_ROLES_SCREEN,
   },
   Appointments: {
     screen: routes.ACTION_APPOINTMENTS_SCREEN,
-    route: routes.ACTION_NAVIGATION
-  }
+    route: routes.ACTION_NAVIGATION,
+  },
 };
 
 export const get = (link) => {

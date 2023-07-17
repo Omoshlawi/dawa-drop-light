@@ -5,6 +5,7 @@ import BottomTabNavigation from "./BottomTabNavigation";
 import routes from "./routes";
 import UserNavigation from "./UserNavigation";
 import ActionsNavigation from "./ActionsNavigation";
+import PermisionsNavigation from "./PermisionsNavigation";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -23,6 +24,10 @@ const MainStackNavigation = () => {
           <Screen
             name={routes.ACTION_NAVIGATION}
             component={ActionsNavigation}
+          />
+          <Screen
+            name={routes.PERMISIONS_NAVIGATION}
+            component={PermisionsNavigation}
           />
         </>
       ) : (

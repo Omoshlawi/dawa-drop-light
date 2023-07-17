@@ -49,8 +49,8 @@ const Roles = ({ navigation }) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate(routes.ACTION_NAVIGATION, {
-                  screen: routes.ACTION_ROLE_DETAIL_SCREEN,
-                  params: item,
+                  screen: routes.PERMISIONS_ROLE_DETAIL_SCREEN,
+                  params: { role: item, menuOptions, privileges },
                 })
               }
             >
@@ -83,7 +83,7 @@ const Roles = ({ navigation }) => {
         style={[styles.fab, { backgroundColor: colors.secondary }]}
         onPress={() =>
           navigation.navigate(routes.ACTION_NAVIGATION, {
-            screen: routes.ACTION_ROLE_FORM_SCREEN,
+            screen: routes.PERMISIONS_ROLE_FORM_SCREEN,
             params: { privileges, menuOptions },
           })
         }

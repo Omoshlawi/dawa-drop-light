@@ -14,10 +14,12 @@ export default Object.freeze({
   USER_CHANGE_PROFILE_UPDATE_SCREEN: "Update Profile",
   USER_DEFAULT_SCREEN: "Default Profile",
 
-  ACTION_NAVIGATION: "Actions Nav",
-  ACTION_ROLES_SCREEN: "Roles Screen",
-  ACTION_ROLE_FORM_SCREEN: "RolesForm Screen",
-  ACTION_ROLE_DETAIL_SCREEN: "Roles Detail Screen",
+  PERMISIONS_NAVIGATION: "Permisions Nav",
+  PERMISIONS_MENU_SCREEN: "PermisionsMenuScreen",
+  PERMISION_ROLES_SCREEN: "Roles Screen",
+  PERMISIONS_ROLE_FORM_SCREEN: "RolesForm Screen",
+  PERMISIONS_ROLE_DETAIL_SCREEN: "Roles Detail Screen",
 
+  ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
 });
