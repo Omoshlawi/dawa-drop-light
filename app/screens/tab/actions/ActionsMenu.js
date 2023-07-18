@@ -14,23 +14,22 @@ const ActionsMenu = ({ navigation }) => {
   const { colors } = useTheme();
   const [user, setUser] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
   useFocusEffect(
     useCallback(() => {
-      handleFetchUser();
-      handleFetchMenu();
+      handleFetch();
     }, [])
   );
-  const handleFetchUser = async () => {
+  const handleFetch = async () => {
+    setLoading(true);
     const response = await getUser();
+    const mresponse = await getMenuOptions();
+    setLoading(false);
     if (response.ok) {
       setUser(response.data);
     }
-  };
-
-  const handleFetchMenu = async () => {
-    const response = await getMenuOptions();
-    if (response.ok) {
-      setMenuOptions(response.data.results);
+    if (mresponse.ok) {
+      setMenuOptions(mresponse.data.results);
     }
   };
 
@@ -41,6 +40,8 @@ const ActionsMenu = ({ navigation }) => {
   return (
     <SafeArea>
       <FlatList
+        onRefresh={handleFetch}
+        refreshing={loading}
         data={menuOptions}
         contentContainerStyle={styles.itemsContainer}
         numColumns={2}

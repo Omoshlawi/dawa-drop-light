@@ -11,6 +11,7 @@ const useAuthorize = () => {
       headers: { "Content-Type": "multipart/form-data" },
     });
   const updateRole = (_id, data) => apiClient.put(`auth/roles/${_id}`, data);
+  const asignUserRoles = (_id, data) => apiClient.post(`auth/user/${_id}/asign-role`, data);
   const updatePrivilege = (_id, data) =>
     apiClient.put(`auth/privileges/${_id}`, data);
   const updateMenuOption = (_id, data) =>
@@ -31,6 +32,7 @@ const useAuthorize = () => {
     updatePrivilege,
     updateMenuOption,
     addMenuOption,
+    asignUserRoles
   };
 };
 
