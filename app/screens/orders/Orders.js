@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../components/layout";
 import { Card, FAB, useTheme } from "react-native-paper";
-import { usePatient } from "../../api";
+import { useOrder, usePatient } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import routes from "../../navigation/routes";
@@ -10,12 +10,21 @@ import routes from "../../navigation/routes";
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { getOrders } = usePatient();
+  const { getDeliveryModes } = useOrder();
+  const [modes, setModes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const handleFetch = async () => {
+    setLoading(true);
     const response = await getOrders();
+    const dResp = await getDeliveryModes();
+    setLoading(false);
     if (response.ok) {
       setOrders(response.data.results);
+    }
+    if (dResp.ok) {
+      setModes(dResp.data.results);
     }
   };
   useFocusEffect(
@@ -43,6 +52,7 @@ const Orders = ({ navigation, route }) => {
         onPress={() => {
           navigation.navigate(routes.ORDERS_NAVIGATION, {
             screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
+            params: { modes },
           });
         }}
       />

@@ -22,11 +22,15 @@ const FormItemPicker = ({ name, ...otherProps }) => {
     <View>
       <ItemPicker
         value={values[name]}
-        onValueChange={(value) => setFieldValue(name, value)}
-        // onValueChange={(value) => console.log(value)}
+        onValueChange={(value) =>
+          Array.isArray(value)
+            ? setFieldValue(name, value)
+            : handleChange(name)(value)
+        }
         {...otherProps}
       />
-      {errors[name] && touched && (
+
+      {errors[name] && touched[name] && (
         <Text style={{ color: error, paddingLeft: 5 }}>{errors[name]}</Text>
       )}
     </View>

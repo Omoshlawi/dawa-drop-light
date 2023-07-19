@@ -82,7 +82,7 @@ const Roles = ({ navigation }) => {
         icon="plus"
         style={[styles.fab, { backgroundColor: colors.secondary }]}
         onPress={() =>
-          navigation.navigate(routes.ACTION_NAVIGATION, {
+          navigation.navigate(routes.PERMISIONS_NAVIGATION, {
             screen: routes.PERMISIONS_ROLE_FORM_SCREEN,
             params: { privileges, menuOptions },
           })

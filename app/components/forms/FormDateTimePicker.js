@@ -19,7 +19,7 @@ const FormDateTimePicker = ({ name, ...otherProps }) => {
         }}
         {...otherProps}
       />
-      {errors[name] && touched && (
+      {errors[name] && touched[name] && (
         <Text style={{ color: error, paddingLeft: 5 }}>{errors[name]}</Text>
       )}
     </>

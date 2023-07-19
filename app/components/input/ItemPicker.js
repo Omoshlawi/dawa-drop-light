@@ -118,10 +118,8 @@ const ItemPicker = ({
             )}
           </View>
         ) : (
-          <Text
-            style={[styles.input, current ? {} : { color: colors.disabled }]}
-          >
-            {current ? labelExtractor(current) : placeHolder}
+          <Text style={[styles.input]}>
+            {current ? labelExtractor(current) : label}
           </Text>
         )}
         <IconButton
@@ -164,7 +162,10 @@ const ItemPicker = ({
                         values.push(valueExtractor(item));
                       }
                       onValueChange(values);
-                    } else onValueChange(valueExtractor(item));
+                    } else {
+                      const value = valueExtractor(item);
+                      onValueChange(value);
+                    }
                   }
                   setShowModal(multiple);
                 }}
