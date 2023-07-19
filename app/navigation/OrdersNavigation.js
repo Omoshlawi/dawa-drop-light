@@ -24,7 +24,7 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_DELIVERY_MODES_FORM_SCREEN}
         component={DeliveryModeForm}
-        options={{ title: "Manage Delivery Modes" }}
+        options={{ title: "" }}
       />
     </Navigator>
   );
