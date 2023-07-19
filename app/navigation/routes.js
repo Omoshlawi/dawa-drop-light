@@ -31,6 +31,9 @@ export default Object.freeze({
   PERMISIONS_USER_ROLES_SCREEN: "UserRoles Screen",
   PERMISIONS_USER_ROLES_ASSIGNMENT_SCREEN: "UserRolesAssignment Screen",
 
+  ORDERS_NAVIGATION: "Orders Nav",
+  ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",
+
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
 });

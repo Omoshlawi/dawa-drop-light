@@ -18,8 +18,8 @@ const mapping = {
     screen: routes.PERMISIONS_USER_ROLES_SCREEN,
   },
   Appointments: {
-    screen: routes.ACTION_APPOINTMENTS_SCREEN,
-    route: routes.ACTION_NAVIGATION,
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_APPOINMENTS_SCREEN,
   },
 };
 
