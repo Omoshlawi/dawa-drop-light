@@ -22,11 +22,7 @@ const FormItemPicker = ({ name, ...otherProps }) => {
     <View>
       <ItemPicker
         value={values[name]}
-        onValueChange={(value) =>
-          Array.isArray(value)
-            ? setFieldValue(name, value)
-            : handleChange(name)(value)
-        }
+        onValueChange={(value) => setFieldValue(name, value)}
         {...otherProps}
       />
 

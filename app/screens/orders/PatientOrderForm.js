@@ -105,6 +105,7 @@ const PatientOrderForm = ({ navigation, route }) => {
               label="Delivery mode"
               data={modes}
               valueExtractor={({ _id }) => _id}
+              labelExtractor={({ name }) => name}
               renderItem={({ item }) => (
                 <List.Item
                   title={item.name}

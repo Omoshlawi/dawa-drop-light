@@ -9,11 +9,11 @@ import _ from "lodash";
 const ItemPicker = ({
   icon,
   data = [],
-  valueExtractor,
+  valueExtractor,//required
   renderItem,
   placeHolder,
   title,
-  labelExtractor,
+  labelExtractor,//required
   value,
   onValueChange,
   numColumns,
