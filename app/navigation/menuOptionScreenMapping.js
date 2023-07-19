@@ -21,6 +21,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_APPOINMENTS_SCREEN,
   },
+  DeliveryModes: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_DELIVERY_MODES_SCREEN,
+  },
 };
 
 export const get = (link) => {

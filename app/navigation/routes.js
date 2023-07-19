@@ -33,6 +33,8 @@ export default Object.freeze({
 
   ORDERS_NAVIGATION: "Orders Nav",
   ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",
+  ORDERS_DELIVERY_MODES_SCREEN: "DeliveryModes Screen",
+  ORDERS_DELIVERY_MODES_FORM_SCREEN: "DeliveryModesfORM Screen",
 
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
