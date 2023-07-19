@@ -4,6 +4,8 @@ import {
   Appointments,
   DeliveryModeForm,
   DeliveryModes,
+  Orders,
+  PatientOrderForm,
 } from "../screens/orders";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -24,6 +26,16 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_DELIVERY_MODES_FORM_SCREEN}
         component={DeliveryModeForm}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ORDERS_ORDERS_SCREEN}
+        component={Orders}
+        options={{ title: "Orders" }}
+      />
+      <Screen
+        name={routes.ORDERS_PATIENT_ORDER_FORM_SCREEN}
+        component={PatientOrderForm}
         options={{ title: "" }}
       />
     </Navigator>

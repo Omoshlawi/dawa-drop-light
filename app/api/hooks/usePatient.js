@@ -5,7 +5,7 @@ const usePatient = () => {
   addTokenInterceptor();
   const getAppointments = () => apiClient.get("patients/appointments");
   const getOrders = () => apiClient.get("patients/orders");
-  return { getAppointments };
+  return { getAppointments, getOrders };
 };
 
 export default usePatient;

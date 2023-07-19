@@ -25,6 +25,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_DELIVERY_MODES_SCREEN,
   },
+  PatientOrders: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_ORDERS_SCREEN,
+  },
 };
 
 export const get = (link) => {
