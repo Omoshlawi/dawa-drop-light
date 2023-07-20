@@ -10,7 +10,7 @@ const DateTimePicker = ({
   value,
   onChangeValue,
   icon,
-  //mode = "time", //countdown,datetime, time, date
+  defaultMode = "time", //countdown,datetime, time, date NB: now supotes date and time only
   is24Hrs = true,
   formarter, //required
 }) => {
@@ -30,7 +30,7 @@ const DateTimePicker = ({
     setDate(selectedDate);
     if (onChangeValue instanceof Function) onChangeValue(selectedDate);
   }, []);
-  const [mode, setMode] = useState("date");
+  const [mode, setMode] = useState(defaultMode);
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -57,7 +57,10 @@ const DateTimePicker = ({
           sh
         />
       )}
-      <IconButton icon="calendar" onPress={showDatepicker} />
+      <IconButton
+        icon="calendar"
+        onPress={defaultMode === "time" ? showTimepicker : showDatepicker}
+      />
     </View>
   );
 };
