@@ -1,51 +1,60 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import React, { useCallback, useState } from "react";
 import { default as ExpoDateTimePicker } from "@react-native-community/datetimepicker";
 import moment from "moment";
-import { Button, IconButton } from "react-native-paper";
+import { Button, IconButton, Text } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const DateTimePicker = ({
-  placeholder = "Select Date",
+  label = "Select Date",
   value,
-  onChangeDate,
+  onChangeValue,
   icon,
+  //mode = "time", //countdown,datetime, time, date
+  is24Hrs = true,
+  formarter, //required
 }) => {
-  const [date, setDate] = useState(new Date(value ? value : Date.now()));
-  const [mode, setMode] = useState("date");
+  const [date, setDate] = useState(value ? new Date(value) : new Date());
   const [show, setShow] = useState(false);
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
+  const handleChange = useCallback((event, selectedDate) => {
+    const {
+      nativeEvent: { timestamp },
+    } = event;
+    // timestamp and selected date are same
+    // console.log("1. ", moment(timestamp).toLocaleString());
+    // console.log("2. ", moment(selectedDate).toLocaleString());
+    // console.log(timestamp); //1689730058119
+    // console.log(selectedDate); //2023-07-19T13:52:47.691Z
+    // console.log(value ? new Date(value) : new Date()); //2023-07-19T13:52:48.352Z
     setShow(false);
-    setDate(currentDate);
-    if (onChangeDate instanceof Function) onChangeDate(currentDate);
+    setDate(selectedDate);
+    if (onChangeValue instanceof Function) onChangeValue(selectedDate);
+  }, []);
+  const [mode, setMode] = useState("date");
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
   };
   const showDatepicker = () => {
-    setMode("date");
-    setShow(true);
+    showMode("date");
   };
 
   const showTimepicker = () => {
-    setMode("time");
-    setShow(true);
+    showMode("time");
   };
 
   return (
     <View style={styles.container}>
       {icon && <MaterialCommunityIcons name={icon} size={20} />}
-      <TextInput
-        style={styles.textInput}
-        placeholder={placeholder}
-        // placeholderTextColor={colors.medium}
-        value={date.toDateString()}
-      />
+      <Text style={styles.textInput}>{value ? formarter(value) : label}</Text>
       {show && (
         <ExpoDateTimePicker
           testID="dateTimePicker"
           value={date}
           mode={mode}
-          is24Hour={true}
-          onChange={onChange}
+          is24Hour={is24Hrs}
+          onChange={handleChange}
+          sh
         />
       )}
       <IconButton icon="calendar" onPress={showDatepicker} />

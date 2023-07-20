@@ -28,7 +28,7 @@ const FormField = ({
         onBlur={() => setFieldTouched(name)}
         onChangeText={handleChange(name)}
         value={values[name] ? `${values[name]}` : ""}
-        error={Boolean(errors[name])}
+        error={Boolean(errors[name] && touched[name])}
         secureTextEntry={password && hide}
         left={
           icon ? <TextInput.Icon icon={icon} color={secondary} /> : undefined

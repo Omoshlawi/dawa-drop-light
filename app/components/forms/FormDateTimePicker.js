@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useFormikContext } from "formik";
 import { DateTimePicker } from "../input";
+import { useTheme } from "react-native-paper";
 
 const FormDateTimePicker = ({ name, ...otherProps }) => {
   const { setFieldTouched, handleChange, touched, errors, values } =
@@ -13,9 +14,8 @@ const FormDateTimePicker = ({ name, ...otherProps }) => {
     <>
       <DateTimePicker
         value={values[name]}
-        onChangeDate={(date) => {
-          const selectedDate = new Date(date);
-          handleChange(name)(selectedDate.toISOString());
+        onChangeValue={(value) => {
+          handleChange(name)(new Date(value).toISOString());
         }}
         {...otherProps}
       />

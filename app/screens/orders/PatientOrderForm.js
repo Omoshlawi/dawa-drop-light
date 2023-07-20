@@ -5,6 +5,7 @@ import { Dialog, getDialogIcon } from "../../components/dialog";
 import { SafeArea } from "../../components/layout";
 import {
   Form,
+  FormDateTimePicker,
   FormField,
   FormItemPicker,
   FormSubmitButton,
@@ -94,9 +95,9 @@ const PatientOrderForm = ({ navigation, route }) => {
             onSubmit={handleSubmit}
           >
             <FormField
+              name="phoneNumber"
               placeholder="Enter Phon enumber"
               label="Phone number"
-              name="phoneNumber"
               icon="phone"
             />
             <FormItemPicker
@@ -115,6 +116,14 @@ const PatientOrderForm = ({ navigation, route }) => {
                 />
               )}
               itemContainerStyle={{ marginBottom: 5 }}
+            />
+            <FormDateTimePicker
+              name={"deliveryTimeSlot"}
+              formarter={(value) => {
+                const date = new Date(value);
+                return date.toDateString();
+              }}
+              mode="datetime"
             />
 
             <FormSubmitButton
