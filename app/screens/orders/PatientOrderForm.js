@@ -15,6 +15,7 @@ import { getFormFileFromUri, getImageUrl, pickX } from "../../utils/helpers";
 import Logo from "../../components/Logo";
 import { useTheme, Button, Text, List } from "react-native-paper";
 import { usePatient } from "../../api";
+import TimeRangePicker from "../../components/time/TimeRangePicker";
 
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
@@ -117,14 +118,7 @@ const PatientOrderForm = ({ navigation, route }) => {
               )}
               itemContainerStyle={{ marginBottom: 5 }}
             />
-            <FormDateTimePicker
-              name={"deliveryTimeSlot"}
-              formarter={(value) => {
-                const date = new Date(value);
-                return date.toDateString();
-              }}
-              mode="datetime"
-            />
+            <TimeRangePicker />
 
             <FormSubmitButton
               title={order ? "Update Order" : "Add Order"}
