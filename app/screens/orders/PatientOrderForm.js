@@ -1,5 +1,11 @@
-import { StyleSheet, View, Image } from "react-native";
-import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Dialog, getDialogIcon } from "../../components/dialog";
 import { SafeArea } from "../../components/layout";
@@ -14,10 +20,11 @@ import {
 import { screenWidth } from "../../utils/contants";
 import { getFormFileFromUri, getImageUrl, pickX } from "../../utils/helpers";
 import Logo from "../../components/Logo";
-import { useTheme, Button, Text, List } from "react-native-paper";
+import { useTheme, Button, Text, List, Modal } from "react-native-paper";
 import { usePatient } from "../../api";
 import TimeRangePicker from "../../components/time/TimeRangePicker";
 import { LocationPicker } from "../../components/map";
+import moment from "moment";
 
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
@@ -42,9 +49,24 @@ const PatientOrderForm = ({ navigation, route }) => {
   const { colors } = useTheme();
 
   const [loading, setLoading] = useState(false);
+  const [eligible, setEligible] = useState(null);
+  const [loadEligibility, setLoadEligibility] = useState(null);
 
-  const { addOrder, updateOrder } = usePatient();
+  const { addOrder, updateOrder, checkEligibility } = usePatient();
   const { modes, mode: order } = route.params;
+
+  const handleCheckEligible = async () => {
+    setLoadEligibility(true);
+    const response = await checkEligibility();
+    setLoadEligibility(false);
+    if (response.ok) {
+      setEligible(response.data);
+    }
+  };
+
+  useEffect(() => {
+    handleCheckEligible();
+  }, []);
 
   const handleSubmit = async (values, { setErrors, errors }) => {
     setLoading(true);
@@ -76,66 +98,134 @@ const PatientOrderForm = ({ navigation, route }) => {
   };
   return (
     <SafeArea>
-      <View style={styles.screen}>
-        <Logo size={screenWidth * 0.4} />
-        <View style={styles.form}>
-          <Form
-            initialValues={
-              order
-                ? pickX(order, [
-                    "deliveryAddress",
-                    // "deliveryTimeSlot",
-                    "deliveryMode",
-                    "phoneNumber",
-                  ])
-                : {
-                    deliveryAddress: null,
-                    // deliveryTimeSlot: null,
-                    deliveryMode: "",
-                    phoneNumber: "",
-                  }
-            }
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            <FormField
-              name="phoneNumber"
-              placeholder="Enter Phon enumber"
-              label="Phone number"
-              icon="phone"
-            />
-            <FormItemPicker
-              name="deliveryMode"
-              icon="truck-delivery"
-              label="Delivery mode"
-              data={modes}
-              valueExtractor={({ _id }) => _id}
-              labelExtractor={({ name }) => name}
-              renderItem={({ item }) => (
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={loadEligibility}
+            onRefresh={handleCheckEligible}
+          />
+        }
+      >
+        {eligible && (
+          <View style={styles.screen}>
+            <Logo size={screenWidth * 0.3} />
+            {eligible && (
+              <View style={styles.data}>
                 <List.Item
-                  title={item.name}
-                  left={(props) => (
-                    <List.Icon {...props} icon="truck-delivery" />
-                  )}
+                  title={`${eligible.appointment.appointment_type} Appointment`}
+                  description={moment(
+                    new Date(
+                      eligible.appointment.appointment
+                        .split("-")
+                        .reverse()
+                        .join("-")
+                    )
+                  ).format("ddd Do MMM yyyy")}
+                  style={[
+                    styles.listItem,
+                    {
+                      backgroundColor: colors.surface,
+                    },
+                  ]}
+                  descriptionStyle={{ color: colors.disabled }}
                 />
-              )}
-              itemContainerStyle={{ marginBottom: 5 }}
-            />
-            <TimeRangePicker />
+                <List.Item
+                  title="Regimen"
+                  description={eligible.currentRegimen.regimen}
+                  style={[
+                    styles.listItem,
+                    {
+                      backgroundColor: colors.surface,
+                    },
+                  ]}
+                  descriptionStyle={{ color: colors.disabled }}
+                />
+                <List.Item
+                  title="Patient name"
+                  description={`${eligible.currentRegimen.firstname} ${eligible.currentRegimen.middlename} ${eligible.currentRegimen.lastname}`}
+                  style={[
+                    styles.listItem,
+                    {
+                      backgroundColor: colors.surface,
+                    },
+                  ]}
+                  descriptionStyle={{ color: colors.disabled }}
+                />
+                <List.Item
+                  title="Patient CCC number"
+                  description={`${eligible.currentRegimen.ccc_no}`}
+                  style={[
+                    styles.listItem,
+                    {
+                      backgroundColor: colors.surface,
+                    },
+                  ]}
+                  descriptionStyle={{ color: colors.disabled }}
+                />
+              </View>
+            )}
+            <View style={styles.form}>
+              <Form
+                initialValues={
+                  order
+                    ? pickX(order, [
+                        "deliveryAddress",
+                        // "deliveryTimeSlot",
+                        "deliveryMode",
+                        "phoneNumber",
+                      ])
+                    : {
+                        deliveryAddress: null,
+                        // deliveryTimeSlot: null,
+                        deliveryMode: "",
+                        phoneNumber: "",
+                      }
+                }
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+              >
+                <FormField
+                  name="phoneNumber"
+                  placeholder="Enter Phon enumber"
+                  label="Phone number"
+                  icon="phone"
+                />
+                <FormItemPicker
+                  name="deliveryMode"
+                  icon="truck-delivery"
+                  label="Delivery mode"
+                  data={modes}
+                  valueExtractor={({ _id }) => _id}
+                  labelExtractor={({ name }) => name}
+                  renderItem={({ item }) => (
+                    <List.Item
+                      title={item.name}
+                      left={(props) => (
+                        <List.Icon {...props} icon="truck-delivery" />
+                      )}
+                    />
+                  )}
+                  itemContainerStyle={{ marginBottom: 5 }}
+                />
+                <TimeRangePicker />
 
-            <FormLocationPicker name="deliveryAddress" />
+                <FormLocationPicker name="deliveryAddress" />
 
-            <FormSubmitButton
-              title={order ? "Update Order" : "Add Order"}
-              mode="contained"
-              style={styles.btn}
-              loading={loading}
-              disabled={loading}
-            />
-            <View style={{ flex: 1 }} />
-          </Form>
-        </View>
-      </View>
+                <FormSubmitButton
+                  title={order ? "Update Order" : "Add Order"}
+                  mode="contained"
+                  style={styles.btn}
+                  loading={loading}
+                  disabled={
+                    loading || Boolean(eligible) === false || loadEligibility
+                  }
+                />
+                <View style={{ flex: 1 }} />
+              </Form>
+            </View>
+          </View>
+        )}
+      </ScrollView>
       <Dialog
         visible={dialogInfo.show}
         title={dialogInfo.success ? "Success!" : "Failure!"}
@@ -191,5 +281,15 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginBottom: 5,
     // padding: 10,
+  },
+  data: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  listItem: {
+    width: "47%",
+    margin: 3,
   },
 });

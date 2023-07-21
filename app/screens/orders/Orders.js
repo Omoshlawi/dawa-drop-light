@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../components/layout";
-import { Card, FAB, useTheme } from "react-native-paper";
+import { Avatar, Card, FAB, useTheme } from "react-native-paper";
 import { useOrder, usePatient } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import routes from "../../navigation/routes";
+import moment from "moment";
 
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
@@ -40,8 +41,18 @@ const Orders = ({ navigation, route }) => {
         onRefresh={handleFetch}
         keyExtractor={({ _id }) => _id}
         renderItem={({ item }) => {
-          const { _id } = item;
-          return <Card.Title title={_id} />;
+          const { _id, created } = item;
+          return (
+            <Card.Title
+              title={_id}
+              style={[styles.listItem, { backgroundColor: colors.surface }]}
+              left={(props) => <Avatar.Icon {...props} icon="cart" />}
+              subtitle={`${moment(created).format(
+                "Do dddd MMM YYYY hh:mm"
+              )} hrs`}
+              subtitleStyle={{ color: colors.disabled }}
+            />
+          );
         }}
       />
       <FAB
@@ -68,5 +79,8 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  listItem: {
+    marginBottom: 10,
   },
 });

@@ -8,7 +8,15 @@ const usePatient = () => {
   const addOrder = (data) => apiClient.post("patients/orders", data);
   const updateOrder = (orderId, data) =>
     apiClient.put(`patients/orders/${orderId}`, data);
-  return { getAppointments, getOrders, addOrder, updateOrder };
+  const checkEligibility = () =>
+    apiClient.get("patients/orders/check-eligibility");
+  return {
+    getAppointments,
+    getOrders,
+    addOrder,
+    updateOrder,
+    checkEligibility,
+  };
 };
 
 export default usePatient;
