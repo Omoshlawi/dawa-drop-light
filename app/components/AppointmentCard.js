@@ -11,7 +11,7 @@ const AppointmentCard = ({
   appointment,
 }) => {
   const { roundness, colors } = useTheme();
-  const date = moment(appointment);
+  const date = moment(new Date(appointment.split("-").reverse().join("-")));
   return (
     <View
       style={[
@@ -32,9 +32,9 @@ const AppointmentCard = ({
       </View>
       <View style={styles.content}>
         <Text variant="bodyLarge" style={{}}>
-          12.00 A.M
+          {date.format("HH:mm")}
         </Text>
-        <Text variant="headlineSmall" style={{}} >
+        <Text variant="headlineSmall" style={{}}>
           {appointment_type} Appointment
         </Text>
         <Text variant="bodyLarge" style={{}}>

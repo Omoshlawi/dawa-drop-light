@@ -85,6 +85,9 @@ export default TimeRangePicker;
 const styles = StyleSheet.create({
   container: {
     padding: 5,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: 10,
   },
   inputContaoner: {
     flexDirection: "row",

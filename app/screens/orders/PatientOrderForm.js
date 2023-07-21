@@ -8,6 +8,7 @@ import {
   FormDateTimePicker,
   FormField,
   FormItemPicker,
+  FormLocationPicker,
   FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
@@ -16,6 +17,7 @@ import Logo from "../../components/Logo";
 import { useTheme, Button, Text, List } from "react-native-paper";
 import { usePatient } from "../../api";
 import TimeRangePicker from "../../components/time/TimeRangePicker";
+import { LocationPicker } from "../../components/map";
 
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
@@ -23,10 +25,10 @@ const validationSchema = Yup.object().shape({
     longitude: Yup.number().required().label("Longitude"),
     address: Yup.string().label("Address"),
   }).label("Delivery address"),
-  deliveryTimeSlot: Yup.object({
-    startTime: Yup.date().required().label("Start time"),
-    endTime: Yup.date().required().label("End time"),
-  }).label("Time between"),
+  // deliveryTimeSlot: Yup.object({
+  //   startTime: Yup.date().required().label("Start time"),
+  //   endTime: Yup.date().required().label("End time"),
+  // }).label("Time between"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
 });
@@ -34,7 +36,7 @@ const validationSchema = Yup.object().shape({
 const PatientOrderForm = ({ navigation, route }) => {
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "menu Option Added Successfully!",
+    message: "Order was Successfully!",
     success: true,
   });
   const { colors } = useTheme();
@@ -58,6 +60,7 @@ const PatientOrderForm = ({ navigation, route }) => {
     } else {
       if (response.status === 400) {
         setErrors({ ...errors, ...response.data.errors });
+        console.log(response.data);
       } else {
         setDialogInfo({
           ...dialogInfo,
@@ -81,13 +84,13 @@ const PatientOrderForm = ({ navigation, route }) => {
               order
                 ? pickX(order, [
                     "deliveryAddress",
-                    "deliveryTimeSlot",
+                    // "deliveryTimeSlot",
                     "deliveryMode",
                     "phoneNumber",
                   ])
                 : {
                     deliveryAddress: null,
-                    deliveryTimeSlot: null,
+                    // deliveryTimeSlot: null,
                     deliveryMode: "",
                     phoneNumber: "",
                   }
@@ -119,6 +122,8 @@ const PatientOrderForm = ({ navigation, route }) => {
               itemContainerStyle={{ marginBottom: 5 }}
             />
             <TimeRangePicker />
+
+            <FormLocationPicker name="deliveryAddress" />
 
             <FormSubmitButton
               title={order ? "Update Order" : "Add Order"}

@@ -1,8 +1,6 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Button, IconButton, useTheme } from "react-native-paper";
 import MapView, { Marker } from "react-native-maps";
-import useLocation from "../hooks/useLocation";
 /**
  *
  * @param {*} param0
@@ -11,42 +9,23 @@ import useLocation from "../hooks/useLocation";
  * @returns
  */
 
-const LocationChoice = ({ setVisible, onLocationChosen }) => {
-  const location = useLocation();
-  const { colors } = useTheme();
-  const [markerLocation, setMarkerLocation] = useState();
-  useEffect(() => {
-    setMarkerLocation({ ...location });
-  }, [location]);
+const LocationChoice = ({
+  defaultSpanLoc,
+  defaultLocation,
+  onLocationChosen,
+}) => {
+  const [markerLocation, setMarkerLocation] = useState(defaultLocation);
+  const [spanLocation, setSpanLocation] = useState(defaultSpanLoc);
+
   return (
     <View style={styles.screen}>
-      <View style={styles.buttonsGroup}>
-        <IconButton
-          icon="check"
-          mode="outlined"
-          iconColor={colors.primary}
-          disabled={!Boolean(location)}
-          onPress={() => {
-            if (onLocationChosen instanceof Function) {
-              onLocationChosen(markerLocation);
-            }
-            setVisible(false);
-          }}
-        />
-        <IconButton
-          icon="close"
-          mode="outlined"
-          iconColor={colors.danger}
-          onPress={() => setVisible(false)}
-        />
-      </View>
-      {location && (
+      {defaultSpanLoc && (
         <View style={styles.mapContainer}>
           <MapView
             style={styles.map}
             initialRegion={{
-              latitude: location.latitude,
-              longitude: location.longitude,
+              latitude: spanLocation.latitude,
+              longitude: spanLocation.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
@@ -57,6 +36,7 @@ const LocationChoice = ({ setVisible, onLocationChosen }) => {
               draggable
               onDragEnd={(e) => {
                 setMarkerLocation(e.nativeEvent.coordinate);
+                onLocationChosen(e.nativeEvent.coordinate);
               }}
             >
               <Image
@@ -83,10 +63,5 @@ const styles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-  },
-  buttonsGroup: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
   },
 });

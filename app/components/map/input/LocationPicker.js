@@ -1,39 +1,33 @@
-import { StyleSheet, View, TextInput, Text, Modal } from "react-native";
+import { StyleSheet, View, Text, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LocationChoice from "./LocationChoice";
-import { IconButton } from "react-native-paper";
-import { AppErrorMessage } from "../forms";
-import { useFormikContext } from "formik";
-const LocationPicker = () => {
+import { IconButton, useTheme } from "react-native-paper";
+import useLocation from "../hooks/useLocation";
+const LocationPicker = ({ location, onLocationChange }) => {
   const [showModal, setShowModal] = useState(false);
-  const { setFieldValue, errors, touched, values, handleChange } =
-    useFormikContext();
   const [deliverLocation, setDeliveryLocation] = useState();
-
+  const currLocation = useLocation();
+  const { colors, roundness } = useTheme();
   useEffect(() => {
     if (deliverLocation) {
-      setFieldValue("latitude", deliverLocation.latitude);
-      setFieldValue("longitude", deliverLocation.longitude);
+      if (onLocationChange instanceof Function) {
+        onLocationChange(deliverLocation);
+      }
     }
   }, [deliverLocation]);
 
   return (
     <>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, { borderRadius: roundness }]}>
         <MaterialCommunityIcons
           name="hospital-marker"
           size={30}
-          color={colors.medium}
+          color={colors.outline}
         />
-        <Text
-          style={[
-            styles.input,
-            values.longitude || values.latitude ? {} : { color: colors.medium },
-          ]}
-        >
-          {values.longitude || values.latitude
-            ? `(${values.latitude}, ${values.longitude})`
+        <Text style={[styles.input]}>
+          {location && (location.longitude || location.latitude)
+            ? `(${location.latitude}, ${location.longitude})`
             : "Choose Delivery Location"}
         </Text>
         <IconButton
@@ -42,22 +36,32 @@ const LocationPicker = () => {
           onPress={() => setShowModal(true)}
         />
       </View>
-      <AppErrorMessage
-        error={
-          errors.latitude || errors.longitude
-            ? "Delivery address cant be null"
-            : ""
-        }
-        visible={touched}
-      />
       <Modal
         visible={showModal}
         onDismiss={() => setShowModal(false)}
         animationType="slide"
       >
+        <View style={styles.buttonsGroup}>
+          <IconButton
+            icon="check"
+            mode="outlined"
+            iconColor={colors.primary}
+            // disabled={!Boolean(location)}
+            onPress={() => {
+              setShowModal(false);
+            }}
+          />
+          <IconButton
+            icon="close"
+            mode="outlined"
+            iconColor={colors.danger}
+            onPress={() => setShowModal(false)}
+          />
+        </View>
         <LocationChoice
-          setVisible={setShowModal}
+          defaultSpanLoc={location ? location : currLocation}
           onLocationChosen={setDeliveryLocation}
+          defaultLocation={location ? location : currLocation}
         />
       </Modal>
     </>
@@ -69,33 +73,31 @@ export default LocationPicker;
 const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
-    margin: 5,
     paddingHorizontal: 5,
-    backgroundColor: colors.white,
-    borderRadius: 20,
+
     alignItems: "center",
+    borderWidth: 1,
+    marginTop: 10,
   },
   input: {
     flex: 1,
     padding: 5,
   },
   listItem: {
-    backgroundColor: colors.white,
     marginTop: 8,
   },
   mordal: {
-    backgroundColor: colors.background,
     flex: 1,
   },
-  itemDescription: {
-    color: colors.medium,
-  },
-  itemTitle: {
-    color: colors.black,
-  },
+  itemDescription: {},
+  itemTitle: {},
   title: {
     padding: 10,
     textAlign: "center",
-    color: colors.primary,
+  },
+  buttonsGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
   },
 });
