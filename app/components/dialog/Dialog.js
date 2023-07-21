@@ -12,7 +12,6 @@ const Dialog = ({ children, title, onDismiss, visible, onRequestClose }) => {
     >
       <View style={styles.screen}>
         <View style={styles.dialog}>
-          <Text style={styles.dialogTitle}>{title}</Text>
           <View style={styles.dialogBody}>{children}</View>
           <View style={styles.dialogActions}></View>
         </View>

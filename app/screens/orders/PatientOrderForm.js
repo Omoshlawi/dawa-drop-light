@@ -7,23 +7,24 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { Dialog, getDialogIcon } from "../../components/dialog";
+import {
+  AlertDialog,
+  Dialog,
+  OrderConfirmation,
+} from "../../components/dialog";
 import { SafeArea } from "../../components/layout";
 import {
   Form,
-  FormDateTimePicker,
   FormField,
   FormItemPicker,
   FormLocationPicker,
-  FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { getFormFileFromUri, getImageUrl, pickX } from "../../utils/helpers";
 import Logo from "../../components/Logo";
-import { useTheme, Button, Text, List, Modal } from "react-native-paper";
+import { useTheme, Button, Text, List } from "react-native-paper";
 import { usePatient } from "../../api";
 import TimeRangePicker from "../../components/time/TimeRangePicker";
-import { LocationPicker } from "../../components/map";
 import moment from "moment";
 
 const validationSchema = Yup.object().shape({
@@ -44,7 +45,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message: "Order was Successfully!",
-    success: true,
+    mode: "success",
   });
   const { colors } = useTheme();
 
@@ -61,6 +62,16 @@ const PatientOrderForm = ({ navigation, route }) => {
     setLoadEligibility(false);
     if (response.ok) {
       setEligible(response.data);
+    } else {
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "error",
+        message: response.data.detail
+          ? response.data.detail
+          : "Unknow Error Occured",
+      });
+      console.log(response.data);
     }
   };
 
@@ -78,7 +89,7 @@ const PatientOrderForm = ({ navigation, route }) => {
     }
     setLoading(false);
     if (response.ok) {
-      setDialogInfo({ ...dialogInfo, show: response.ok, success: response.ok });
+      setDialogInfo({ ...dialogInfo, show: response.ok, mode: "success" });
     } else {
       if (response.status === 400) {
         setErrors({ ...errors, ...response.data.errors });
@@ -87,7 +98,7 @@ const PatientOrderForm = ({ navigation, route }) => {
         setDialogInfo({
           ...dialogInfo,
           show: true,
-          success: false,
+          mode: "error",
           message: response.data.detail
             ? response.data.detail
             : "Unknow Error Occured",
@@ -211,42 +222,51 @@ const PatientOrderForm = ({ navigation, route }) => {
 
                 <FormLocationPicker name="deliveryAddress" />
 
-                <FormSubmitButton
-                  title={order ? "Update Order" : "Add Order"}
+                <Button
                   mode="contained"
                   style={styles.btn}
                   loading={loading}
                   disabled={
                     loading || Boolean(eligible) === false || loadEligibility
                   }
-                />
+                  onPress={() =>
+                    setDialogInfo({
+                      ...dialogInfo,
+                      show: true,
+                      mode: "confirm",
+                    })
+                  }
+                >
+                  {order ? "Update Order" : "Add Order"}
+                </Button>
+                <Dialog
+                  visible={dialogInfo.show}
+                  // title={dialogInfo.success ? "Success!" : "Failure!"}
+                >
+                  {dialogInfo.mode !== "confirm" ? (
+                    <AlertDialog
+                      message={dialogInfo.message}
+                      mode={dialogInfo.mode}
+                      onButtonPress={() => {
+                        setDialogInfo({ ...dialogInfo, show: false });
+                        if (dialogInfo.mode === "success") navigation.goBack();
+                      }}
+                    />
+                  ) : (
+                    <OrderConfirmation
+                      onSubmit={() =>
+                        setDialogInfo({ ...dialogInfo, show: false })
+                      }
+                      deliveryModes={modes}
+                    />
+                  )}
+                </Dialog>
                 <View style={{ flex: 1 }} />
               </Form>
             </View>
           </View>
         )}
       </ScrollView>
-      <Dialog
-        visible={dialogInfo.show}
-        title={dialogInfo.success ? "Success!" : "Failure!"}
-      >
-        <View style={styles.dialog}>
-          <Image
-            style={styles.img}
-            source={getDialogIcon(dialogInfo.success ? "success" : "error")}
-          />
-          <Text style={styles.text}>{dialogInfo.message}</Text>
-          <Button
-            mode="outlined"
-            onPress={() => {
-              setDialogInfo({ ...dialogInfo, show: false });
-              if (dialogInfo.success) navigation.goBack();
-            }}
-          >
-            Ok
-          </Button>
-        </View>
-      </Dialog>
     </SafeArea>
   );
 };
@@ -274,10 +294,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
   },
-  text: {
-    textAlign: "center",
-    padding: 10,
-  },
+
   itemContainer: {
     marginBottom: 5,
     // padding: 10,
