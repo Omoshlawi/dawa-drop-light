@@ -286,19 +286,6 @@ const styles = StyleSheet.create({
   btn: {
     marginVertical: 20,
   },
-  dialog: {
-    width: screenWidth * 0.75,
-  },
-  img: {
-    alignSelf: "center",
-    width: 100,
-    height: 100,
-  },
-
-  itemContainer: {
-    marginBottom: 5,
-    // padding: 10,
-  },
   data: {
     flexDirection: "row",
     flexWrap: "wrap",

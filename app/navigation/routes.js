@@ -14,6 +14,7 @@ export default Object.freeze({
   USER_CHANGE_PROFILE_UPDATE_SCREEN: "Update Profile",
   USER_DEFAULT_SCREEN: "Default Profile",
   USER_CREATE_PROFILE_SCREEN: "Create Profile",
+  USER_ACCOUNT_VERIFY_SCREEN: "AccountVerificationForm Screen",
 
   PERMISIONS_NAVIGATION: "Permisions Nav",
   PERMISIONS_MENU_SCREEN: "PermisionsMenuScreen",

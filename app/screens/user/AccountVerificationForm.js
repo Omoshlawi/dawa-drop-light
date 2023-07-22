@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { SafeArea } from "../../components/layout";
-import { useTheme } from "react-native-paper";
+import { useTheme, Text } from "react-native-paper";
 import { usePatient } from "../../api";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { screenWidth } from "../../utils/contants";
@@ -11,34 +11,32 @@ import Logo from "../../components/Logo";
 import routes from "../../navigation/routes";
 
 const validationSchemer = Yup.object().shape({
-  cccNumber: Yup.string().label("CCC Number").required(),
-  firstName: Yup.string().label("First Name").required(),
-  upiNo: Yup.string().label("Unique Patient Number(Optional)"),
+  code: Yup.string().label("OTP Code").required(),
 });
 const initalValues = {
-  cccNumber: "",
-  firstName: "",
-  upiNo: "",
+  code: "",
 };
 
-const CreateProfileScreen = ({ navigation }) => {
+const AccountVerificationForm = ({ navigation, route }) => {
+  const message = route.params;
   const { colors } = useTheme();
-  const { createProfile } = usePatient();
+  const { verifySelf } = usePatient();
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Profile created successfully!",
+    message: "Account verification success",
     mode: "success",
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values, { setErrors, errors }) => {
     setLoading(true);
-    const response = await createProfile(values);
+    const response = await verifySelf(values);
     setLoading(false);
     if (response.ok) {
-      navigation.navigate(routes.USER_NAVIGATION, {
-        screen: routes.USER_ACCOUNT_VERIFY_SCREEN,
-        params: response.data.message,
+      setDialogInfo({
+        ...dialogInfo,
+        show: response.ok,
+        mode: "success",
       });
     } else {
       if (response.status === 400) {
@@ -61,6 +59,9 @@ const CreateProfileScreen = ({ navigation }) => {
     <SafeArea>
       <View style={styles.screen}>
         <Logo size={screenWidth * 0.3} />
+        <Text variant="titleLarge" style={{ textAlign: "center", padding: 10 }}>
+          {message}
+        </Text>
         <View style={styles.form}>
           <Form
             initialValues={initalValues}
@@ -68,31 +69,18 @@ const CreateProfileScreen = ({ navigation }) => {
             onSubmit={handleSubmit}
           >
             <FormField
-              name="cccNumber"
-              placeholder="Enter ccc number"
-              label="CCC Number"
+              name="code"
+              placeholder="Enter verification code here"
+              label="code"
               icon="phone"
             />
-            <FormField
-              name="firstName"
-              placeholder="Enter first name"
-              label="First name"
-              icon="account"
-            />
-            <FormField
-              name="upiNo"
-              placeholder="Enter UPI Number"
-              label="UPI Number"
-              icon="account"
-            />
             <FormSubmitButton
-              title="Submit"
+              title="Submitt"
               mode="contained"
               style={styles.btn}
               loading={loading}
               disabled={loading}
             />
-
             <View style={{ flex: 1 }} />
           </Form>
         </View>
@@ -106,7 +94,10 @@ const CreateProfileScreen = ({ navigation }) => {
           mode={dialogInfo.mode}
           onButtonPress={() => {
             setDialogInfo({ ...dialogInfo, show: false });
-            if (dialogInfo.mode === "success") navigation.goBack();
+            if (dialogInfo.mode === "success")
+              navigation.navigate(routes.BTAB_NAVIGATION, {
+                screen: routes.BTAB_HOME_SCREEN,
+              });
           }}
         />
       </Dialog>
@@ -114,7 +105,7 @@ const CreateProfileScreen = ({ navigation }) => {
   );
 };
 
-export default CreateProfileScreen;
+export default AccountVerificationForm;
 
 const styles = StyleSheet.create({
   screen: {

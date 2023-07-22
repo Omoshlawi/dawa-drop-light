@@ -10,12 +10,17 @@ const usePatient = () => {
     apiClient.put(`patients/orders/${orderId}`, data);
   const checkEligibility = () =>
     apiClient.get("patients/orders/check-eligibility");
+  const createProfile = (data) =>
+    apiClient.post("patients/create-profile", data);
+  const verifySelf = (data) => apiClient.post("patients/verify", data);
   return {
     getAppointments,
     getOrders,
     addOrder,
     updateOrder,
     checkEligibility,
+    createProfile,
+    verifySelf,
   };
 };
 

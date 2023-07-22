@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import {
+  AccountVerificationForm,
   ChangePassword,
   CreateProfileScreen,
   DefaultScreen,
@@ -31,6 +32,11 @@ const UserNavigation = () => {
         name={routes.USER_CREATE_PROFILE_SCREEN}
         component={CreateProfileScreen}
         options={{ title: "Create profile" }}
+      />
+      <Screen
+        name={routes.USER_ACCOUNT_VERIFY_SCREEN}
+        component={AccountVerificationForm}
+        options={{ title: "Verify yourself" }}
       />
     </Navigator>
   );
