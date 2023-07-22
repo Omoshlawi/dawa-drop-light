@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { SafeArea } from "../../components/layout";
-import { useTheme } from "react-native-paper";
+import { IconButton, useTheme } from "react-native-paper";
 import { usePatient } from "../../api";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { screenWidth } from "../../utils/contants";
@@ -14,6 +14,7 @@ import {
 } from "../../components/forms";
 import Logo from "../../components/Logo";
 import routes from "../../navigation/routes";
+import { CodeScanner } from "../../components/scanner";
 
 const validationSchemer = Yup.object().shape({
   code: Yup.string().label("Delivery Code").required(),
@@ -23,7 +24,7 @@ const validationSchemer = Yup.object().shape({
 const initalValues = {
   code: "",
   review: "",
-  rating: 4,
+  rating: "",
 };
 const FeedBackForm = () => {
   const { colors } = useTheme();
@@ -64,13 +65,13 @@ const FeedBackForm = () => {
   return (
     <SafeArea>
       <View style={styles.screen}>
-        <Logo size={screenWidth * 0.3} />
         <View style={styles.form}>
           <Form
             initialValues={initalValues}
             validationSchema={validationSchemer}
             onSubmit={handleSubmit}
           >
+            <CodeScanner />
             <FormField
               name="code"
               placeholder="Enter/Scan delivery code"
