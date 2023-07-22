@@ -70,8 +70,8 @@ const AccountVerificationForm = ({ navigation, route }) => {
           >
             <FormField
               name="code"
-              placeholder="Enter verification code here"
-              label="code"
+              placeholder="Enter OTP Code"
+              label="OTP Code"
               icon="phone"
             />
             <FormSubmitButton

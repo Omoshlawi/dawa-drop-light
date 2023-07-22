@@ -57,7 +57,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     // if user is normal user with no roles then set suggest to true
-    // setSuggestProfile(user && !user.isSuperUser && roles.length > 0);
+    setSuggestProfile(user && !user.isSuperUser && roles.length === 0);
   }, [roles, user]);
 
   if (!user) {
@@ -112,7 +112,11 @@ const Home = ({ navigation }) => {
           </TouchableOpacity>
         ) : (
           <>
-            <Text variant="titleMedium">Recent and Upcoming Appointments</Text>
+            {appointments.length > 0 && (
+              <Text variant="titleMedium">
+                Recent and Upcoming Appointments
+              </Text>
+            )}
             <FlatList
               showsHorizontalScrollIndicator={false}
               data={appointments}
