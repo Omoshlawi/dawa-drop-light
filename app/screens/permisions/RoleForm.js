@@ -15,7 +15,7 @@ import {
 import { screenWidth } from "../../utils/contants";
 import { pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
-import { Button, List, Text, useTheme } from "react-native-paper";
+import { Button, List, Switch, Text, useTheme } from "react-native-paper";
 import { DropDown, ItemPicker, ModalPicker } from "../../components/input";
 
 const validationSchemer = Yup.object().shape({
@@ -114,7 +114,15 @@ const RoleForm = ({ navigation, route }) => {
               placeholder="Select Privileges"
               multiple
               valueExtractor={(item) => item._id}
-              renderItem={({ item }) => <List.Item title={item.name} />}
+              renderItem={({ item, selected }) => (
+                <List.Item
+                  title={item.name}
+                  left={(props) => (
+                    <List.Icon {...props} icon="shield-lock-outline" />
+                  )}
+                  right={(props) => <Switch value={selected} disabled />}
+                />
+              )}
               itemContainerStyle={styles.itemContainer}
               icon="format-list-checks"
               label="Role Privileges"
@@ -125,7 +133,15 @@ const RoleForm = ({ navigation, route }) => {
               placeholder="Select Menu Options"
               labelExtractor={(item) => item.label}
               itemContainerStyle={styles.itemContainer}
-              renderItem={({ item }) => <List.Item title={item.label} />}
+              renderItem={({ item, selected }) => (
+                <List.Item
+                  title={item.label}
+                  left={(props) => (
+                    <List.Icon {...props} icon="account-group" />
+                  )}
+                  right={(props) => <Switch value={selected} disabled />}
+                />
+              )}
               valueExtractor={(item) => item._id}
               multiple
               icon="format-list-checks"

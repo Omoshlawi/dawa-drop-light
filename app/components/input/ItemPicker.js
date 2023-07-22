@@ -9,11 +9,11 @@ import _ from "lodash";
 const ItemPicker = ({
   icon,
   data = [],
-  valueExtractor,//required
+  valueExtractor, //required
   renderItem,
   placeHolder,
   title,
-  labelExtractor,//required
+  labelExtractor, //required
   value,
   onValueChange,
   numColumns,
@@ -184,7 +184,11 @@ const ItemPicker = ({
                       },
                 ]}
               >
-                {renderItem({ item, index })}
+                {renderItem({
+                  item,
+                  index,
+                  selected: multiple && current.includes(item),
+                })}
               </TouchableOpacity>
             )}
           />
