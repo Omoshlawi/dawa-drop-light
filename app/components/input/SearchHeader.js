@@ -2,14 +2,23 @@ import { StyleSheet, TextInput, View } from "react-native";
 import React from "react";
 import { IconButton, Text, useTheme } from "react-native-paper";
 
-const SearchHeader = ({ text, onTextChange, onSearch, placeholder }) => {
+const SearchHeader = ({
+  text,
+  onTextChange,
+  onSearch,
+  placeholder,
+  backgroundColor,
+}) => {
   const { colors, roundness } = useTheme();
   return (
     <View style={styles.header}>
       <View
         style={[
           styles.search,
-          { backgroundColor: colors.surface, borderRadius: roundness },
+          {
+            backgroundColor: backgroundColor ? backgroundColor : colors.surface,
+            borderRadius: roundness,
+          },
         ]}
       >
         <TextInput

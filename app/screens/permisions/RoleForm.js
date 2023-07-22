@@ -130,6 +130,7 @@ const RoleForm = ({ navigation, route }) => {
             <FormItemPicker
               name="menuOptions"
               data={menuOptions}
+              searchable
               placeholder="Select Menu Options"
               labelExtractor={(item) => item.label}
               itemContainerStyle={styles.itemContainer}

@@ -6,6 +6,7 @@ import { IconButton, useTheme, Text } from "react-native-paper";
 import { Modal } from "react-native";
 import { getRandomColor } from "../../utils/helpers";
 import _ from "lodash";
+import SearchHeader from "./SearchHeader";
 const ItemPicker = ({
   icon,
   data = [],
@@ -26,13 +27,14 @@ const ItemPicker = ({
   inactiveBackgroundColor,
   outline = true,
   label,
+  searchable,
 }) => {
   const { colors, roundness } = useTheme();
   const [showModal, setShowModal] = useState(false);
   const current = multiple
     ? data.filter((item) => value.includes(valueExtractor(item)))
     : data.find((item) => valueExtractor(item) === value);
-
+  const [listedData, setListedData] = useState(data);
   return (
     <View style={styles.container}>
       {outline && label && !_.isEmpty(current) && (
@@ -130,21 +132,37 @@ const ItemPicker = ({
       </View>
       <Modal visible={showModal} animationType="slide">
         <View style={styles.mordal}>
-          <IconButton
-            style={styles.close}
-            icon="close"
-            onPress={() => setShowModal(false)}
-            iconColor={colors.danger}
-            mode="outlined"
-          />
-          <Text style={[styles.title, titleStyle]} variant="titleLarge">
-            {title}
-          </Text>
+          <View style={styles.header}>
+            <IconButton
+              style={styles.close}
+              icon="close"
+              onPress={() => setShowModal(false)}
+              iconColor={colors.error}
+              mode="outlined"
+            />
+            <Text style={[styles.title, titleStyle]} variant="titleLarge">
+              {title}
+            </Text>
+          </View>
+          {searchable && (
+            <SearchHeader
+              onTextChange={(value) =>
+                setListedData(
+                  data.filter((v) =>
+                    String(labelExtractor(v))
+                      .toLowerCase()
+                      .includes(value.toLowerCase())
+                  )
+                )
+              }
+              backgroundColor={colors.background}
+            />
+          )}
           <FlatList
             contentContainerStyle={contentContainerStyle}
             numColumns={numColumns}
             horizontal={horozontal}
-            data={data}
+            data={listedData}
             keyExtractor={valueExtractor}
             renderItem={({ item, index }) => (
               <TouchableOpacity
@@ -229,7 +247,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   close: {
-    position: "absolute",
     top: 10,
     right: 10,
     zIndex: 1,
@@ -244,4 +261,9 @@ const styles = StyleSheet.create({
   },
   itemDescription: {},
   itemTitle: {},
+  header: {
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    padding: 10,
+  },
 });
