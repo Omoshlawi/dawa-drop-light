@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { IconButton, useTheme, Text } from "react-native-paper";
@@ -35,6 +35,11 @@ const ItemPicker = ({
     ? data.filter((item) => value.includes(valueExtractor(item)))
     : data.find((item) => valueExtractor(item) === value);
   const [listedData, setListedData] = useState(data);
+  useEffect(() => {
+    if (!showModal) {
+      setListedData(data);
+    }
+  }, [showModal]);
   return (
     <View style={styles.container}>
       {outline && label && !_.isEmpty(current) && (
@@ -138,7 +143,7 @@ const ItemPicker = ({
               icon="close"
               onPress={() => setShowModal(false)}
               iconColor={colors.error}
-              mode="outlined"
+              // mode="outlined"
             />
             <Text style={[styles.title, titleStyle]} variant="titleLarge">
               {title}
