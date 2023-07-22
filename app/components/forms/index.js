@@ -8,3 +8,4 @@ export { default as FormDropDown } from "./FormDropDown";
 export { default as FormModalPicker } from "./FormModalPicker";
 export { default as FormItemPicker } from "./FormItemPicker";
 export { default as FormLocationPicker } from "./FormLocationPicker";
+export { default as FormRatingBar } from "./FormRatingBar";

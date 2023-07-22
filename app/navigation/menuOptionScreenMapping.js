@@ -29,6 +29,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_ORDERS_SCREEN,
   },
+  CheckoutDelivery: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_DELIVERY_FEEDBACK_FORM_SCREEN,
+  },
 };
 
 export const get = (link) => {

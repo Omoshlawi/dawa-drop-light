@@ -6,22 +6,26 @@ import { useTheme } from "react-native-paper";
 import { usePatient } from "../../api";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { screenWidth } from "../../utils/contants";
-import { Form, FormField, FormSubmitButton } from "../../components/forms";
+import {
+  Form,
+  FormField,
+  FormRatingBar,
+  FormSubmitButton,
+} from "../../components/forms";
 import Logo from "../../components/Logo";
 import routes from "../../navigation/routes";
 
 const validationSchemer = Yup.object().shape({
-  cccNumber: Yup.string().label("CCC Number").required(),
-  firstName: Yup.string().label("First Name").required(),
-  upiNo: Yup.string().label("Unique Patient Number(Optional)"),
+  code: Yup.string().label("Delivery Code").required(),
+  review: Yup.string().label("Review").required(),
+  rating: Yup.number().required().label("Rating"),
 });
 const initalValues = {
-  cccNumber: "",
-  firstName: "",
-  upiNo: "",
+  code: "",
+  review: "",
+  rating: 4,
 };
-
-const CreateProfileScreen = ({ navigation }) => {
+const FeedBackForm = () => {
   const { colors } = useTheme();
   const { createProfile } = usePatient();
   const [dialogInfo, setDialogInfo] = useState({
@@ -68,23 +72,18 @@ const CreateProfileScreen = ({ navigation }) => {
             onSubmit={handleSubmit}
           >
             <FormField
-              name="cccNumber"
-              placeholder="Enter ccc number"
-              label="CCC Number"
+              name="code"
+              placeholder="Enter/Scan delivery code"
+              label="Delivery Code"
               icon="phone"
             />
             <FormField
-              name="firstName"
-              placeholder="Enter first name"
-              label="First name"
+              name="review"
+              placeholder="Enter review"
+              label="Delivery review"
               icon="account"
             />
-            <FormField
-              name="upiNo"
-              placeholder="Enter UPI Number"
-              label="UPI Number"
-              icon="account"
-            />
+            <FormRatingBar name="rating" />
             <FormSubmitButton
               title="Submit"
               mode="contained"
@@ -114,7 +113,7 @@ const CreateProfileScreen = ({ navigation }) => {
   );
 };
 
-export default CreateProfileScreen;
+export default FeedBackForm;
 
 const styles = StyleSheet.create({
   screen: {
