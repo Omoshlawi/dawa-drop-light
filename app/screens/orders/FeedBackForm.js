@@ -15,6 +15,7 @@ import {
 import Logo from "../../components/Logo";
 import routes from "../../navigation/routes";
 import { CodeScanner } from "../../components/scanner";
+import FormScanner from "../../components/forms/FormScanner";
 
 const validationSchemer = Yup.object().shape({
   code: Yup.string().label("Delivery Code").required(),
@@ -71,12 +72,12 @@ const FeedBackForm = () => {
             validationSchema={validationSchemer}
             onSubmit={handleSubmit}
           >
-            <CodeScanner />
+            <FormScanner name="code" />
             <FormField
               name="code"
               placeholder="Enter/Scan delivery code"
               label="Delivery Code"
-              icon="phone"
+              icon="data-matrix-scan"
             />
             <FormField
               name="review"
