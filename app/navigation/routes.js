@@ -13,6 +13,7 @@ export default Object.freeze({
   USER_CHANGE_PWD_SCREEN: "Change Password",
   USER_CHANGE_PROFILE_UPDATE_SCREEN: "Update Profile",
   USER_DEFAULT_SCREEN: "Default Profile",
+  USER_CREATE_PROFILE_SCREEN: "Create Profile",
 
   PERMISIONS_NAVIGATION: "Permisions Nav",
   PERMISIONS_MENU_SCREEN: "PermisionsMenuScreen",

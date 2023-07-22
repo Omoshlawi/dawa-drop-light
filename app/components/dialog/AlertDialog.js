@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 import React, { useState } from "react";
 import { Text, Button } from "react-native-paper";
-import { getDialogIcon } from "./";
+import { getDialogIcon } from "./helpers";
 import { screenWidth } from "../../utils/contants";
 
 const AlertDialog = ({ mode, message, onButtonPress }) => {

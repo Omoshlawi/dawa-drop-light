@@ -41,10 +41,10 @@ const Orders = ({ navigation, route }) => {
         onRefresh={handleFetch}
         keyExtractor={({ _id }) => _id}
         renderItem={({ item }) => {
-          const { _id, created } = item;
+          const { _id, created, drug } = item;
           return (
             <Card.Title
-              title={_id}
+              title={drug}
               style={[styles.listItem, { backgroundColor: colors.surface }]}
               left={(props) => <Avatar.Icon {...props} icon="cart" />}
               subtitle={`${moment(created).format(

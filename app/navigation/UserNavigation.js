@@ -1,6 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
-import { ChangePassword, DefaultScreen, ProfileUpdate } from "../screens/user";
+import {
+  ChangePassword,
+  CreateProfileScreen,
+  DefaultScreen,
+  ProfileUpdate,
+} from "../screens/user";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -21,6 +26,11 @@ const UserNavigation = () => {
         name={routes.USER_DEFAULT_SCREEN}
         component={DefaultScreen}
         options={{ headerShown: false }}
+      />
+      <Screen
+        name={routes.USER_CREATE_PROFILE_SCREEN}
+        component={CreateProfileScreen}
+        options={{ title: "Create profile" }}
       />
     </Navigator>
   );

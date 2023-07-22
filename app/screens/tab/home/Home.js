@@ -1,23 +1,36 @@
 import { StyleSheet, View, FlatList } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeArea } from "../../../components/layout";
-import { IconButton, Text, useTheme } from "react-native-paper";
-import { usePatient, useUser } from "../../../api";
+import {
+  Avatar,
+  Card,
+  IconButton,
+  List,
+  Text,
+  useTheme,
+} from "react-native-paper";
+import { useAuthorize, usePatient, useUser } from "../../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { ServiceCard } from "../../../components/common";
 import HomeAdvert from "../../../components/HomeAdvert";
 import AppointmentCard from "../../../components/AppointmentCard";
+import { TouchableOpacity } from "react-native";
+import routes from "../../../navigation/routes";
 
 const Home = ({ navigation }) => {
-  const { getUser } = useUser();
+  const { getUser, getUserId } = useUser();
+  const { getUserAuthInfo } = useAuthorize();
   const { getAppointments } = usePatient();
   const { colors, roundness } = useTheme();
+  const [suggestProfile, setSuggestProfile] = useState(true);
+  const [roles, setRoles] = useState([]);
   const [user, setUser] = useState(null);
   const [appointments, setAppointments] = useState([]);
   useFocusEffect(
     useCallback(() => {
       handleFetchUser();
       handleFetchAppoitments();
+      handleFetchAuthInfo();
     }, [])
   );
   const handleFetchUser = async () => {
@@ -34,6 +47,18 @@ const Home = ({ navigation }) => {
       // if(response.stat)
     }
   };
+
+  const handleFetchAuthInfo = async () => {
+    const response = await getUserAuthInfo(getUserId());
+    if (response.ok) {
+      setRoles(response.data.roles);
+    }
+  };
+
+  useEffect(() => {
+    // if user is normal user with no roles then set suggest to true
+    // setSuggestProfile(user && !user.isSuperUser && roles.length > 0);
+  }, [roles, user]);
 
   if (!user) {
     return null;
@@ -66,14 +91,37 @@ const Home = ({ navigation }) => {
           subTitle="Talk to a clinician and get help fast and easy, just by button press"
         />
         <HomeAdvert />
-        <Text variant="titleMedium">Recent and Upcoming Appointments</Text>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          data={appointments}
-          horizontal
-          keyExtractor={({ id }) => id}
-          renderItem={({ item, index }) => <AppointmentCard {...item} />}
-        />
+        {suggestProfile ? (
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.waningLight,
+              borderRadius: roundness + 20,
+            }}
+            onPress={() =>
+              navigation.navigate(routes.USER_NAVIGATION, {
+                screen: routes.USER_CREATE_PROFILE_SCREEN,
+              })
+            }
+          >
+            <Card.Title
+              style={{ padding: 20 }}
+              left={(props) => <Avatar.Icon {...props} icon="refresh" />}
+              title="Are you a patient user ? Sync you account with you medical account"
+              titleNumberOfLines={3}
+            />
+          </TouchableOpacity>
+        ) : (
+          <>
+            <Text variant="titleMedium">Recent and Upcoming Appointments</Text>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={appointments}
+              horizontal
+              keyExtractor={({ id }) => id}
+              renderItem={({ item, index }) => <AppointmentCard {...item} />}
+            />
+          </>
+        )}
       </View>
     </SafeArea>
   );

@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image, Dimensions } from "react-native";
 import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../../components/layout";
-import { useUser } from "../../../api";
+import { useAuthorize, useUser } from "../../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import { TouchableOpacity } from "react-native";
@@ -10,7 +10,8 @@ import { getImageUrl } from "../../../utils/helpers";
 import { get } from "../../../navigation";
 const itemWidth = Dimensions.get("window").width / 2 - 5;
 const ActionsMenu = ({ navigation }) => {
-  const { getUser, getMenuOptions } = useUser();
+  const { getUser, getUserId } = useUser();
+  const { getUserAuthInfo } = useAuthorize();
   const { colors } = useTheme();
   const [user, setUser] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
@@ -23,13 +24,13 @@ const ActionsMenu = ({ navigation }) => {
   const handleFetch = async () => {
     setLoading(true);
     const response = await getUser();
-    const mresponse = await getMenuOptions();
+    const mresponse = await getUserAuthInfo(getUserId());
     setLoading(false);
     if (response.ok) {
       setUser(response.data);
     }
     if (mresponse.ok) {
-      setMenuOptions(mresponse.data.results);
+      setMenuOptions(mresponse.data.menuOptions);
     }
   };
 

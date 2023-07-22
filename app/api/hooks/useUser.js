@@ -1,9 +1,10 @@
 import { useUserContext } from "../../context/hooks";
 import apiClient from "../client";
 import { addTokenInterceptor } from "../helpers";
+import jwtDecode from "jwt-decode";
 
 const useUser = () => {
-  const { clearToken } = useUserContext();
+  const { clearToken, token } = useUserContext();
   addTokenInterceptor();
   const getUser = () => apiClient.get("auth/profile");
   const logout = () => clearToken(true);
@@ -13,7 +14,15 @@ const useUser = () => {
       headers: { "Content-Type": "multipart/form-data" },
     });
   const getMenuOptions = () => apiClient.get("/auth/my-menu-options");
-  return { getUser, logout, changePassword, updateProfile, getMenuOptions };
+  const getUserId = () => jwtDecode(token)._id;
+  return {
+    getUser,
+    logout,
+    changePassword,
+    updateProfile,
+    getMenuOptions,
+    getUserId,
+  };
 };
 
 export default useUser;
