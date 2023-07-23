@@ -2,7 +2,6 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { Button, IconButton, List, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../utils/contants";
-import colors from "../../utils/colors";
 import { useFormikContext } from "formik";
 
 const OrderConfirmation = ({

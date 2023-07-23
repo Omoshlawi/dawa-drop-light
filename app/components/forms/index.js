@@ -9,3 +9,4 @@ export { default as FormModalPicker } from "./FormModalPicker";
 export { default as FormItemPicker } from "./FormItemPicker";
 export { default as FormLocationPicker } from "./FormLocationPicker";
 export { default as FormRatingBar } from "./FormRatingBar";
+export { default as FormScanner } from "./FormScanner";

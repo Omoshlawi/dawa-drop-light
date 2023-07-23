@@ -11,11 +11,9 @@ import {
   FormField,
   FormRatingBar,
   FormSubmitButton,
+  FormScanner,
 } from "../../components/forms";
-import Logo from "../../components/Logo";
 import routes from "../../navigation/routes";
-import { CodeScanner } from "../../components/scanner";
-import FormScanner from "../../components/forms/FormScanner";
 
 const validationSchemer = Yup.object().shape({
   code: Yup.string().label("Delivery Code").required(),
