@@ -15,7 +15,7 @@ const Step1 = ({ onNext, appointment, regimen }) => {
           resizeMode="contain"
         />
       </View>
-      <Text variant="headlineLarge">Step 1</Text>
+      <Text variant="headlineLarge">STEP 1: Patient Information</Text>
       <View style={styles.dataContainer}>
         <List.Item
           style={[

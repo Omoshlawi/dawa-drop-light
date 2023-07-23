@@ -11,6 +11,8 @@ import {
 } from "react-native-paper";
 import { usePatient } from "../../api";
 import { Step1, Step2 } from "../../components/order";
+import { Form } from "../../components/forms";
+import { pickX } from "../../utils/helpers";
 
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
@@ -18,10 +20,10 @@ const validationSchema = Yup.object().shape({
     longitude: Yup.number().required().label("Longitude"),
     address: Yup.string().label("Address"),
   }).label("Delivery address"),
-  // deliveryTimeSlot: Yup.object({
-  //   startTime: Yup.date().required().label("Start time"),
-  //   endTime: Yup.date().required().label("End time"),
-  // }).label("Time between"),
+  deliveryTimeSlot: Yup.object({
+    startTime: Yup.date().required().label("Start time"),
+    endTime: Yup.date().required().label("End time"),
+  }).label("Time between"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
 });
@@ -39,7 +41,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [loadEligibility, setLoadEligibility] = useState(false);
   const [step, setStep] = useState(1);
   const { addOrder, updateOrder, checkEligibility } = usePatient();
-  const { modes, mode: order } = route.params;
+  const { modes, order } = route.params;
 
   const handleCheckEligible = async () => {
     setLoadEligibility(true);
@@ -117,25 +119,47 @@ const PatientOrderForm = ({ navigation, route }) => {
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
-      {step === 1 && eligible && (
-        <Step1
-          onNext={next}
-          appointment={eligible.appointment}
-          regimen={eligible.currentRegimen}
-        />
-      )}
-      {step === 2 && eligible && <Step2 onNext={next} onPrevious={previous} />}
-      <Dialog visible={dialogInfo.show}>
-        <AlertDialog
-          message={dialogInfo.message}
-          mode={dialogInfo.mode}
-          onButtonPress={() => {
-            setDialogInfo({ ...dialogInfo, show: false });
-            if (dialogInfo.mode === "success") navigation.goBack();
-            else if (dialogInfo.mode === "error") navigation.goBack();
-          }}
-        />
-      </Dialog>
+      <Form
+        validationSchema={validationSchema}
+        initialValues={
+          order
+            ? pickX(order, [
+                "deliveryAddress",
+                "deliveryTimeSlot",
+                "deliveryMode",
+                "phoneNumber",
+              ])
+            : {
+                deliveryAddress: null,
+                deliveryTimeSlot: null,
+                deliveryMode: "",
+                phoneNumber: "",
+              }
+        }
+        onSubmit={handleSubmit}
+      >
+        {step === 1 && eligible && (
+          <Step1
+            onNext={next}
+            appointment={eligible.appointment}
+            regimen={eligible.currentRegimen}
+          />
+        )}
+        {step === 2 && eligible && (
+          <Step2 onNext={next} onPrevious={previous} modes={modes} />
+        )}
+        <Dialog visible={dialogInfo.show}>
+          <AlertDialog
+            message={dialogInfo.message}
+            mode={dialogInfo.mode}
+            onButtonPress={() => {
+              setDialogInfo({ ...dialogInfo, show: false });
+              if (dialogInfo.mode === "success") navigation.goBack();
+              else if (dialogInfo.mode === "error") navigation.goBack();
+            }}
+          />
+        </Dialog>
+      </Form>
     </View>
   );
 };

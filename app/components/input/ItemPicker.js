@@ -79,7 +79,9 @@ const ItemPicker = ({
         {multiple ? (
           <View style={styles.inputMultiple}>
             {_.isEmpty(current) ? (
-              <Text style={styles.input}>{label}</Text>
+              <Text variant="labelLarge" style={styles.input}>
+                {label}
+              </Text>
             ) : (
               <FlatList
                 horizontal
@@ -235,13 +237,13 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: "row",
-    paddingHorizontal: 10,
+    paddingLeft: 15,
     alignItems: "center",
     marginTop: 5,
   },
   input: {
     flex: 1,
-    padding: 5,
+    paddingLeft: 15,
   },
   inputMultiple: {
     flex: 1,

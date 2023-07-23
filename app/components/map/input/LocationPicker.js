@@ -73,15 +73,14 @@ export default LocationPicker;
 const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
-    paddingHorizontal: 5,
-
+    paddingLeft: 10,
     alignItems: "center",
     borderWidth: 1,
     marginTop: 10,
   },
   input: {
     flex: 1,
-    padding: 5,
+    padding: 10,
   },
   listItem: {
     marginTop: 8,
