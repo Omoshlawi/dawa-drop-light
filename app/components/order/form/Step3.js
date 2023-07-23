@@ -16,7 +16,7 @@ const Step3 = ({ onPrevious, onNext }) => {
           resizeMode="contain"
         />
       </View>
-      <Text variant="headlineLarge">STEP 3: Delivery Information</Text>
+      <Text variant="headlineLarge">Almost there: Curiour info</Text>
       <View style={styles.form}>
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous

@@ -18,7 +18,7 @@ const Step2 = ({ onNext, onPrevious, modes }) => {
           resizeMode="contain"
         />
       </View>
-      <Text variant="headlineLarge">STEP 2: Order Information</Text>
+      <Text variant="headlineLarge">STEP 2: Delivery Information</Text>
       <View style={styles.form}>
         <FormField
           name="phoneNumber"
