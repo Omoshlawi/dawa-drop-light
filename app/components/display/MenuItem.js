@@ -27,8 +27,8 @@ export default MenuItem;
 
 const styles = StyleSheet.create({
   img: {
-    width: screenWidth * 0.25,
-    height: screenWidth * 0.25,
+    width: screenWidth * 0.2,
+    height: screenWidth * 0.2,
   },
   container: {
     padding: 10,

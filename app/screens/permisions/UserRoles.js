@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../components/layout";
 import { SearchHeader } from "../../components/input";
 import { useAuthorize } from "../../api";
@@ -7,6 +7,7 @@ import { FlatList } from "react-native";
 import { Avatar, Card, useTheme, Text } from "react-native-paper";
 import { getImageUrl } from "../../utils/helpers";
 import routes from "../../navigation/routes";
+import { useFocusEffect } from "@react-navigation/native";
 
 const UserRoles = ({ navigation, route }) => {
   const { getUsers, getRoles } = useAuthorize();
@@ -27,6 +28,12 @@ const UserRoles = ({ navigation, route }) => {
       setRoles(rResponse.data.results);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setUsers([]);
+    }, [])
+  );
   const { colors } = useTheme();
   return (
     <SafeArea>
