@@ -17,6 +17,7 @@ import { pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
 import { Button, List, Switch, Text, useTheme } from "react-native-paper";
 import { DropDown, ItemPicker, ModalPicker } from "../../components/input";
+import { MenuItem } from "../../components/display";
 
 const validationSchemer = Yup.object().shape({
   name: Yup.string().label("Role Name").required(),
@@ -33,7 +34,7 @@ const RoleForm = ({ navigation, route }) => {
     message: "Role Added Successfully!",
     success: true,
   });
-  const { colors } = useTheme();
+  const { colors, roundness } = useTheme();
 
   const handleSubmit = async (values, { setErrors, errors }) => {
     setLoading(true);
@@ -110,6 +111,7 @@ const RoleForm = ({ navigation, route }) => {
             <FormItemPicker
               name="privileges"
               data={privileges}
+              searchable
               labelExtractor={(item) => item.name}
               placeholder="Select Privileges"
               multiple
@@ -123,7 +125,10 @@ const RoleForm = ({ navigation, route }) => {
                   right={(props) => <Switch value={selected} disabled />}
                 />
               )}
-              itemContainerStyle={styles.itemContainer}
+              itemContainerStyle={[
+                styles.itemContainer,
+                { borderRadius: roundness },
+              ]}
               icon="format-list-checks"
               label="Role Privileges"
             />
@@ -133,16 +138,15 @@ const RoleForm = ({ navigation, route }) => {
               searchable
               placeholder="Select Menu Options"
               labelExtractor={(item) => item.label}
-              itemContainerStyle={styles.itemContainer}
+              itemContainerStyle={[
+                styles.itemContainer,
+                { borderRadius: roundness },
+              ]}
               renderItem={({ item, selected }) => (
-                <List.Item
-                  title={item.label}
-                  left={(props) => (
-                    <List.Icon {...props} icon="account-group" />
-                  )}
-                  right={(props) => <Switch value={selected} disabled />}
-                />
+                <MenuItem item={item} checked={selected} />
               )}
+              numColumns={2}
+              contentContainerStyle={{ alignItems: "center" }}
               valueExtractor={(item) => item._id}
               multiple
               icon="format-list-checks"
@@ -212,7 +216,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   itemContainer: {
-    marginBottom: 5,
+    margin: 5,
     // padding: 10,
   },
 });
