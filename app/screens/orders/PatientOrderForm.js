@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native-paper";
 import { usePatient } from "../../api";
-import { Step1, Step2 } from "../../components/order";
+import { Step1, Step2, Step3 } from "../../components/order";
 import { Form } from "../../components/forms";
 import { pickX } from "../../utils/helpers";
 
@@ -147,6 +147,9 @@ const PatientOrderForm = ({ navigation, route }) => {
         )}
         {step === 2 && eligible && (
           <Step2 onNext={next} onPrevious={previous} modes={modes} />
+        )}
+        {step === 3 && eligible && (
+          <Step3 onNext={next} onPrevious={previous} />
         )}
         <Dialog visible={dialogInfo.show}>
           <AlertDialog

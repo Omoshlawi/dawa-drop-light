@@ -4,9 +4,11 @@ import { Button, List, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../../utils/contants";
 import moment from "moment/moment";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
+import { useFormikContext } from "formik";
 
 const Step2 = ({ onNext, onPrevious, modes }) => {
   const { colors, roundness } = useTheme();
+  const { values, validateForm, setFieldTouched } = useFormikContext();
   return (
     <View style={styles.container}>
       <View>
@@ -48,7 +50,24 @@ const Step2 = ({ onNext, onPrevious, modes }) => {
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous
         </Button>
-        <Button mode="contained" onPress={onNext} style={styles.btn}>
+        <Button
+          mode="contained"
+          onPress={async () => {
+            const fields = ["deliveryAddress", "deliveryMode", "phoneNumber"];
+            const errors = await validateForm(values);
+            const invalidFields = Object.keys(errors);
+            let valid = true;
+            for (const field of fields) {
+              const inValid = invalidFields.includes(field);
+              if (inValid) {
+                valid = !inValid;
+                setFieldTouched(field, true);
+              }
+            }
+            if (valid) onNext();
+          }}
+          style={styles.btn}
+        >
           Next
         </Button>
       </View>
