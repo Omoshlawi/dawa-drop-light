@@ -1,7 +1,12 @@
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { IconButton, useTheme, Text } from "react-native-paper";
+import {
+  IconButton,
+  useTheme,
+  Text,
+  ActivityIndicator,
+} from "react-native-paper";
 import { screenWidth } from "../../utils/contants";
 
 const Scanner = ({ onScanned, requestCancel }) => {
@@ -20,10 +25,18 @@ const Scanner = ({ onScanned, requestCancel }) => {
   }, []);
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return (
+      <View style={{ padding: 100 }}>
+        <ActivityIndicator size={100} />
+      </View>
+    );
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    Alert.alert(
+      "Error",
+      "Camera permission neeeded!\nGo to app settings and allow camera permision",
+      [{ text: "Ok", onPress: requestCancel }]
+    );
   }
 
   return (
