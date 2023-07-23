@@ -1,31 +1,16 @@
-import {
-  StyleSheet,
-  View,
-  Image,
-  ScrollView,
-  RefreshControl,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
+import { AlertDialog, Dialog } from "../../components/dialog";
 import {
-  AlertDialog,
-  Dialog,
-  OrderConfirmation,
-} from "../../components/dialog";
-import { SafeArea } from "../../components/layout";
-import {
-  Form,
-  FormField,
-  FormItemPicker,
-  FormLocationPicker,
-} from "../../components/forms";
-import { screenWidth } from "../../utils/contants";
-import { getFormFileFromUri, getImageUrl, pickX } from "../../utils/helpers";
-import Logo from "../../components/Logo";
-import { useTheme, Button, Text, List } from "react-native-paper";
+  useTheme,
+  Button,
+  Text,
+  List,
+  ActivityIndicator,
+} from "react-native-paper";
 import { usePatient } from "../../api";
-import TimeRangePicker from "../../components/time/TimeRangePicker";
-import moment from "moment";
+import { Step1, Step2 } from "../../components/order";
 
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
@@ -51,8 +36,8 @@ const PatientOrderForm = ({ navigation, route }) => {
 
   const [loading, setLoading] = useState(false);
   const [eligible, setEligible] = useState(null);
-  const [loadEligibility, setLoadEligibility] = useState(null);
-
+  const [loadEligibility, setLoadEligibility] = useState(false);
+  const [step, setStep] = useState(1);
   const { addOrder, updateOrder, checkEligibility } = usePatient();
   const { modes, mode: order } = route.params;
 
@@ -107,7 +92,52 @@ const PatientOrderForm = ({ navigation, route }) => {
       }
     }
   };
-  return <SafeArea></SafeArea>;
+
+  const next = () => {
+    setStep(step + 1);
+  };
+
+  const previous = () => {
+    setStep(step - 1);
+  };
+
+  if (loadEligibility) {
+    return (
+      <View
+        style={[
+          styles.screen,
+          { backgroundColor: colors.background, padding: 20 },
+        ]}
+      >
+        <ActivityIndicator size={50} />
+        <Text>Checking Eligibility...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={[styles.screen, { backgroundColor: colors.background }]}>
+      {step === 1 && eligible && (
+        <Step1
+          onNext={next}
+          appointment={eligible.appointment}
+          regimen={eligible.currentRegimen}
+        />
+      )}
+      {step === 2 && eligible && <Step2 onNext={next} onPrevious={previous} />}
+      <Dialog visible={dialogInfo.show}>
+        <AlertDialog
+          message={dialogInfo.message}
+          mode={dialogInfo.mode}
+          onButtonPress={() => {
+            setDialogInfo({ ...dialogInfo, show: false });
+            if (dialogInfo.mode === "success") navigation.goBack();
+            else if (dialogInfo.mode === "error") navigation.goBack();
+          }}
+        />
+      </Dialog>
+    </View>
+  );
 };
 
 export default PatientOrderForm;
@@ -116,23 +146,5 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     alignItems: "center",
-  },
-  form: {
-    width: "100%",
-    padding: 10,
-    flex: 1,
-  },
-  btn: {
-    marginVertical: 20,
-  },
-  data: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  listItem: {
-    width: "47%",
-    margin: 3,
   },
 });
