@@ -14,7 +14,7 @@ const DateTimePicker = ({
   is24Hrs = true,
   formarter, //required
 }) => {
-  const [date, setDate] = useState(value ? new Date(value) : new Date());
+  const date = value ? new Date(value) : new Date();
   const [show, setShow] = useState(false);
   const handleChange = useCallback((event, selectedDate) => {
     const {
@@ -27,7 +27,7 @@ const DateTimePicker = ({
     // console.log(selectedDate); //2023-07-19T13:52:47.691Z
     // console.log(value ? new Date(value) : new Date()); //2023-07-19T13:52:48.352Z
     setShow(false);
-    setDate(selectedDate);
+    // setDate(selectedDate);
     if (onChangeValue instanceof Function) onChangeValue(selectedDate);
   }, []);
   const [mode, setMode] = useState(defaultMode);
@@ -46,7 +46,7 @@ const DateTimePicker = ({
   return (
     <View style={styles.container}>
       {icon && <MaterialCommunityIcons name={icon} size={20} />}
-      <Text style={styles.textInput}>{value ? formarter(value) : label}</Text>
+      <Text style={styles.textInput}>{date ? formarter(date) : label}</Text>
       {show && (
         <ExpoDateTimePicker
           testID="dateTimePicker"
@@ -54,7 +54,6 @@ const DateTimePicker = ({
           mode={mode}
           is24Hour={is24Hrs}
           onChange={handleChange}
-          sh
         />
       )}
       <IconButton

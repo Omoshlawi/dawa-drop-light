@@ -4,6 +4,7 @@ import {
   Appointments,
   DeliveryModeForm,
   DeliveryModes,
+  DeliveryTimeSlotForm,
   DeliveryTimeSlots,
   FeedBackForm,
   Orders,
@@ -52,7 +53,7 @@ const OrdersNavigation = () => {
       />
       <Screen
         name={routes.ORDERS_DELIVERY_TIMESLOTES_FORM_SCREEN}
-        component={DeliveryModeForm}
+        component={DeliveryTimeSlotForm}
         options={{ title: "" }}
       />
     </Navigator>
