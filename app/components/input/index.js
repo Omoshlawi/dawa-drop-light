@@ -7,3 +7,4 @@ export { default as DropDown } from "./DropDown";
 export { default as ItemPicker } from "./ItemPicker";
 export { default as SearchHeader } from "./SearchHeader";
 export { default as TextInputField } from "./TextInputField";
+export { default as AutoComplete } from "./AutoComplete";

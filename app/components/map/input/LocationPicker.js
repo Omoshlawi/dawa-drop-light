@@ -4,6 +4,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LocationChoice from "./LocationChoice";
 import { IconButton, useTheme } from "react-native-paper";
 import useLocation from "../hooks/useLocation";
+import { SearchHeader } from "../../input";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+
 const LocationPicker = ({ location, onLocationChange }) => {
   const [showModal, setShowModal] = useState(false);
   const [deliverLocation, setDeliveryLocation] = useState();
@@ -41,22 +44,32 @@ const LocationPicker = ({ location, onLocationChange }) => {
         onDismiss={() => setShowModal(false)}
         animationType="slide"
       >
-        <View style={styles.buttonsGroup}>
+        <View style={[styles.header, { backgroundColor: "#00ACA929" }]}>
           <IconButton
-            icon="check"
-            mode="outlined"
-            iconColor={colors.primary}
-            // disabled={!Boolean(location)}
-            onPress={() => {
-              setShowModal(false);
-            }}
-          />
-          <IconButton
+            style={[
+              styles.close,
+              { borderRadius: roundness, backgroundColor: colors.error },
+            ]}
             icon="close"
-            mode="outlined"
-            iconColor={colors.danger}
+            iconColor={colors.surface}
             onPress={() => setShowModal(false)}
+            // size={30}
+            mode="outlined"
           />
+          <View style={{ flex: 1 }}>
+            <GooglePlacesAutocomplete
+              placeholder="Search"
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                console.log(data, details);
+              }}
+              query={{
+                key: "YOUR API KEY",
+                language: "en",
+              }}
+              onFail={(error) => console.error(error)}
+            />
+          </View>
         </View>
         <LocationChoice
           defaultSpanLoc={location ? location : currLocation}
@@ -71,6 +84,7 @@ const LocationPicker = ({ location, onLocationChange }) => {
 export default LocationPicker;
 
 const styles = StyleSheet.create({
+  close: {},
   inputContainer: {
     flexDirection: "row",
     paddingLeft: 10,
@@ -94,9 +108,15 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
   },
-  buttonsGroup: {
-    flexDirection: "row",
+  header: {
+    flexDirection: "row-reverse",
     justifyContent: "space-between",
-    padding: 10,
+    padding: 5,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+    alignItems: "center",
   },
 });
