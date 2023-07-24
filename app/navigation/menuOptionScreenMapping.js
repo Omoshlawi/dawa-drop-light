@@ -33,6 +33,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_DELIVERY_FEEDBACK_FORM_SCREEN,
   },
+  TimeSlot: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_DELIVERY_TIMESLOTES_SCREEN,
+  },
 };
 
 export const get = (link) => {

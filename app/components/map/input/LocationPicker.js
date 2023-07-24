@@ -44,19 +44,14 @@ const LocationPicker = ({ location, onLocationChange }) => {
         onDismiss={() => setShowModal(false)}
         animationType="slide"
       >
-        <View style={[styles.header, { backgroundColor: "#00ACA929" }]}>
+        <View style={styles.header}>
           <IconButton
-            style={[
-              styles.close,
-              { borderRadius: roundness, backgroundColor: colors.error },
-            ]}
+            style={styles.close}
             icon="close"
-            iconColor={colors.surface}
+            iconColor={colors.error}
             onPress={() => setShowModal(false)}
-            // size={30}
-            mode="outlined"
           />
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, width: "100%", backgroundColor: "red" }}>
             <GooglePlacesAutocomplete
               placeholder="Search"
               onPress={(data, details = null) => {
@@ -84,7 +79,9 @@ const LocationPicker = ({ location, onLocationChange }) => {
 export default LocationPicker;
 
 const styles = StyleSheet.create({
-  close: {},
+  close: {
+    alignSelf: "flex-end",
+  },
   inputContainer: {
     flexDirection: "row",
     paddingLeft: 10,
@@ -109,8 +106,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   header: {
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
     padding: 5,
     position: "absolute",
     top: 0,
@@ -118,5 +113,7 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 1,
     alignItems: "center",
+    flex: 1,
+    backgroundColor: "green",
   },
 });
