@@ -18,6 +18,7 @@ import { getFormFileFromUri, getImageUrl, pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { DropDown, ItemPicker, ModalPicker } from "../../components/input";
+import routes from "../../navigation/routes";
 
 const validationSchemer = Yup.object().shape({
   label: Yup.string().label("Menu Name").required(),
@@ -143,7 +144,10 @@ const MenuOptionForm = ({ navigation, route }) => {
             mode="outlined"
             onPress={() => {
               setDialogInfo({ ...dialogInfo, show: false });
-              if (dialogInfo.success) navigation.pop(2);
+              if (dialogInfo.success)
+                navigation.navigate(routes.PERMISIONS_NAVIGATION, {
+                  screen: routes.PERMISIONS_MENU_OPTIONS_SCREEN,
+                });
             }}
           >
             Ok

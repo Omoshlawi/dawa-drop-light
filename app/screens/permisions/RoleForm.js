@@ -6,24 +6,27 @@ import { useAuthorize } from "../../api";
 import Logo from "../../components/Logo";
 import {
   Form,
-  FormDropDown,
+  FormCheckBox,
   FormField,
   FormItemPicker,
-  FormModalPicker,
   FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
 import { Button, List, Switch, Text, useTheme } from "react-native-paper";
-import { DropDown, ItemPicker, ModalPicker } from "../../components/input";
 import { MenuItem } from "../../components/display";
+import routes from "../../navigation/routes";
 
 const validationSchemer = Yup.object().shape({
   name: Yup.string().label("Role Name").required(),
   description: Yup.string().label("Role Description").required(),
   menuOptions: Yup.array().label("Role Menu Options").required(),
   privileges: Yup.array().label("Role Privileges").required(),
+  assignAllPatients: Yup.boolean()
+    .label("Assign All Patients")
+    .required()
+    .default(false),
 });
 const RoleForm = ({ navigation, route }) => {
   const { addRoles, updateRole } = useAuthorize();
@@ -82,12 +85,19 @@ const RoleForm = ({ navigation, route }) => {
                         ({ _id }) => _id
                       ),
                     },
-                    ["name", "description", "privileges", "menuOptions"]
+                    [
+                      "name",
+                      "description",
+                      "privileges",
+                      "menuOptions",
+                      "assignAllPatients",
+                    ]
                   )
                 : {
                     name: "",
                     description: "",
                     privileges: [],
+                    assignAllPatients: false,
                     menuOptions: [],
                   }
             }
@@ -107,6 +117,10 @@ const RoleForm = ({ navigation, route }) => {
               icon="information-variant"
               multiline
               numberOfLines={10}
+            />
+            <FormCheckBox
+              name="assignAllPatients"
+              label="Assign Role to all Patients"
             />
             <FormItemPicker
               name="privileges"
@@ -152,6 +166,7 @@ const RoleForm = ({ navigation, route }) => {
               icon="format-list-checks"
               label="Role Menu Options"
             />
+
             <FormSubmitButton
               title={defaultValues ? "Update Role" : "Add Role"}
               mode="contained"
@@ -177,7 +192,10 @@ const RoleForm = ({ navigation, route }) => {
             mode="outlined"
             onPress={() => {
               setDialogInfo({ ...dialogInfo, show: false });
-              if (dialogInfo.success) navigation.goBack();
+              if (dialogInfo.success)
+                navigation.navigate(routes.PERMISIONS_NAVIGATION, {
+                  screen: routes.PERMISION_ROLES_SCREEN,
+                });
             }}
           >
             Ok

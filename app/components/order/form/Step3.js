@@ -18,6 +18,32 @@ const Step3 = ({ onPrevious, onNext }) => {
       </View>
       <Text variant="headlineLarge">Almost there: Curiour info</Text>
       <View style={styles.form}>
+        <View
+          style={[
+            styles.choiceContainer,
+            { backgroundColor: colors.surface, borderRadius: roundness },
+          ]}
+        >
+          <Text>How do you want drugs delivered ? </Text>
+          <View style={styles.choiceContainer}>
+            <View
+              style={[
+                styles.response,
+                { backgroundColor: colors.disabled, borderRadius: roundness },
+              ]}
+            >
+              <Text variant="titleLarge">Choice One</Text>
+            </View>
+            <View
+              style={[
+                styles.response,
+                { backgroundColor: colors.disabled, borderRadius: roundness },
+              ]}
+            >
+              <Text variant="titleLarge">Choice Two</Text>
+            </View>
+          </View>
+        </View>
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous
         </Button>
@@ -53,5 +79,17 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 10,
+  },
+  choiceContainer: {
+    padding: 10,
+  },
+  responsesContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    padding: 10,
+  },
+  response: {
+    padding: 10,
+    margin: 10,
   },
 });

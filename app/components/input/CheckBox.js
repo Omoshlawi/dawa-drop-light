@@ -1,16 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Checkbox from "expo-checkbox";
+import { default as ExpoCheckbox } from "expo-checkbox";
+import { TouchableOpacity } from "react-native";
 
 const CheckBox = ({ text, value, onValueChange }) => {
   return (
     <View style={styles.section} onPress={() => {}}>
-      <Checkbox
+      <ExpoCheckbox
         style={styles.checkbox}
-        value={value}
+        value={Boolean(value)}
         onValueChange={onValueChange}
       />
-      <Text style={styles.paragraph}>{text}</Text>
+      <TouchableOpacity onPress={() => onValueChange(!Boolean(value))}>
+        <Text style={styles.paragraph}>{text}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -21,6 +24,7 @@ const styles = StyleSheet.create({
   section: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 10,
   },
   paragraph: {
     fontSize: 15,
