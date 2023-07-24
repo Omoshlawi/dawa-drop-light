@@ -19,7 +19,7 @@ const DeliveryModeForm = ({ navigation, route }) => {
 
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "menu Option Added Successfully!",
+    message: "Delivery Mode Added Successfully!",
     success: true,
   });
   const { colors } = useTheme();

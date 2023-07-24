@@ -33,7 +33,7 @@ const MenuOptionForm = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "menu Option Added Successfully!",
+    message: "Menu Option Added Successfully!",
     success: true,
   });
   const { colors } = useTheme();

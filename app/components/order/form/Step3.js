@@ -1,9 +1,10 @@
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../../utils/contants";
 import moment from "moment/moment";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Step3 = ({ onPrevious, onNext }) => {
   const { colors, roundness } = useTheme();
@@ -24,24 +25,53 @@ const Step3 = ({ onPrevious, onNext }) => {
             { backgroundColor: colors.surface, borderRadius: roundness },
           ]}
         >
-          <Text>How do you want drugs delivered ? </Text>
+          <Text variant="titleLarge">How do you want drugs delivered ? </Text>
           <View style={styles.choiceContainer}>
-            <View
+            <TouchableOpacity
               style={[
                 styles.response,
-                { backgroundColor: colors.disabled, borderRadius: roundness },
+                { backgroundColor: colors.background, borderRadius: roundness },
               ]}
             >
-              <Text variant="titleLarge">Choice One</Text>
-            </View>
-            <View
+              <MaterialCommunityIcons
+                name="radiobox-marked"
+                size={20}
+                color={colors.primary}
+              />
+              <Text variant="titleSmall" style={styles.responseText}>
+                Through Curiour service
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[
                 styles.response,
-                { backgroundColor: colors.disabled, borderRadius: roundness },
+                { backgroundColor: colors.background, borderRadius: roundness },
               ]}
             >
-              <Text variant="titleLarge">Choice Two</Text>
-            </View>
+              <MaterialCommunityIcons
+                name="radiobox-marked"
+                size={20}
+                color={colors.primary}
+              />
+              <Text variant="titleSmall" style={styles.responseText}>
+                Through my providor
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.response,
+                { backgroundColor: colors.background, borderRadius: roundness },
+              ]}
+            >
+              <MaterialCommunityIcons
+                name="radiobox-marked"
+                size={20}
+                color={colors.primary}
+              />
+              <Text variant="titleSmall" style={styles.responseText}>
+                Through treatment surport
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
@@ -90,6 +120,11 @@ const styles = StyleSheet.create({
   },
   response: {
     padding: 10,
-    margin: 10,
+    margin: 2,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  responseText: {
+    paddingHorizontal: 10,
   },
 });
