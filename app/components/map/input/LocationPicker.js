@@ -5,13 +5,15 @@ import LocationChoice from "./LocationChoice";
 import { IconButton, List, useTheme } from "react-native-paper";
 import useLocation from "../hooks/useLocation";
 import { SearchBar, SearchHeader } from "../../input";
+import { useGeoService } from "../../../api";
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const LocationPicker = ({ location, onLocationChange }) => {
   const [showModal, setShowModal] = useState(false);
   const [deliverLocation, setDeliveryLocation] = useState();
+  const { searchPlace } = useGeoService();
   const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState(["Hellow", "Wolrd"]);
+  const [searchResults, setSearchResults] = useState([]);
   const currLocation = useLocation();
   const { colors, roundness } = useTheme();
   useEffect(() => {
@@ -23,11 +25,19 @@ const LocationPicker = ({ location, onLocationChange }) => {
   }, [deliverLocation]);
 
   useEffect(() => {
-    console.log("Searching ....", search);
+    handleSearch();
   }, [search]);
 
   const handleSpanAndPlot = (selected) => {
+    setSearch(selected.display);
     console.log("Span and plot to map....", selected);
+  };
+
+  const handleSearch = async () => {
+    const response = await searchPlace({ q: search });
+    if (response.ok) {
+      setSearchResults(response.data.results);
+    }
   };
 
   return (
@@ -79,7 +89,7 @@ const LocationPicker = ({ location, onLocationChange }) => {
               searchValue={search}
               onSearchValueChange={setSearch}
               searchResults={searchResults}
-              renderItem={({ item }) => <List.Item title={item} />}
+              renderItem={({ item }) => <List.Item title={item.display} />}
               onSelectItem={handleSpanAndPlot}
               onClearSearchText={() => setSearch("")}
             />
