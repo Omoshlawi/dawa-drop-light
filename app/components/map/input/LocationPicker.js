@@ -2,14 +2,16 @@ import { StyleSheet, View, Text, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LocationChoice from "./LocationChoice";
-import { IconButton, useTheme } from "react-native-paper";
+import { IconButton, List, useTheme } from "react-native-paper";
 import useLocation from "../hooks/useLocation";
-import { SearchHeader } from "../../input";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { SearchBar, SearchHeader } from "../../input";
+// import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const LocationPicker = ({ location, onLocationChange }) => {
   const [showModal, setShowModal] = useState(false);
   const [deliverLocation, setDeliveryLocation] = useState();
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState(["Hellow", "Wolrd"]);
   const currLocation = useLocation();
   const { colors, roundness } = useTheme();
   useEffect(() => {
@@ -19,6 +21,14 @@ const LocationPicker = ({ location, onLocationChange }) => {
       }
     }
   }, [deliverLocation]);
+
+  useEffect(() => {
+    console.log("Searching ....", search);
+  }, [search]);
+
+  const handleSpanAndPlot = (selected) => {
+    console.log("Span and plot to map....", selected);
+  };
 
   return (
     <>
@@ -51,8 +61,8 @@ const LocationPicker = ({ location, onLocationChange }) => {
             iconColor={colors.error}
             onPress={() => setShowModal(false)}
           />
-          <View style={{ flex: 1, width: "100%", }}>
-            <GooglePlacesAutocomplete
+          <View style={{ flex: 1, width: "100%" }}>
+            {/* <GooglePlacesAutocomplete
               placeholder="Search"
               onPress={(data, details = null) => {
                 // 'details' is provided when fetchDetails = true
@@ -63,6 +73,15 @@ const LocationPicker = ({ location, onLocationChange }) => {
                 language: "en",
               }}
               onFail={(error) => console.error(error)}
+            /> */}
+            <SearchBar
+              placeholder="Search..."
+              searchValue={search}
+              onSearchValueChange={setSearch}
+              searchResults={searchResults}
+              renderItem={({ item }) => <List.Item title={item} />}
+              onSelectItem={handleSpanAndPlot}
+              onClearSearchText={() => setSearch("")}
             />
           </View>
         </View>

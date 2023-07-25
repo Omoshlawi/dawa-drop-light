@@ -9,3 +9,4 @@ export { default as SearchHeader } from "./SearchHeader";
 export { default as TextInputField } from "./TextInputField";
 export { default as AutoComplete } from "./AutoComplete";
 export { default as RadioButton } from "./RadioButton";
+export { default as SearchBar } from "./SearchBar";
