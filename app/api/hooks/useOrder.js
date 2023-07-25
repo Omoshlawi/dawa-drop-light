@@ -9,14 +9,10 @@ const useOrder = () => {
   const addDeliveryMode = (data) => apiClient.post(`deliveries/modes`, data);
   const getDeliveryTimeSlots = () => apiClient.get("deliveries/timeslots");
   const addDeliveryTimeSlot = (data) =>
-    apiClient.post("deliveries/timeslots", data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    apiClient.post("deliveries/timeslots", data);
 
   const updateDeliveryTimeSlot = (_id, data) =>
-    apiClient.put(`deliveries/timeslots/${_id}`, data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    apiClient.put(`deliveries/timeslots/${_id}`, data);
 
   return {
     getDeliveryModes,

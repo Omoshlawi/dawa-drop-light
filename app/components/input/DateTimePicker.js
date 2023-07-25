@@ -1,65 +1,85 @@
-import { StyleSheet, View } from "react-native";
-import React, { useCallback, useState } from "react";
-import { default as ExpoDateTimePicker } from "@react-native-community/datetimepicker";
-import moment from "moment";
-import { Button, IconButton, Text } from "react-native-paper";
+import React, { useState } from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { default as CommunityDateTimePicker } from "@react-native-community/datetimepicker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTheme, Text } from "react-native-paper";
+import { Pressable } from "react-native";
+import { TouchableHighlight } from "react-native";
 
 const DateTimePicker = ({
-  label = "Select Date",
+  label = "Date",
   value,
   onChangeValue,
   icon,
-  defaultMode = "time", //countdown,datetime, time, date NB: now supotes date and time only
+  defaultMode = "time",
   is24Hrs = true,
   formarter, //required
 }) => {
-  const date = value ? new Date(value) : new Date();
   const [show, setShow] = useState(false);
-  const handleChange = useCallback((event, selectedDate) => {
-    const {
-      nativeEvent: { timestamp },
-    } = event;
-    // timestamp and selected date are same
-    // console.log("1. ", moment(timestamp).toLocaleString());
-    // console.log("2. ", moment(selectedDate).toLocaleString());
-    // console.log(timestamp); //1689730058119
-    // console.log(selectedDate); //2023-07-19T13:52:47.691Z
-    // console.log(value ? new Date(value) : new Date()); //2023-07-19T13:52:48.352Z
+  const { colors, roundness } = useTheme();
+  const handleDateChange = (event, selectedDate) => {
     setShow(false);
-    // setDate(selectedDate);
-    if (onChangeValue instanceof Function) onChangeValue(selectedDate);
-  }, []);
-  const [mode, setMode] = useState(defaultMode);
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-  const showDatepicker = () => {
-    showMode("date");
+    if (selectedDate) {
+      if (onChangeValue instanceof Function) onChangeValue(selectedDate);
+    }
   };
 
-  const showTimepicker = () => {
-    showMode("time");
+  const showDatePicker = () => {
+    setShow(true);
   };
 
   return (
-    <View style={styles.container}>
-      {icon && <MaterialCommunityIcons name={icon} size={20} />}
-      <Text style={styles.textInput}>{date ? formarter(date) : label}</Text>
-      {show && (
-        <ExpoDateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={is24Hrs}
-          onChange={handleChange}
-        />
+    <View style={styles.component}>
+      {value && label && (
+        <Text
+          style={[
+            styles.label,
+            {
+              backgroundColor: colors.background,
+              color: colors.onSurfaceVariant,
+            },
+          ]}
+          variant="labelSmall"
+        >
+          {label}
+        </Text>
       )}
-      <IconButton
-        icon="calendar"
-        onPress={defaultMode === "time" ? showTimepicker : showDatepicker}
-      />
+      <View
+        style={[
+          styles.container,
+          { borderRadius: roundness, borderColor: colors.outline },
+        ]}
+      >
+        <View style={styles.inputContainer}>
+          {icon && (
+            <TouchableHighlight
+              underlayColor={colors.disabled}
+              style={{ borderRadius: 10 }}
+              onPress={showDatePicker}
+            >
+              <MaterialCommunityIcons
+                name={icon}
+                size={20}
+                color={colors.outline}
+              />
+            </TouchableHighlight>
+          )}
+          <TouchableOpacity onPress={showDatePicker} style={{ flex: 1 }}>
+            <Text variant="labelLarge" style={styles.textInput}>
+              {value ? formarter(value) : label}
+            </Text>
+          </TouchableOpacity>
+          {show && (
+            <CommunityDateTimePicker
+              value={value || new Date()}
+              mode={defaultMode}
+              is24Hour={is24Hrs}
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
+        </View>
+      </View>
     </View>
   );
 };
@@ -67,15 +87,28 @@ const DateTimePicker = ({
 export default DateTimePicker;
 
 const styles = StyleSheet.create({
+  label: {
+    left: 10,
+    position: "absolute",
+    zIndex: 1,
+    paddingHorizontal: 5,
+  },
+  component: {
+    marginTop: 5,
+  },
   container: {
+    borderWidth: 1,
+    marginTop: 5,
+  },
+  inputContainer: {
     flexDirection: "row",
     paddingHorizontal: 10,
     alignItems: "center",
     margin: 5,
-    borderRadius: 20,
+    padding: 10,
   },
   textInput: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
   },
 });

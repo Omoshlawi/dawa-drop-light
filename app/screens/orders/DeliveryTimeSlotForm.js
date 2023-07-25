@@ -16,7 +16,7 @@ import {
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { getFormFileFromUri, getImageUrl, pickX } from "../../utils/helpers";
-import { Dialog, getDialogIcon } from "../../components/dialog";
+import { AlertDialog, Dialog, getDialogIcon } from "../../components/dialog";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { DropDown, ItemPicker, ModalPicker } from "../../components/input";
 import routes from "../../navigation/routes";
@@ -41,7 +41,6 @@ const DeliveryTimeSlotForm = ({ navigation, route }) => {
   const { colors } = useTheme();
 
   const handleSubmit = async (values, { setErrors, errors }) => {
-    console.log(values);
     let response;
     if (timeSlot) {
       response = await updateDeliveryTimeSlot(timeSlot._id, values);
@@ -130,26 +129,14 @@ const DeliveryTimeSlotForm = ({ navigation, route }) => {
           </Form>
         </View>
       </View>
-      <Dialog
-        visible={dialogInfo.show}
-        title={dialogInfo.success ? "Success!" : "Failure!"}
-      >
-        <View style={styles.dialog}>
-          <Image
-            style={styles.img}
-            source={getDialogIcon(dialogInfo.success ? "success" : "error")}
-          />
-          <Text style={styles.text}>{dialogInfo.message}</Text>
-          <Button
-            mode="outlined"
-            onPress={() => {
-              setDialogInfo({ ...dialogInfo, show: false });
-              if (dialogInfo.success) navigation.goBack();
-            }}
-          >
-            Ok
-          </Button>
-        </View>
+      <Dialog visible={dialogInfo.show}>
+        <AlertDialog
+          message={dialogInfo.message}
+          mode={dialogInfo.mode}
+          onButtonPress={() => {
+            navigation.goBack();
+          }}
+        />
       </Dialog>
     </SafeArea>
   );
