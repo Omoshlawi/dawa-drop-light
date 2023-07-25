@@ -51,7 +51,7 @@ const LocationPicker = ({ location, onLocationChange }) => {
             iconColor={colors.error}
             onPress={() => setShowModal(false)}
           />
-          <View style={{ flex: 1, width: "100%", backgroundColor: "red" }}>
+          <View style={{ flex: 1, width: "100%", }}>
             <GooglePlacesAutocomplete
               placeholder="Search"
               onPress={(data, details = null) => {
@@ -114,6 +114,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
     alignItems: "center",
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "#FBF0DCA6",
   },
 });

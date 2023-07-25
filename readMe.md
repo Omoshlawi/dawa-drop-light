@@ -18,3 +18,22 @@ Keep in mind that the user's device needs to have the Google Maps app installed 
 Additionally, always ensure that you comply with Google Maps API usage policies and terms of service while using this feature.
 
 https://www.google.com/maps/dir/?api=1&origin=-1.43444,35.65566&destination=-2.434566,37.988575&travelmode=DRIVING
+
+
+
+# -------------------------------
+Google AdMob (AdSense for Mobile Apps):
+
+Expo Documentation: https://docs.expo.dev/monetization/admob/
+React Native Admob Library: https://github.com/sbugert/react-native-admob
+Facebook Audience Network:
+
+Expo Documentation: https://docs.expo.dev/monetization/fan/
+React Native Facebook Ads Library: https://github.com/facebook/react-native-fbsdk
+Unity Ads:
+
+Unity Ads Documentation: https://unity.com/solutions/unity-ads
+Unity Ads Expo Package: https://github.com/mediamonks/expo-unity-ads
+AppLovin MAX:
+
+AppLovin MAX Expo Package: https://github.com/AppLovin/expo-adapter
