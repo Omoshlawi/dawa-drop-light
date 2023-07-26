@@ -56,7 +56,7 @@ const ItemPicker = ({
           {label}
         </Text>
       )}
-      <View
+      <TouchableOpacity
         style={[
           styles.inputContainer,
           outline
@@ -67,6 +67,7 @@ const ItemPicker = ({
               }
             : {},
         ]}
+        onPress={() => setShowModal(true)}
       >
         {icon && (
           <MaterialCommunityIcons
@@ -131,12 +132,8 @@ const ItemPicker = ({
             {current ? labelExtractor(current) : label}
           </Text>
         )}
-        <IconButton
-          icon="chevron-down"
-          size={30}
-          onPress={() => setShowModal(true)}
-        />
-      </View>
+        <MaterialCommunityIcons name="chevron-down" size={30} />
+      </TouchableOpacity>
       <Modal visible={showModal} animationType="slide">
         <View style={styles.mordal}>
           <View style={styles.header}>
@@ -237,9 +234,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: "row",
-    paddingLeft: 15,
+    paddingHorizontal: 15,
     alignItems: "center",
     marginTop: 5,
+    paddingVertical: 10,
   },
   input: {
     flex: 1,

@@ -7,6 +7,7 @@ import useLocation from "../hooks/useLocation";
 import { SearchBar, SearchHeader } from "../../input";
 import { useGeoService } from "../../../api";
 import MapView, { Marker, Callout } from "react-native-maps";
+import { TouchableOpacity } from "react-native";
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const LocationPicker = ({ location, onLocationChange }) => {
@@ -80,8 +81,11 @@ const LocationPicker = ({ location, onLocationChange }) => {
   };
 
   return (
-    <>
-      <View style={[styles.inputContainer, { borderRadius: roundness }]}>
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={[styles.inputContainer, { borderRadius: roundness }]}
+        onPress={() => setShowModal(true)}
+      >
         <MaterialCommunityIcons
           name="hospital-marker"
           size={30}
@@ -94,12 +98,8 @@ const LocationPicker = ({ location, onLocationChange }) => {
               })`
             : "Choose Delivery Location"}
         </Text>
-        <IconButton
-          icon="chevron-down"
-          size={30}
-          onPress={() => setShowModal(true)}
-        />
-      </View>
+        <MaterialCommunityIcons name="chevron-down" size={30} />
+      </TouchableOpacity>
       <Modal
         visible={showModal}
         onDismiss={() => setShowModal(false)}
@@ -184,13 +184,16 @@ const LocationPicker = ({ location, onLocationChange }) => {
           </View>
         )}
       </Modal>
-    </>
+    </View>
   );
 };
 
 export default LocationPicker;
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 10,
+  },
   mapContainer: {
     flex: 1,
   },
@@ -202,14 +205,14 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: "row",
-    paddingLeft: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     alignItems: "center",
     borderWidth: 1,
-    marginTop: 10,
   },
   input: {
     flex: 1,
-    padding: 10,
+    paddingHorizontal: 10,
   },
   listItem: {
     marginTop: 8,

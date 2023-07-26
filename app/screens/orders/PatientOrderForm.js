@@ -41,7 +41,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [loadEligibility, setLoadEligibility] = useState(false);
   const [step, setStep] = useState(1);
   const { addOrder, updateOrder, checkEligibility } = usePatient();
-  const { modes, order } = route.params;
+  const { modes, order, timeSlots } = route.params;
 
   const handleCheckEligible = async () => {
     setLoadEligibility(true);
@@ -146,7 +146,12 @@ const PatientOrderForm = ({ navigation, route }) => {
           />
         )}
         {step === 2 && eligible && (
-          <Step2 onNext={next} onPrevious={previous} modes={modes} />
+          <Step2
+            onNext={next}
+            onPrevious={previous}
+            modes={modes}
+            timeSlots={timeSlots}
+          />
         )}
         {step === 3 && eligible && (
           <Step3 onNext={next} onPrevious={previous} />

@@ -6,7 +6,7 @@ import moment from "moment/moment";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
 import { useFormikContext } from "formik";
 
-const Step2 = ({ onNext, onPrevious, modes }) => {
+const Step2 = ({ onNext, onPrevious, modes, timeSlots }) => {
   const { colors, roundness } = useTheme();
   const { values, validateForm, setFieldTouched } = useFormikContext();
   return (
@@ -39,6 +39,26 @@ const Step2 = ({ onNext, onPrevious, modes }) => {
               title={item.name}
               style={styles.listItem}
               left={(props) => <List.Icon {...props} icon="truck-delivery" />}
+            />
+          )}
+          itemContainerStyle={[
+            styles.itemContainer,
+            { borderRadius: roundness },
+          ]}
+        />
+        <FormItemPicker
+          name="deliveryTimeSlot"
+          icon="calendar"
+          searchable
+          label="Delivery time slot"
+          data={timeSlots}
+          valueExtractor={({ _id }) => _id}
+          labelExtractor={({ label }) => label}
+          renderItem={({ item }) => (
+            <List.Item
+              title={item.label}
+              style={styles.listItem}
+              left={(props) => <List.Icon {...props} icon="timelapse" />}
             />
           )}
           itemContainerStyle={[

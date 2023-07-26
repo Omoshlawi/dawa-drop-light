@@ -11,21 +11,26 @@ import moment from "moment";
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { getOrders } = usePatient();
-  const { getDeliveryModes } = useOrder();
+  const { getDeliveryModes, getDeliveryTimeSlots } = useOrder();
   const [modes, setModes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [timeSlots, setTimeSlots] = useState([]);
 
   const handleFetch = async () => {
     setLoading(true);
     const response = await getOrders();
     const dResp = await getDeliveryModes();
+    const tResp = await getDeliveryTimeSlots();
     setLoading(false);
     if (response.ok) {
       setOrders(response.data.results);
     }
     if (dResp.ok) {
       setModes(dResp.data.results);
+    }
+    if (tResp.ok) {
+      setTimeSlots(tResp.data.results);
     }
   };
   useFocusEffect(
@@ -63,7 +68,7 @@ const Orders = ({ navigation, route }) => {
         onPress={() => {
           navigation.navigate(routes.ORDERS_NAVIGATION, {
             screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-            params: { modes },
+            params: { modes, timeSlots },
           });
         }}
       />
