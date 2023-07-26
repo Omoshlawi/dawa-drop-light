@@ -20,10 +20,7 @@ const validationSchema = Yup.object().shape({
     longitude: Yup.number().required().label("Longitude"),
     address: Yup.string().label("Address"),
   }).label("Delivery address"),
-  deliveryTimeSlot: Yup.object({
-    startTime: Yup.date().required().label("Start time"),
-    endTime: Yup.date().required().label("End time"),
-  }).label("Time between"),
+  deliveryTimeSlot: Yup.string().required().label("Time slot"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
 });
@@ -131,7 +128,7 @@ const PatientOrderForm = ({ navigation, route }) => {
               ])
             : {
                 deliveryAddress: null,
-                deliveryTimeSlot: null,
+                deliveryTimeSlot: "",
                 deliveryMode: "",
                 phoneNumber: "",
               }

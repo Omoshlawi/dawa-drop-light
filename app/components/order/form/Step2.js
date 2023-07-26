@@ -48,7 +48,7 @@ const Step2 = ({ onNext, onPrevious, modes, timeSlots }) => {
         />
         <FormItemPicker
           name="deliveryTimeSlot"
-          icon="calendar"
+          icon="timelapse"
           searchable
           label="Delivery time slot"
           data={timeSlots}
@@ -73,7 +73,12 @@ const Step2 = ({ onNext, onPrevious, modes, timeSlots }) => {
         <Button
           mode="contained"
           onPress={async () => {
-            const fields = ["deliveryAddress", "deliveryMode", "phoneNumber"];
+            const fields = [
+              "deliveryAddress",
+              "deliveryMode",
+              "phoneNumber",
+              "deliveryTimeSlot",
+            ];
             const errors = await validateForm(values);
             const invalidFields = Object.keys(errors);
             let valid = true;

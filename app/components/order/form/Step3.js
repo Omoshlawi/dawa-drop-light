@@ -29,7 +29,7 @@ const Step3 = ({ onPrevious, onNext }) => {
       <Text variant="headlineLarge">Almost there: Courrier info</Text>
       <View style={styles.form}>
         <RadioButton
-          label="How do you want drugs delivered? "
+          label="How do you want drugs delivered ? "
           data={currierInfo.options}
           labelExtractor={(val) => val}
           valueExtractor={(val) => val}
