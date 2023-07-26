@@ -6,18 +6,19 @@ import { IconButton, List, useTheme } from "react-native-paper";
 import useLocation from "../hooks/useLocation";
 import { SearchBar, SearchHeader } from "../../input";
 import { useGeoService } from "../../../api";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const LocationPicker = ({ location, onLocationChange }) => {
   const [showModal, setShowModal] = useState(false);
-  const { searchPlace } = useGeoService();
+  const { searchPlace, reverseGeoCode } = useGeoService();
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const currLocation = useLocation();
   const { colors, roundness } = useTheme();
   const [markerLocation, setMarkerLocation] = useState();
   const [region, setRegion] = useState();
+  const [geoCoded, setGeoCoded] = useState("");
   useEffect(() => {
     handleSearch();
   }, [search]);
@@ -31,6 +32,13 @@ const LocationPicker = ({ location, onLocationChange }) => {
       });
     }
   }, [currLocation]);
+  useEffect(() => {
+    if (markerLocation)
+      handleReverseGeoCode({
+        lat: markerLocation.latitude,
+        lng: markerLocation.longitude,
+      });
+  }, [markerLocation]);
 
   const handleSpanAndPlot = (selected) => {
     setSearch(selected.display);
@@ -50,6 +58,18 @@ const LocationPicker = ({ location, onLocationChange }) => {
     const response = await searchPlace({ q: search });
     if (response.ok) {
       setSearchResults(response.data.results);
+    }
+  };
+
+  const handleReverseGeoCode = async ({ lat, lng }) => {
+    const response = await reverseGeoCode({ location: `${lat},${lng}` });
+    if (
+      response.ok &&
+      response.data.results.length > 0 &&
+      response.data.results[0].locations.length > 0
+    ) {
+      const location = response.data.results[0].locations[0];
+      setGeoCoded(location.label);
     }
   };
 
@@ -121,7 +141,7 @@ const LocationPicker = ({ location, onLocationChange }) => {
                 coordinate={markerLocation}
                 title="Long press and drag to your desired location"
                 draggable
-                onDragEnd={(e) => {
+                onDragEnd={async (e) => {
                   setMarkerLocation(e.nativeEvent.coordinate);
                   setRegion({ ...region, ...e.nativeEvent.coordinate });
                   if (onLocationChange instanceof Function)
@@ -132,6 +152,16 @@ const LocationPicker = ({ location, onLocationChange }) => {
                   source={require("../../../assets/hospitalmarker.png")}
                   style={{ width: 60, height: 60 }}
                 />
+                <Callout
+                  style={styles.callOut}
+                  onPress={() => {
+                    if (onLocationChange instanceof Function)
+                      onLocationChange(markerLocation);
+                    setShowModal(false);
+                  }}
+                >
+                  <Text>{geoCoded}</Text>
+                </Callout>
               </Marker>
             </MapView>
           </View>
