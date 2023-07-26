@@ -17,13 +17,18 @@ const LocationPicker = ({ location, onLocationChange }) => {
   const currLocation = useLocation();
   const { colors, roundness } = useTheme();
   const [markerLocation, setMarkerLocation] = useState();
-
+  const [region, setRegion] = useState();
   useEffect(() => {
     handleSearch();
   }, [search]);
   useEffect(() => {
     if (currLocation) {
       setMarkerLocation(currLocation);
+      setRegion({
+        ...currLocation,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
     }
   }, [currLocation]);
 
@@ -33,6 +38,12 @@ const LocationPicker = ({ location, onLocationChange }) => {
       coordinates: { lat: latitude, lng: longitude },
     } = selected;
     setMarkerLocation({ latitude, longitude });
+    setRegion({
+      latitude,
+      longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
   };
 
   const handleSearch = async () => {
@@ -41,8 +52,6 @@ const LocationPicker = ({ location, onLocationChange }) => {
       setSearchResults(response.data.results);
     }
   };
-
-  const coords = markerLocation || currLocation;
 
   return (
     <>
@@ -103,19 +112,18 @@ const LocationPicker = ({ location, onLocationChange }) => {
           <View style={styles.mapContainer}>
             <MapView
               style={styles.map}
-              initialRegion={{
-                latitude: markerLocation.latitude,
-                longitude: markerLocation.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+              region={region}
+              onRegionChangeComplete={(newRegion) => {
+                setRegion(newRegion);
               }}
             >
               <Marker
-                coordinate={markerLocation }
+                coordinate={markerLocation}
                 title="Long press and drag to your desired location"
                 draggable
                 onDragEnd={(e) => {
                   setMarkerLocation(e.nativeEvent.coordinate);
+                  setRegion({ ...region, ...e.nativeEvent.coordinate });
                   if (onLocationChange instanceof Function)
                     onLocationChange(e.nativeEvent.coordinate);
                 }}
@@ -138,9 +146,6 @@ export default LocationPicker;
 const styles = StyleSheet.create({
   mapContainer: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "red",
   },
   map: {
     flex: 1,
