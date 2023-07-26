@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Modal, Image } from "react-native";
+import { StyleSheet, View, Text, Modal, Image, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LocationChoice from "./LocationChoice";
@@ -11,6 +11,7 @@ import MapView, { Marker, Callout } from "react-native-maps";
 
 const LocationPicker = ({ location, onLocationChange }) => {
   const [showModal, setShowModal] = useState(false);
+  const [selected, setSelected] = useState(false);
   const { searchPlace, reverseGeoCode } = useGeoService();
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -33,12 +34,17 @@ const LocationPicker = ({ location, onLocationChange }) => {
     }
   }, [currLocation]);
   useEffect(() => {
-    if (markerLocation)
+    if (markerLocation) {
       handleReverseGeoCode({
         lat: markerLocation.latitude,
         lng: markerLocation.longitude,
       });
-  }, [markerLocation]);
+      if (onLocationChange instanceof Function && selected) {
+        onLocationChange({ ...markerLocation, address: geoCoded });
+        setSelected(false);
+      }
+    }
+  }, [markerLocation, geoCoded, selected]);
 
   const handleSpanAndPlot = (selected) => {
     setSearch(selected.display);
@@ -83,7 +89,9 @@ const LocationPicker = ({ location, onLocationChange }) => {
         />
         <Text style={[styles.input]}>
           {location?.latitude && location?.longitude
-            ? `(${location.latitude}, ${location.longitude})`
+            ? `${location.address || ""}(${location.latitude}, ${
+                location.longitude
+              })`
             : "Choose Delivery Location"}
         </Text>
         <IconButton
@@ -144,8 +152,6 @@ const LocationPicker = ({ location, onLocationChange }) => {
                 onDragEnd={async (e) => {
                   setMarkerLocation(e.nativeEvent.coordinate);
                   setRegion({ ...region, ...e.nativeEvent.coordinate });
-                  if (onLocationChange instanceof Function)
-                    onLocationChange(e.nativeEvent.coordinate);
                 }}
               >
                 <Image
@@ -155,9 +161,20 @@ const LocationPicker = ({ location, onLocationChange }) => {
                 <Callout
                   style={styles.callOut}
                   onPress={() => {
-                    if (onLocationChange instanceof Function)
-                      onLocationChange(markerLocation);
-                    setShowModal(false);
+                    Alert.alert(
+                      "Confirmation",
+                      `Are you sure you want choose location ${geoCoded}(${markerLocation.latitude}, ${markerLocation.longitude})`,
+                      [
+                        {
+                          text: "Yes",
+                          onPress: () => {
+                            setSelected(true);
+                            setShowModal(false);
+                          },
+                        },
+                        { text: "No" },
+                      ]
+                    );
                   }}
                 >
                   <Text>{geoCoded}</Text>
