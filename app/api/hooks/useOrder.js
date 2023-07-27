@@ -13,7 +13,11 @@ const useOrder = () => {
 
   const updateDeliveryTimeSlot = (_id, data) =>
     apiClient.put(`deliveries/timeslots/${_id}`, data);
-
+  const getDeliveryMethods = () => apiClient.get("deliveries/methods");
+  const addDeliveryMethod = (data) =>
+    apiClient.post("deliveries/methods", data);
+  const updateDeliveryMethod = (_id, data) =>
+    apiClient.put(`deliveries/methods/${_id}`, data);
   return {
     getDeliveryModes,
     updateDeliveryMode,
@@ -21,6 +25,9 @@ const useOrder = () => {
     getDeliveryTimeSlots,
     addDeliveryTimeSlot,
     updateDeliveryTimeSlot,
+    getDeliveryMethods,
+    addDeliveryMethod,
+    updateDeliveryMethod,
   };
 };
 
