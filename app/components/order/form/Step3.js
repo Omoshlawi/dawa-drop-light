@@ -1,47 +1,98 @@
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, View, Image } from "react-native";
+import React from "react";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../../utils/contants";
 import moment from "moment/moment";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { RadioButton } from "../../input";
+import { useFormikContext } from "formik";
 
-const Step3 = ({ onPrevious, onNext }) => {
+const Step3 = ({ onNext, onPrevious, modes, timeSlots }) => {
   const { colors, roundness } = useTheme();
-  const [currierInfo, setCurrierInfo] = useState({
-    options: [
-      "Through Community ART",
-      "Through Treatment surport budding",
-      "Through Currier Service",
-    ],
-    current: null,
-  });
+  const { values, validateForm, setFieldTouched } = useFormikContext();
   return (
     <View style={styles.container}>
       <View>
         <Image
           style={styles.img}
-          source={require("../../../assets/dev-red.png")}
+          source={require("../../../assets/dev.png")}
           resizeMode="contain"
         />
       </View>
-      <Text variant="headlineLarge">Almost there: Courrier info</Text>
+      <Text variant="headlineLarge">STEP 2: Delivery Information</Text>
       <View style={styles.form}>
-        <RadioButton
-          label="How do you want drugs delivered ? "
-          data={currierInfo.options}
-          labelExtractor={(val) => val}
-          valueExtractor={(val) => val}
-          value={currierInfo.current}
-          onValueChange={(current) =>
-            setCurrierInfo({ ...currierInfo, current })
-          }
+        <FormField
+          name="phoneNumber"
+          placeholder="Enter Phon enumber"
+          label="Phone number"
+          icon="phone"
         />
+        <FormItemPicker
+          name="deliveryMode"
+          icon="truck-delivery"
+          searchable
+          label="Delivery mode"
+          data={modes}
+          valueExtractor={({ _id }) => _id}
+          labelExtractor={({ name }) => name}
+          renderItem={({ item }) => (
+            <List.Item
+              title={item.name}
+              style={styles.listItem}
+              left={(props) => <List.Icon {...props} icon="truck-delivery" />}
+            />
+          )}
+          itemContainerStyle={[
+            styles.itemContainer,
+            { borderRadius: roundness },
+          ]}
+        />
+        <FormItemPicker
+          name="deliveryTimeSlot"
+          icon="timelapse"
+          searchable
+          label="Delivery time slot"
+          data={timeSlots}
+          valueExtractor={({ _id }) => _id}
+          labelExtractor={({ label }) => label}
+          renderItem={({ item }) => (
+            <List.Item
+              title={item.label}
+              style={styles.listItem}
+              left={(props) => <List.Icon {...props} icon="timelapse" />}
+            />
+          )}
+          itemContainerStyle={[
+            styles.itemContainer,
+            { borderRadius: roundness },
+          ]}
+        />
+        <FormLocationPicker name="deliveryAddress" />
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous
         </Button>
-        <Button mode="contained" onPress={onNext} style={styles.btn}>
+        <Button
+          mode="contained"
+          onPress={async () => {
+            const fields = [
+              "deliveryAddress",
+              "deliveryMode",
+              "phoneNumber",
+              "deliveryTimeSlot",
+            ];
+            const errors = await validateForm(values);
+            const invalidFields = Object.keys(errors);
+            let valid = true;
+            for (const field of fields) {
+              const inValid = invalidFields.includes(field);
+              if (inValid) {
+                valid = !inValid;
+                setFieldTouched(field, true);
+              }
+            }
+            if (valid) onNext();
+          }}
+          style={styles.btn}
+        >
           Next
         </Button>
       </View>

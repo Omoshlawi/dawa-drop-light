@@ -2,6 +2,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import {
   Appointments,
+  DeliveryMethod,
+  DeliveryMethodForm,
   DeliveryModeForm,
   DeliveryModes,
   DeliveryTimeSlotForm,
@@ -54,6 +56,16 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_DELIVERY_TIMESLOTES_FORM_SCREEN}
         component={DeliveryTimeSlotForm}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ORDERS_DELIVERY_METHODSS_SCREEN}
+        component={DeliveryMethod}
+        options={{ title: "Manage Delivery methods" }}
+      />
+      <Screen
+        name={routes.ORDERS_DELIVERY_METHOD_FORM_SCREEN}
+        component={DeliveryMethodForm}
         options={{ title: "" }}
       />
     </Navigator>

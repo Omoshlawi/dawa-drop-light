@@ -23,6 +23,7 @@ const validationSchema = Yup.object().shape({
   deliveryTimeSlot: Yup.string().required().label("Time slot"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
+  deliveryPreference: Yup.string().required(),
 });
 
 const PatientOrderForm = ({ navigation, route }) => {

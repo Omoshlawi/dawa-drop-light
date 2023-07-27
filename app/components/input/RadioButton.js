@@ -10,6 +10,7 @@ const RadioButton = ({
   labelExtractor,
   valueExtractor,
   onValueChange,
+  error,
 }) => {
   const { colors, roundness } = useTheme();
   const current = data.find((val) => valueExtractor(val) === value);
@@ -54,6 +55,7 @@ const RadioButton = ({
           );
         })}
       </View>
+      {error && <Text style={{ color: colors.error }}>{error}</Text>}
     </View>
   );
 };

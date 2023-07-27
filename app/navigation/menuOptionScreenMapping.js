@@ -37,6 +37,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_DELIVERY_TIMESLOTES_SCREEN,
   },
+  DeliveryMethod: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_DELIVERY_METHODSS_SCREEN,
+  },
 };
 
 export const get = (link) => {

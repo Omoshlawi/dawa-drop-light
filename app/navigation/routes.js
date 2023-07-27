@@ -44,6 +44,9 @@ export default Object.freeze({
   ORDERS_DELIVERY_TIMESLOTES_SCREEN: "DeliveryTimeSlot Screen",
   ORDERS_DELIVERY_TIMESLOTES_FORM_SCREEN: "DeliveryTimeSlotForm Screen",
 
+  ORDERS_DELIVERY_METHODSS_SCREEN: "DeliveryMethods Screen",
+  ORDERS_DELIVERY_METHOD_FORM_SCREEN: "DeliveryMethodForm Screen",
+
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
 });

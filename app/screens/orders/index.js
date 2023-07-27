@@ -6,3 +6,5 @@ export { default as PatientOrderForm } from "./PatientOrderForm";
 export { default as FeedBackForm } from "./FeedBackForm";
 export { default as DeliveryTimeSlots } from "./DeliveryTimeSlots";
 export { default as DeliveryTimeSlotForm } from "./DeliveryTimeSlotForm";
+export { default as DeliveryMethod } from "./DeliveryMethod";
+export { default as DeliveryMethodForm } from "./DeliveryMethodForm";
