@@ -11,9 +11,11 @@ import moment from "moment";
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { getOrders } = usePatient();
-  const { getDeliveryModes, getDeliveryTimeSlots } = useOrder();
+  const { getDeliveryModes, getDeliveryTimeSlots, getDeliveryMethods } =
+    useOrder();
   const [modes, setModes] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [methods, setMethods] = useState([]);
   const [loading, setLoading] = useState(false);
   const [timeSlots, setTimeSlots] = useState([]);
 
@@ -22,6 +24,7 @@ const Orders = ({ navigation, route }) => {
     const response = await getOrders();
     const dResp = await getDeliveryModes();
     const tResp = await getDeliveryTimeSlots();
+    const mResp = await getDeliveryMethods();
     setLoading(false);
     if (response.ok) {
       setOrders(response.data.results);
@@ -31,6 +34,9 @@ const Orders = ({ navigation, route }) => {
     }
     if (tResp.ok) {
       setTimeSlots(tResp.data.results);
+    }
+    if (mResp.ok) {
+      setMethods(mResp.data.results);
     }
   };
   useFocusEffect(
@@ -68,7 +74,7 @@ const Orders = ({ navigation, route }) => {
         onPress={() => {
           navigation.navigate(routes.ORDERS_NAVIGATION, {
             screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-            params: { modes, timeSlots },
+            params: { modes, timeSlots, methods },
           });
         }}
       />

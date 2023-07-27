@@ -6,14 +6,12 @@ import moment from "moment/moment";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { RadioButton } from "../../input";
+import DeliveryMethodChoice from "../DeliveryMethodChoice";
+import { useFormikContext } from "formik";
 
-const Step2 = ({ onPrevious, onNext }) => {
+const Step2 = ({ onPrevious, onNext, methods }) => {
   const { colors, roundness } = useTheme();
-  const [currierInfo, setCurrierInfo] = useState({
-    options: ["Through Community ART", "Through Treatment surport budding"],
-    current: null,
-    error: "",
-  });
+  const { validateForm, values } = useFormikContext();
   return (
     <View style={styles.container}>
       <View>
@@ -25,17 +23,7 @@ const Step2 = ({ onPrevious, onNext }) => {
       </View>
       <Text variant="headlineLarge">Step 2: Delivery Preference</Text>
       <View style={styles.form}>
-        <RadioButton
-          label="How do you want drugs delivered ? "
-          data={currierInfo.options}
-          labelExtractor={(val) => val}
-          valueExtractor={(val) => val}
-          value={currierInfo.current}
-          onValueChange={(current) =>
-            setCurrierInfo({ ...currierInfo, current })
-          }
-          error={currierInfo.error}
-        />
+        <DeliveryMethodChoice methods={methods} />
         <Button
           mode="contained"
           onPress={onPrevious}
@@ -45,14 +33,11 @@ const Step2 = ({ onPrevious, onNext }) => {
         </Button>
         <Button
           mode="contained"
-          onPress={() => {
-            if (currierInfo.current) {
-              onNext();
+          onPress={async () => {
+            const errors = await validateForm(values);
+            if (errors["deliveryMethod"]) {
             } else {
-              setCurrierInfo({
-                ...currierInfo,
-                error: "Please specify how you want your drugs delivered",
-              });
+              onNext();
             }
           }}
           style={styles.btn}

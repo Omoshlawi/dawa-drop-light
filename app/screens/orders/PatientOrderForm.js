@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
   deliveryTimeSlot: Yup.string().required().label("Time slot"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
-  deliveryPreference: Yup.string().required(),
+  deliveryMethod: Yup.string().required(),
 });
 
 const PatientOrderForm = ({ navigation, route }) => {
@@ -39,7 +39,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [loadEligibility, setLoadEligibility] = useState(false);
   const [step, setStep] = useState(1);
   const { addOrder, updateOrder, checkEligibility } = usePatient();
-  const { modes, order, timeSlots } = route.params;
+  const { modes, order, timeSlots, methods } = route.params;
 
   const handleCheckEligible = async () => {
     setLoadEligibility(true);
@@ -126,12 +126,14 @@ const PatientOrderForm = ({ navigation, route }) => {
                 "deliveryTimeSlot",
                 "deliveryMode",
                 "phoneNumber",
+                "deliveryMethod",
               ])
             : {
                 deliveryAddress: null,
                 deliveryTimeSlot: "",
                 deliveryMode: "",
                 phoneNumber: "",
+                deliveryMethod: "",
               }
         }
         onSubmit={handleSubmit}
@@ -144,15 +146,15 @@ const PatientOrderForm = ({ navigation, route }) => {
           />
         )}
         {step === 2 && eligible && (
-          <Step2
+          <Step2 onNext={next} onPrevious={previous} methods={methods} />
+        )}
+        {step === 3 && eligible && (
+          <Step3
             onNext={next}
             onPrevious={previous}
             modes={modes}
             timeSlots={timeSlots}
           />
-        )}
-        {step === 3 && eligible && (
-          <Step3 onNext={next} onPrevious={previous} />
         )}
         <Dialog visible={dialogInfo.show}>
           <AlertDialog
