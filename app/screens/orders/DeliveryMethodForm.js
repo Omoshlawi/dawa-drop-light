@@ -4,7 +4,12 @@ import { SafeArea } from "../../components/layout";
 import * as Yup from "yup";
 import { useAuthorize, useOrder } from "../../api";
 import Logo from "../../components/Logo";
-import { Form, FormField, FormSubmitButton } from "../../components/forms";
+import {
+  Form,
+  FormCheckBox,
+  FormField,
+  FormSubmitButton,
+} from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { getFormFileFromUri, getImageUrl, pickX } from "../../utils/helpers";
 import { Dialog, getDialogIcon } from "../../components/dialog";
@@ -13,6 +18,7 @@ import { Button, List, Text, useTheme } from "react-native-paper";
 const validationSchemer = Yup.object().shape({
   name: Yup.string().label("Delivery method").required(),
   description: Yup.string().label("Delivery description"),
+  blockOnTimeSlotFull: Yup.bool().label("Block when Timeslot if full"),
 });
 const DeliveryMethodForm = ({ navigation, route }) => {
   const method = route.params;
@@ -63,10 +69,11 @@ const DeliveryMethodForm = ({ navigation, route }) => {
           <Form
             initialValues={
               method
-                ? pickX(method, ["name", "description"])
+                ? pickX(method, ["name", "description", "blockOnTimeSlotFull"])
                 : {
                     name: "",
                     description: "",
+                    blockOnTimeSlotFull: true,
                   }
             }
             validationSchema={validationSchemer}
@@ -86,7 +93,10 @@ const DeliveryMethodForm = ({ navigation, route }) => {
               multiline
               numberOfLines={10}
             />
-
+            <FormCheckBox
+              name="blockOnTimeSlotFull"
+              label="Block when slot is full?"
+            />
             <FormSubmitButton
               title={method ? "Update delivery method" : "Add Delivery method"}
               mode="contained"
