@@ -9,6 +9,7 @@ import {
   DeliveryTimeSlotForm,
   DeliveryTimeSlots,
   FeedBackForm,
+  OrderDetail,
   Orders,
   PatientOrderForm,
 } from "../screens/orders";
@@ -67,6 +68,11 @@ const OrdersNavigation = () => {
         name={routes.ORDERS_DELIVERY_METHOD_FORM_SCREEN}
         component={DeliveryMethodForm}
         options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ORDERS_ORDER_DETAIL_SCREEN}
+        component={OrderDetail}
+        options={{ headerShown: false }}
       />
     </Navigator>
   );

@@ -36,9 +36,12 @@ export default Object.freeze({
   ORDERS_NAVIGATION: "Orders Nav",
   ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",
   ORDERS_DELIVERY_MODES_SCREEN: "DeliveryModes Screen",
-  ORDERS_ORDERS_SCREEN: "Orders Screen",
-  ORDERS_PATIENT_ORDER_FORM_SCREEN: "PatientOrderForm Screen",
   ORDERS_DELIVERY_MODES_FORM_SCREEN: "DeliveryModesfORM Screen",
+
+  ORDERS_ORDERS_SCREEN: "Orders Screen",
+  ORDERS_ORDER_DETAIL_SCREEN: "OrderDetail sCREEN",
+  ORDERS_PATIENT_ORDER_FORM_SCREEN: "PatientOrderForm Screen",
+
   ORDERS_DELIVERY_FEEDBACK_FORM_SCREEN: "DeliveryFeedBackForm Screen",
 
   ORDERS_DELIVERY_TIMESLOTES_SCREEN: "DeliveryTimeSlot Screen",

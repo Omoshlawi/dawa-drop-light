@@ -7,6 +7,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import routes from "../../navigation/routes";
 import moment from "moment";
+import { TouchableOpacity } from "react-native";
 
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
@@ -54,15 +55,24 @@ const Orders = ({ navigation, route }) => {
         renderItem={({ item }) => {
           const { _id, created, drug } = item;
           return (
-            <Card.Title
-              title={drug}
-              style={[styles.listItem, { backgroundColor: colors.surface }]}
-              left={(props) => <Avatar.Icon {...props} icon="cart" />}
-              subtitle={`${moment(created).format(
-                "Do dddd MMM YYYY hh:mm"
-              )} hrs`}
-              subtitleStyle={{ color: colors.disabled }}
-            />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(routes.ORDERS_NAVIGATION, {
+                  screen: routes.ORDERS_ORDER_DETAIL_SCREEN,
+                  params: { modes, timeSlots, methods, order: item },
+                })
+              }
+            >
+              <Card.Title
+                title={drug}
+                style={[styles.listItem, { backgroundColor: colors.surface }]}
+                left={(props) => <Avatar.Icon {...props} icon="cart" />}
+                subtitle={`${moment(created).format(
+                  "Do dddd MMM YYYY hh:mm"
+                )} hrs`}
+                subtitleStyle={{ color: colors.disabled }}
+              />
+            </TouchableOpacity>
           );
         }}
       />

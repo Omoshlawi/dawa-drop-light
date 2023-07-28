@@ -4,7 +4,9 @@ import { addTokenInterceptor } from "../helpers";
 const usePatient = () => {
   addTokenInterceptor();
   const getAppointments = () => apiClient.get("patients/appointments");
+  const getAppointment = (id) => apiClient.get(`patients/appointments/${id}`);
   const getOrders = () => apiClient.get("patients/orders");
+  const getOrder = (orderId) => apiClient.get(`patients/orders/${orderId}`);
   const addOrder = (data) => apiClient.post("patients/orders", data);
   const updateOrder = (orderId, data) =>
     apiClient.put(`patients/orders/${orderId}`, data);
@@ -21,6 +23,8 @@ const usePatient = () => {
     checkEligibility,
     createProfile,
     verifySelf,
+    getAppointment,
+    getOrder
   };
 };
 
