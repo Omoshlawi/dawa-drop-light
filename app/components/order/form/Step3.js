@@ -6,7 +6,7 @@ import moment from "moment/moment";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
 import { useFormikContext } from "formik";
 
-const Step3 = ({ onNext, onPrevious, modes, timeSlots }) => {
+const Step3 = ({ onNext, onPrevious, modes, timeSlots, loading }) => {
   const { colors, roundness } = useTheme();
   const { values, validateForm, setFieldTouched } = useFormikContext();
   return (
@@ -18,11 +18,11 @@ const Step3 = ({ onNext, onPrevious, modes, timeSlots }) => {
           resizeMode="contain"
         />
       </View>
-      <Text variant="headlineLarge">STEP 2: Delivery Information</Text>
+      <Text variant="headlineLarge">Finish: Delivery Information</Text>
       <View style={styles.form}>
         <FormField
           name="phoneNumber"
-          placeholder="Enter Phon enumber"
+          placeholder="Enter Phone number"
           label="Phone number"
           icon="phone"
         />
@@ -72,6 +72,7 @@ const Step3 = ({ onNext, onPrevious, modes, timeSlots }) => {
         </Button>
         <Button
           mode="contained"
+          loading={loading}
           onPress={async () => {
             const fields = [
               "deliveryAddress",
@@ -93,7 +94,7 @@ const Step3 = ({ onNext, onPrevious, modes, timeSlots }) => {
           }}
           style={styles.btn}
         >
-          Next
+          Submit
         </Button>
       </View>
     </View>

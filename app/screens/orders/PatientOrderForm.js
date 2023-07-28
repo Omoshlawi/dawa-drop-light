@@ -1,7 +1,11 @@
 import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { AlertDialog, Dialog } from "../../components/dialog";
+import {
+  AlertDialog,
+  Dialog,
+  OrderConfirmation,
+} from "../../components/dialog";
 import {
   useTheme,
   Button,
@@ -23,7 +27,9 @@ const validationSchema = Yup.object().shape({
   deliveryTimeSlot: Yup.string().required().label("Time slot"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
-  deliveryMethod: Yup.string().required(),
+  deliveryMethod: Yup.string()
+    .required("You must specify how you want your drug delivered to you")
+    .label("Delivery Method"),
 });
 
 const PatientOrderForm = ({ navigation, route }) => {
@@ -101,6 +107,12 @@ const PatientOrderForm = ({ navigation, route }) => {
     setStep(step - 1);
   };
 
+  useEffect(() => {
+    if (step > 3) {
+      setDialogInfo({ ...dialogInfo, mode: "confirm", show: true });
+    }
+  }, [step]);
+
   if (loadEligibility) {
     return (
       <View
@@ -154,18 +166,39 @@ const PatientOrderForm = ({ navigation, route }) => {
             onPrevious={previous}
             modes={modes}
             timeSlots={timeSlots}
+            loading={loading}
           />
         )}
-        <Dialog visible={dialogInfo.show}>
-          <AlertDialog
-            message={dialogInfo.message}
-            mode={dialogInfo.mode}
-            onButtonPress={() => {
-              setDialogInfo({ ...dialogInfo, show: false });
-              if (dialogInfo.mode === "success") navigation.goBack();
-              else if (dialogInfo.mode === "error") navigation.goBack();
-            }}
-          />
+        <Dialog
+          visible={dialogInfo.show}
+          onRequestClose={() => {
+            setDialogInfo({ ...dialogInfo, show: false });
+            if (dialogInfo.mode === "confirm") {
+              previous();
+            }
+          }}
+        >
+          {dialogInfo.mode === "confirm" ? (
+            <OrderConfirmation
+              deliveryModes={modes}
+              onSubmit={() => {
+                previous();
+                setDialogInfo({ ...dialogInfo, show: false });
+              }}
+              deliveryTimeSlots={timeSlots}
+              deliveryMethods={methods}
+            />
+          ) : (
+            <AlertDialog
+              message={dialogInfo.message}
+              mode={dialogInfo.mode}
+              onButtonPress={() => {
+                setDialogInfo({ ...dialogInfo, show: false });
+                if (dialogInfo.mode === "success") navigation.goBack();
+                else if (dialogInfo.mode === "error") navigation.goBack();
+              }}
+            />
+          )}
         </Dialog>
       </Form>
     </View>

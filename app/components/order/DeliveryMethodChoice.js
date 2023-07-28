@@ -51,7 +51,7 @@ const DeliveryMethodChoice = ({
                 size={20}
               />
               <MaterialCommunityIcons name="truck-delivery" size={40} />
-              <Text>{name}</Text>
+              <Text style={{ textAlign: "center" }}>{name}</Text>
             </TouchableOpacity>
           );
         }}

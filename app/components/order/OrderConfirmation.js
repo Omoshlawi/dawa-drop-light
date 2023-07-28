@@ -8,10 +8,14 @@ const OrderConfirmation = ({
   deliveryTimeSlots = [],
   deliveryModes = [],
   onSubmit,
+  deliveryMethods = [],
 }) => {
   const { values, handleSubmit } = useFormikContext();
   const slot = deliveryTimeSlots.find(({ url }) => url === values["time_slot"]);
   const mode = deliveryModes.find(({ _id }) => _id === values["deliveryMode"]);
+  const method = deliveryMethods.find(
+    ({ _id }) => _id === values["deliveryMethod"]
+  );
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
@@ -27,8 +31,14 @@ const OrderConfirmation = ({
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.background }]}
         title="Time Slot"
-        description={slot ? slot.slot : "None"}
-        left={(props) => <List.Icon icon="clock" {...props} />}
+        description={slot ? slot.label : "None"}
+        left={(props) => <List.Icon icon="timelapse" {...props} />}
+      />
+      <List.Item
+        style={[styles.listItem, { backgroundColor: colors.background }]}
+        title="Delivered through?"
+        description={method ? method.name : "None"}
+        left={(props) => <List.Icon icon="truck-delivery" {...props} />}
       />
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.background }]}
@@ -41,7 +51,7 @@ const OrderConfirmation = ({
         title="Delivery Location"
         description={
           values["deliveryAddress"]
-            ? `(${values["deliveryAddress"]["latitude"]}, ${values["deliveryAddress"]["longitude"]})`
+            ? `${values["deliveryAddress"]["address"]}(${values["deliveryAddress"]["latitude"]}, ${values["deliveryAddress"]["longitude"]})`
             : "None"
         }
         left={(props) => <List.Icon icon="hospital-marker" {...props} />}
