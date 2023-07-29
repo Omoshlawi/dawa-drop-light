@@ -17,6 +17,7 @@ import { usePatient } from "../../api";
 import { Step1, Step2, Step3 } from "../../components/order";
 import { Form } from "../../components/forms";
 import { pickX } from "../../utils/helpers";
+import routes from "../../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
@@ -84,7 +85,6 @@ const PatientOrderForm = ({ navigation, route }) => {
     } else {
       if (response.status === 400) {
         setErrors({ ...errors, ...response.data.errors });
-        console.log(response.data);
       } else {
         setDialogInfo({
           ...dialogInfo,
@@ -133,13 +133,13 @@ const PatientOrderForm = ({ navigation, route }) => {
         validationSchema={validationSchema}
         initialValues={
           order
-            ? pickX(order, [
-                "deliveryAddress",
-                "deliveryTimeSlot",
-                "deliveryMode",
-                "phoneNumber",
-                "deliveryMethod",
-              ])
+            ? {
+                deliveryAddress: order.deliveryAddress,
+                deliveryTimeSlot: order.deliveryTimeSlot._id,
+                deliveryMode: order.deliveryMode._id,
+                phoneNumber: order.phoneNumber,
+                deliveryMethod: order.deliveryMethod._id,
+              }
             : {
                 deliveryAddress: null,
                 deliveryTimeSlot: "",
@@ -194,7 +194,10 @@ const PatientOrderForm = ({ navigation, route }) => {
               mode={dialogInfo.mode}
               onButtonPress={() => {
                 setDialogInfo({ ...dialogInfo, show: false });
-                if (dialogInfo.mode === "success") navigation.goBack();
+                if (dialogInfo.mode === "success")
+                  navigation.navigate(routes.ORDERS_NAVIGATION, {
+                    screen: routes.ORDERS_ORDERS_SCREEN,
+                  });
                 else if (dialogInfo.mode === "error") navigation.goBack();
               }}
             />

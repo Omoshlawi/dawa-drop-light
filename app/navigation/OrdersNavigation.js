@@ -13,10 +13,15 @@ import {
   Orders,
   PatientOrderForm,
 } from "../screens/orders";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { View } from "react-native";
+import { useTheme } from "react-native-paper";
+import { TouchableOpacity } from "react-native";
 
 const { Navigator, Screen } = createStackNavigator();
 
 const OrdersNavigation = () => {
+  const { colors } = useTheme();
   return (
     <Navigator>
       <Screen
@@ -72,7 +77,28 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_ORDER_DETAIL_SCREEN}
         component={OrderDetail}
-        options={{ title: "" }}
+        options={({ navigation, route }) => ({
+          title: "",
+          headerRight: ({}) => {
+            return (
+              <TouchableOpacity
+                style={{ paddingRight: 10 }}
+                onPress={() => {
+                  navigation.navigate(routes.ORDERS_NAVIGATION, {
+                    screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
+                    params: route.params,
+                  });
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="square-edit-outline"
+                  size={30}
+                  color={colors.primary}
+                />
+              </TouchableOpacity>
+            );
+          },
+        })}
       />
     </Navigator>
   );

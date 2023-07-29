@@ -9,8 +9,6 @@ import QRCodeStyled from "react-native-qrcode-styled";
 
 const OrderDetail = ({ navigation, route }) => {
   const { modes, timeSlots, methods, order } = route.params;
-  const [loading, setLoading] = useState(false);
-  const [currOrder, setCurrOrder] = useState(null);
   const { colors, roundness } = useTheme();
 
   return (
