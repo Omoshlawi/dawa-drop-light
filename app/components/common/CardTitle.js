@@ -3,16 +3,19 @@ import React from "react";
 import { Avatar, Card, IconButton, useTheme } from "react-native-paper";
 
 const CardTitle = ({ onPress, text, icon, subText }) => {
-  const { colors } = useTheme();
+  const { colors, roundness } = useTheme();
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={!(onPress instanceof Function)}
+      style={[{ borderRadius: roundness }, styles.container]}
     >
       <Card.Title
-        style={[styles.listItem, { backgroundColor: colors.surface }]}
+        style={[
+          styles.listItem,
+          { backgroundColor: colors.surface, borderRadius: roundness },
+        ]}
         title={subText ? text : undefined}
-        
         subtitle={subText ? subText : text}
         subtitleVariant={subText ? "bodySmall" : "bodyLarge"}
         left={(props) => <Avatar.Icon {...props} icon={icon} />}
@@ -36,5 +39,6 @@ export default CardTitle;
 const styles = StyleSheet.create({
   listItem: {
     marginBottom: 5,
+    overflow: "hidden",
   },
 });

@@ -72,7 +72,7 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_ORDER_DETAIL_SCREEN}
         component={OrderDetail}
-        options={{ headerShown: false }}
+        options={{ title: "" }}
       />
     </Navigator>
   );

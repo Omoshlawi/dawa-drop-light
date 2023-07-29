@@ -4,10 +4,10 @@ import QRCodeStyled from "react-native-qrcode-styled";
 import { useTheme } from "react-native-paper";
 
 // Dependancy: react-native-svg react-native-qrcode-styled
-const QRGenerator = ({ value }) => {
+const QRGenerator = ({ value, style }) => {
   const { colors } = useTheme();
   return (
-    <View>
+    <View style={style}>
       <QRCodeStyled
         data={value}
         style={{ backgroundColor: "white" }}
