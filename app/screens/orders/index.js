@@ -9,3 +9,4 @@ export { default as DeliveryTimeSlotForm } from "./DeliveryTimeSlotForm";
 export { default as DeliveryMethod } from "./DeliveryMethod";
 export { default as DeliveryMethodForm } from "./DeliveryMethodForm";
 export { default as OrderDetail } from "./OrderDetail";
+export { default as ProvidorDeliveryRequests } from "./ProvidorDeliveryRequests";

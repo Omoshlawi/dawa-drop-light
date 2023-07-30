@@ -1,8 +1,8 @@
 import apiClient from "../client";
 
 const useProvidor = () => {
-    const getAppointments = (params) =>apiClient.get()
-  return {};
+  const getPendingOrderRequests = (params) => apiClient.get("orders");
+  return { getPendingOrderRequests };
 };
 
 export default useProvidor;

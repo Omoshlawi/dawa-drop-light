@@ -12,6 +12,7 @@ import {
   OrderDetail,
   Orders,
   PatientOrderForm,
+  ProvidorDeliveryRequests,
 } from "../screens/orders";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
@@ -99,6 +100,11 @@ const OrdersNavigation = () => {
             );
           },
         })}
+      />
+      <Screen
+        name={routes.ORDERS_PROVIDOR_DELIVERY_REQUESTS_SCREEN}
+        component={ProvidorDeliveryRequests}
+        options={{ title: "Delivery Requests" }}
       />
     </Navigator>
   );
