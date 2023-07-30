@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from "react-native-maps";
 import { useLocation } from "../../components/map";
 import { useProvidor } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
+import { SwipableBottomSheet } from "../../components/display";
 
 const ProvidorDeliveryRequests = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ const ProvidorDeliveryRequests = () => {
       {location && (
         <MapView
           style={styles.map}
+          mapType="mutedStandard"
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
@@ -54,6 +56,7 @@ const ProvidorDeliveryRequests = () => {
           })}
         </MapView>
       )}
+      <SwipableBottomSheet />
     </View>
   );
 };
