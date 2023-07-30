@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
   View,
   Animated,
@@ -12,7 +12,9 @@ const { height: screenHeight } = Dimensions.get("window");
 const BOTTOM_SHEET_HEIGHT = screenHeight * 0.25;
 
 const SwipableBottomSheet = ({ children }) => {
-  const [bottomSheetHeight, setHeight] = useState(BOTTOM_SHEET_HEIGHT);
+  const bottomSheetHeight = useRef(
+    new Animated.Value(BOTTOM_SHEET_HEIGHT)
+  ).current;
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -20,22 +22,44 @@ const SwipableBottomSheet = ({ children }) => {
       onPanResponderMove: (_, gestureState) => {
         const { dy } = gestureState;
         // NB: dy positive when drugged down otherwise negative
-        const newHeight = bottomSheetHeight - dy;
+        const newHeight = BOTTOM_SHEET_HEIGHT - dy;
         if (
           newHeight >= BOTTOM_SHEET_HEIGHT &&
-          newHeight <= screenHeight * 0.5
+          newHeight <= screenHeight * 0.75
         ) {
-          setHeight(newHeight);
+          bottomSheetHeight.setValue(newHeight);
         }
       },
+      //   onPanResponderRelease: (_, gestureState) => {
+      //     const { dy } = gestureState;
+      //     if (dy < 0) {
+      //       Animated.timing(bottomSheetHeight, {
+      //         toValue: screenHeight,
+      //         duration: 300,
+      //         useNativeDriver: false,
+      //       }).start();
+      //     } else if (dy > 0 && dy < BOTTOM_SHEET_HEIGHT * 0.5) {
+      //       Animated.timing(bottomSheetHeight, {
+      //         toValue: BOTTOM_SHEET_HEIGHT,
+      //         duration: 300,
+      //         useNativeDriver: false,
+      //       }).start();
+      //     } else {
+      //       Animated.timing(bottomSheetHeight, {
+      //         toValue: screenHeight,
+      //         duration: 300,
+      //         useNativeDriver: false,
+      //       }).start();
+      //     }
+      //   },
     })
   ).current;
 
   return (
-    <View style={[styles.bottomSheet, { height: bottomSheetHeight }]}>
+    <Animated.View style={[styles.bottomSheet, { height: bottomSheetHeight }]}>
       <View style={styles.line} {...panResponder.panHandlers} />
       {children}
-    </View>
+    </Animated.View>
   );
 };
 
