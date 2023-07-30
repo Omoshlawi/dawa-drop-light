@@ -21,15 +21,16 @@ const SwipableBottomSheet = ({ children }) => {
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (_, gestureState) => {
         const { dy } = gestureState;
-        // NB: dy positive when drugged down otherwise negative
-        const newHeight = BOTTOM_SHEET_HEIGHT - dy;
+        // NB: dy is positive when dragged down, otherwise negative
+        const newHeight = bottomSheetHeight._value - dy;
         if (
           newHeight >= BOTTOM_SHEET_HEIGHT &&
-          newHeight <= screenHeight * 0.75
+          newHeight <= screenHeight * 0.5
         ) {
           bottomSheetHeight.setValue(newHeight);
         }
       },
+
       //   onPanResponderRelease: (_, gestureState) => {
       //     const { dy } = gestureState;
       //     if (dy < 0) {

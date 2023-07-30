@@ -10,6 +10,7 @@ const ProvidorDeliveryRequests = () => {
   const location = useLocation();
   const { getPendingOrderRequests } = useProvidor();
   const [requests, setRequests] = useState([]);
+  const [currIndex, setCurIndex] = useState(null);
 
   const handleFetch = async () => {
     const response = await getPendingOrderRequests();
@@ -29,6 +30,7 @@ const ProvidorDeliveryRequests = () => {
         <MapView
           style={styles.map}
           mapType="mutedStandard"
+          provider="google"
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
@@ -36,7 +38,7 @@ const ProvidorDeliveryRequests = () => {
             longitudeDelta: 0.0421,
           }}
         >
-          {requests.map((request) => {
+          {requests.map((request, index) => {
             const {
               _id,
               deliveryAddress: { latitude, longitude, address },
@@ -46,9 +48,15 @@ const ProvidorDeliveryRequests = () => {
                 coordinate={{ latitude, longitude }}
                 title={address}
                 key={_id}
+                onPress={() => {
+                  setCurIndex(index);
+                }}
               >
                 <Image
-                  source={require("../../assets/hospitalmarker.png")}
+                  //   source={require("../../assets/hospitalmarker.png")}
+                  source={{
+                    uri: "https://assets.mapquestapi.com/icon/v2/marker-start-md-F8E71C-417505-A@1x.png",
+                  }}
                   style={{ width: 60, height: 60 }}
                 />
               </Marker>
@@ -56,7 +64,13 @@ const ProvidorDeliveryRequests = () => {
           })}
         </MapView>
       )}
-      <SwipableBottomSheet />
+      {currIndex !== null && (
+        <SwipableBottomSheet>
+          <View style={styles.requestContainer}>
+            <Text>{requests[currIndex]._id}</Text>
+          </View>
+        </SwipableBottomSheet>
+      )}
     </View>
   );
 };
@@ -69,5 +83,11 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  requestContainer: {
+    flex: 1,
+    backgroundColor: "red",
+    borderRadius: 20,
+    padding: 10,
   },
 });
