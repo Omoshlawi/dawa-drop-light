@@ -5,23 +5,32 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import MapView, { Marker, Callout, Polyline } from "react-native-maps";
 import { useLocation } from "../../components/map";
-import { useGeoService, useProvidor } from "../../api";
+import { useGeoService, useProvidor, useUser } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { SwipableBottomSheet } from "../../components/display";
 import { Avatar, Button, Card, List, useTheme } from "react-native-paper";
 import { pick } from "lodash";
+import { AlertDialog, Dialog } from "../../components/dialog";
 
-const ProvidorDeliveryRequests = () => {
+const ProvidorDeliveryRequests = ({ navigation }) => {
   const location = useLocation();
-  const { getPendingOrderRequests } = useProvidor();
+  const { getPendingOrderRequests, createDelivery } = useProvidor();
+  const { getUserId } = useUser();
   const [requests, setRequests] = useState([]);
   const [options, setOptions] = useState({
     currIndex: -1,
     showPath: false,
+  });
+  const [dialogInfo, setDialogInfo] = useState({
+    show: false,
+    message:
+      "The delivery task has been assigned to you succesfully Successfully!",
+    mode: "success",
   });
   const { aproximateDistanceTime, direction } = useGeoService();
   const [matrix, setMatrix] = useState({
@@ -82,6 +91,43 @@ const ProvidorDeliveryRequests = () => {
           distance: response.data.route.distance,
           time: response.data.route.time,
         });
+      }
+    }
+  };
+
+  const handleAcceptJob = async () => {
+    if (location && currIndex !== -1) {
+      const response = await createDelivery({
+        order: requests[currIndex]._id,
+        deliveredBy: getUserId(),
+        location,
+        status: "pending",
+      });
+      if (response.ok) {
+        setDialogInfo({
+          ...dialogInfo,
+          show: true,
+          message:
+            "The delivery task has been assigned to you succesfully Successfully!",
+        });
+      } else if (response.status === 400) {
+        setDialogInfo({
+          ...dialogInfo,
+          show: true,
+          mode: "error",
+          message: JSON.stringify(response.data),
+        });
+        console.log(response.data);
+      } else {
+        setDialogInfo({
+          ...dialogInfo,
+          show: true,
+          mode: "error",
+          message: response.data.detail
+            ? response.data.detail
+            : "Unknow Error Occured",
+        });
+        console.log(response.data);
       }
     }
   };
@@ -217,7 +263,20 @@ const ProvidorDeliveryRequests = () => {
                       >
                         Toggle Show Route
                       </Button>
-                      <Button>Take Task</Button>
+                      <Button
+                        onPress={() => {
+                          Alert.alert(
+                            "Confirmation!",
+                            "Are you sure you wanna accept this delivery task?",
+                            [
+                              { text: "Accept", onPress: handleAcceptJob },
+                              { text: "Cancel" },
+                            ]
+                          );
+                        }}
+                      >
+                        Take Task
+                      </Button>
                     </Card.Actions>
                   </View>
                 );
@@ -226,6 +285,16 @@ const ProvidorDeliveryRequests = () => {
           </View>
         </SwipableBottomSheet>
       )}
+      <Dialog visible={dialogInfo.show}>
+        <AlertDialog
+          message={dialogInfo.message}
+          mode={dialogInfo.mode}
+          onButtonPress={() => {
+            setDialogInfo({ ...dialogInfo, show: false });
+            navigation.goBack();
+          }}
+        />
+      </Dialog>
     </View>
   );
 };
