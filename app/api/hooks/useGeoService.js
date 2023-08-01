@@ -5,7 +5,8 @@ const useGeoService = () => {
   const reverseGeoCode = (params) =>
     apiClient.get("maps/geocoding/reverse", params);
   const aproximateDistanceTime = (data) => apiClient.post("maps/matrix", data);
-  return { searchPlace, reverseGeoCode, aproximateDistanceTime };
+  const direction = (data)=>apiClient.post("maps/direction", data)
+  return { searchPlace, reverseGeoCode, aproximateDistanceTime, direction };
 };
 
 export default useGeoService;

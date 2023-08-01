@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import MapView, { Marker, Callout } from "react-native-maps";
+import MapView, { Marker, Callout, Polyline } from "react-native-maps";
 import { useLocation } from "../../components/map";
 import { useGeoService, useProvidor } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
@@ -20,11 +20,12 @@ const ProvidorDeliveryRequests = () => {
   const { getPendingOrderRequests } = useProvidor();
   const [requests, setRequests] = useState([]);
   const [currIndex, setCurIndex] = useState(-1);
-  const { aproximateDistanceTime } = useGeoService();
+  const { aproximateDistanceTime, direction } = useGeoService();
   const [matrix, setMatrix] = useState({
     distance: null,
     time: null,
   });
+  const [route, setRoute] = useState([]);
 
   const handleFetch = async () => {
     const response = await getPendingOrderRequests();
@@ -51,9 +52,34 @@ const ProvidorDeliveryRequests = () => {
     }
   };
 
+  const handleFetchRoute = async (data) => {
+    if (location && currIndex !== -1) {
+      const response = await direction({
+        src: { lat: location.latitude, lng: location.longitude },
+        dst: {
+          lat: requests[currIndex].deliveryAddress.latitude,
+          lng: requests[currIndex].deliveryAddress.longitude,
+        },
+      });
+      if (
+        response.ok &&
+        response.data.route &&
+        response.data.route.legs.length > 0
+      ) {
+        setRoute(
+          response.data.route.legs[0].maneuvers.map((man) => ({
+            latitude: man.startPoint.lat,
+            longitude: man.startPoint.lng,
+          }))
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     if (currIndex !== -1) {
       handleFetchMatrix();
+      handleFetchRoute();
     }
   }, [currIndex]);
 
@@ -101,6 +127,7 @@ const ProvidorDeliveryRequests = () => {
               </Marker>
             );
           })}
+          {<Polyline coordinates={route} strokeWidth={3} />}
         </MapView>
       )}
       {currIndex !== -1 && (
