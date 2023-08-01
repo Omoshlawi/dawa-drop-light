@@ -9,7 +9,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { useLocation } from "../../components/map";
-import { useProvidor } from "../../api";
+import { useGeoService, useProvidor } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { SwipableBottomSheet } from "../../components/display";
 import { Avatar, Button, Card, List, useTheme } from "react-native-paper";
@@ -20,11 +20,10 @@ const ProvidorDeliveryRequests = () => {
   const { getPendingOrderRequests } = useProvidor();
   const [requests, setRequests] = useState([]);
   const [currIndex, setCurIndex] = useState(-1);
-  const [region, setRegion] = useState({
-    latitude: null,
-    longitude: null,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+  const { aproximateDistanceTime } = useGeoService();
+  const [matrix, setMatrix] = useState({
+    distance: null,
+    time: null,
   });
 
   const handleFetch = async () => {
@@ -34,16 +33,29 @@ const ProvidorDeliveryRequests = () => {
     }
   };
 
-  useEffect(() => {
-    if (location) {
-      setRegion({ ...region, ...location });
-    }
-  }, [location]);
-
-  const handleFetchRoute = async () => {
+  const handleFetchMatrix = async (data) => {
     if (location && currIndex !== -1) {
+      const response = await aproximateDistanceTime({
+        src: { lat: location.latitude, lng: location.longitude },
+        dst: {
+          lat: requests[currIndex].deliveryAddress.latitude,
+          lng: requests[currIndex].deliveryAddress.longitude,
+        },
+      });
+      if (response.ok && response.data.time && response.data.distance) {
+        setMatrix({
+          distance: response.data.distance[1],
+          time: response.data.time[1],
+        });
+      }
     }
   };
+
+  useEffect(() => {
+    if (currIndex !== -1) {
+      handleFetchMatrix();
+    }
+  }, [currIndex]);
 
   useFocusEffect(
     useCallback(() => {
@@ -53,13 +65,17 @@ const ProvidorDeliveryRequests = () => {
   const { colors, roundness } = useTheme();
   return (
     <View style={styles.screen}>
-      {region.latitude && region.longitude && (
+      {location && (
         <MapView
           style={styles.map}
           mapType="mutedStandard"
           provider="google"
-          region={region}
-          onRegionChange={setRegion}
+          initialRegion={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
         >
           {requests.map((request, index) => {
             const {
@@ -91,43 +107,50 @@ const ProvidorDeliveryRequests = () => {
         <SwipableBottomSheet>
           <View style={styles.requestContainer}>
             <FlatList
-              data={requests}
+              data={[requests[currIndex]]}
               keyExtractor={({ _id }) => _id}
               renderItem={({ item, index }) => {
                 const { _id, deliveryAddress } = item;
                 const active = index === currIndex;
                 return (
-                  <Card
+                  <View
                     style={[
-                      {
-                        backgroundColor: active
-                          ? colors.disabled
-                          : colors.background,
-                      },
+                      { backgroundColor: colors.background },
                       styles.card,
                     ]}
-                    onPress={() => {
-                      setCurIndex(index);
-                      setRegion({
-                        ...region,
-                        ...pick(requests[index].deliveryAddress, [
-                          "longitude",
-                          "latitude",
-                        ]),
-                      });
-                    }}
                   >
                     <Card.Title
                       title={deliveryAddress.address || _id}
-                      subtitle="Duration: 65758 meters | Time: 65758 hours"
                       left={(props) => (
                         <Avatar.Icon {...props} icon="google-maps" />
                       )}
                     />
+                    <Card.Content>
+                      <List.Item
+                        style={{
+                          backgroundColor: colors.surface,
+                          marginBottom: 5,
+                        }}
+                        title="Distance(Meteres)"
+                        description={
+                          matrix.distance ? matrix.distance : "Unknown"
+                        }
+                        left={(props) => (
+                          <List.Icon {...props} icon="map-marker-distance" />
+                        )}
+                      />
+                      <List.Item
+                        style={{ backgroundColor: colors.surface }}
+                        title="Time"
+                        description={matrix.time ? matrix.time : "Unknown"}
+                        left={(props) => <List.Icon {...props} icon="clock" />}
+                      />
+                    </Card.Content>
                     <Card.Actions>
+                      <Button>Show Route</Button>
                       <Button>Take Task</Button>
                     </Card.Actions>
-                  </Card>
+                  </View>
                 );
               }}
             />

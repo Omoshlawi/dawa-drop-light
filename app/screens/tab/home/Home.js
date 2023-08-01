@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, ScrollView } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeArea } from "../../../components/layout";
 import {
@@ -64,7 +64,7 @@ const Home = ({ navigation }) => {
     return null;
   }
   return (
-    <SafeArea>
+    <ScrollView>
       <View style={styles.header}>
         <IconButton icon="menu" onPress={() => {}} />
         <View style={styles.headerRight}>
@@ -127,7 +127,7 @@ const Home = ({ navigation }) => {
           </>
         )}
       </View>
-    </SafeArea>
+    </ScrollView>
   );
 };
 
