@@ -19,12 +19,16 @@ const ProvidorDeliveryRequests = () => {
   const location = useLocation();
   const { getPendingOrderRequests } = useProvidor();
   const [requests, setRequests] = useState([]);
-  const [currIndex, setCurIndex] = useState(-1);
+  const [options, setOptions] = useState({
+    currIndex: -1,
+    showPath: false,
+  });
   const { aproximateDistanceTime, direction } = useGeoService();
   const [matrix, setMatrix] = useState({
     distance: null,
     time: null,
   });
+
   const [route, setRoute] = useState([]);
 
   const handleFetch = async () => {
@@ -52,6 +56,8 @@ const ProvidorDeliveryRequests = () => {
     }
   };
 
+  const { currIndex, showPath } = options;
+
   const handleFetchRoute = async (data) => {
     if (location && currIndex !== -1) {
       const response = await direction({
@@ -72,16 +78,20 @@ const ProvidorDeliveryRequests = () => {
             longitude: man.startPoint.lng,
           }))
         );
+        setMatrix({
+          distance: response.data.route.distance,
+          time: response.data.route.time,
+        });
       }
     }
   };
 
   useEffect(() => {
     if (currIndex !== -1) {
-      handleFetchMatrix();
+      // handleFetchMatrix();
       handleFetchRoute();
     }
-  }, [currIndex]);
+  }, [options]);
 
   useFocusEffect(
     useCallback(() => {
@@ -103,31 +113,57 @@ const ProvidorDeliveryRequests = () => {
             longitudeDelta: 0.0421,
           }}
         >
-          {requests.map((request, index) => {
-            const {
-              _id,
-              deliveryAddress: { latitude, longitude, address },
-            } = request;
-            return (
+          {showPath === false &&
+            requests.map((request, index) => {
+              const {
+                _id,
+                deliveryAddress: { latitude, longitude, address },
+              } = request;
+              return (
+                <Marker
+                  coordinate={{ latitude, longitude }}
+                  title={address}
+                  key={_id}
+                  onPress={() => {
+                    setOptions({ ...options, currIndex: index });
+                  }}
+                >
+                  <Image
+                    source={require("../../assets/hospitalmarker.png")}
+                    // source={{
+                    //   uri: "https://assets.mapquestapi.com/icon/v2/marker-start-md-F8E71C-417505-A@1x.png",
+                    // }}
+                    style={{ width: 60, height: 60 }}
+                  />
+                </Marker>
+              );
+            })}
+          {showPath && (
+            <>
+              <Polyline coordinates={route} strokeWidth={3} />
               <Marker
-                coordinate={{ latitude, longitude }}
-                title={address}
-                key={_id}
-                onPress={() => {
-                  setCurIndex(index);
-                }}
+                coordinate={location} //Source(Ahent curent location marker)
+                title={"Your Current Location"}
               >
                 <Image
-                  source={require("../../assets/hospitalmarker.png")}
-                  // source={{
-                  //   uri: "https://assets.mapquestapi.com/icon/v2/marker-start-md-F8E71C-417505-A@1x.png",
-                  // }}
+                  source={require("../../assets/hospital.png")}
                   style={{ width: 60, height: 60 }}
                 />
               </Marker>
-            );
-          })}
-          {<Polyline coordinates={route} strokeWidth={3} />}
+              <Marker
+                coordinate={{
+                  latitude: requests[currIndex].deliveryAddress.latitude,
+                  longitude: requests[currIndex].deliveryAddress.longitude,
+                }} // Patient Order delivery Address marker
+                title={requests[currIndex].deliveryAddress.address}
+              >
+                <Image
+                  source={require("../../assets/hospitalmarker.png")}
+                  style={{ width: 60, height: 60 }}
+                />
+              </Marker>
+            </>
+          )}
         </MapView>
       )}
       {currIndex !== -1 && (
@@ -174,7 +210,13 @@ const ProvidorDeliveryRequests = () => {
                       />
                     </Card.Content>
                     <Card.Actions>
-                      <Button>Show Route</Button>
+                      <Button
+                        onPress={() =>
+                          setOptions({ ...options, showPath: !showPath })
+                        }
+                      >
+                        Toggle Show Route
+                      </Button>
                       <Button>Take Task</Button>
                     </Card.Actions>
                   </View>
