@@ -45,6 +45,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_PROVIDOR_DELIVERY_REQUESTS_SCREEN,
   },
+  CurriourDeliveryTasks: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_PROVIDOR_DELIVERY_HISTORY_SCREEN,
+  },
 };
 
 export const get = (link) => {

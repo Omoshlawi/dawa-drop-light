@@ -13,6 +13,7 @@ import {
   Orders,
   PatientOrderForm,
   ProvidorDeliveryRequests,
+  ProvidorDeliveryTasks,
 } from "../screens/orders";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
@@ -105,6 +106,11 @@ const OrdersNavigation = () => {
         name={routes.ORDERS_PROVIDOR_DELIVERY_REQUESTS_SCREEN}
         component={ProvidorDeliveryRequests}
         options={{ title: "Delivery Requests" }}
+      />
+      <Screen
+        name={routes.ORDERS_PROVIDOR_DELIVERY_HISTORY_SCREEN}
+        component={ProvidorDeliveryTasks}
+        options={{ title: "Delivery History" }}
       />
     </Navigator>
   );
