@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import {
   Appointments,
+  DeliveryDetail,
   DeliveryMethod,
   DeliveryMethodForm,
   DeliveryModeForm,
@@ -111,6 +112,11 @@ const OrdersNavigation = () => {
         name={routes.ORDERS_PROVIDOR_DELIVERY_HISTORY_SCREEN}
         component={ProvidorDeliveryTasks}
         options={{ title: "Delivery History" }}
+      />
+      <Screen
+        name={routes.ORDERS_PROVIDOR_DELIVERY_DETAIL_SCREEN}
+        component={DeliveryDetail}
+        options={{ title: "" }}
       />
     </Navigator>
   );

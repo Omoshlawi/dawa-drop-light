@@ -11,3 +11,4 @@ export { default as DeliveryMethodForm } from "./DeliveryMethodForm";
 export { default as OrderDetail } from "./OrderDetail";
 export { default as ProvidorDeliveryRequests } from "./ProvidorDeliveryRequests";
 export { default as ProvidorDeliveryTasks } from "./ProvidorDeliveryTasks";
+export { default as DeliveryDetail } from "./DeliveryDetail";

@@ -5,16 +5,14 @@ import { CardTitle } from "../../components/common";
 import { ActivityIndicator, useTheme } from "react-native-paper";
 import moment from "moment/moment";
 import QRCodeStyled from "react-native-qrcode-styled";
-
-const OrderDetail = ({ navigation, route }) => {
-  const { modes, timeSlots, methods, order } = route.params;
+const DeliveryDetail = ({ navigation, route }) => {
   const { colors, roundness } = useTheme();
-
+  const delivery = route.params;
   return (
     <ScrollView style={[styles.screen, { backgroundColor: colors.background }]}>
-      <View style={[styles.order, { bordderRadius: roundness }]}>
+      <View style={[styles.delivery, { bordderRadius: roundness }]}>
         <QRCodeStyled
-          data={order._id}
+          data={delivery._id}
           style={{ backgroundColor: "white" }}
           color={colors.primary}
           // pieceBorderRadius={10}
@@ -22,53 +20,41 @@ const OrderDetail = ({ navigation, route }) => {
           pieceSize={8}
         />
       </View>
-      <CardTitle text="Order id" subText={order._id} icon="cart" />
+      <CardTitle text="Delivery id" subText={delivery._id} icon="cart" />
       <CardTitle
-        text={"Date Ordered"}
-        subText={moment(order.created).format("dddd Do MMMM yyy hh:mm")}
+        text={"Date accepted"}
+        subText={moment(delivery.created).format("dddd Do MMMM yyy hh:mm")}
         icon="clock"
       />
-      <CardTitle text={"Drug ordered"} subText={order.drug} icon="pill" />
-
       <CardTitle
         text={"Phone number"}
-        subText={order.phoneNumber}
+        subText={delivery.order.phoneNumber}
         icon="phone"
       />
       <CardTitle
-        text={`${order.appointment.appointment_type} Appointment`}
-        subText={`${order.appointment.appointment_date}`}
-        icon="calendar"
-      />
-      <CardTitle
-        text={"Delivery Preference"}
-        subText={order.deliveryMethod.name}
-        icon="truck"
-      />
-      <CardTitle
         text={"Adress"}
-        subText={`${order.deliveryAddress.address}(${order.deliveryAddress.latitude},${order.deliveryAddress.longitude})`}
+        subText={`${delivery.order.deliveryAddress.address}(${delivery.order.deliveryAddress.latitude},${delivery.order.deliveryAddress.longitude})`}
         icon="google-maps"
       />
 
       <CardTitle
         text={"Delivere Through"}
-        subText={order.deliveryMode.name}
+        subText={delivery.order.deliveryMode.name}
         icon="bicycle"
       />
       <CardTitle
         text={"Delivery time"}
-        subText={order.deliveryTimeSlot.label}
+        subText={delivery.order.deliveryTimeSlot.label}
         icon="timelapse"
       />
     </ScrollView>
   );
 };
 
-export default OrderDetail;
+export default DeliveryDetail;
 
 const styles = StyleSheet.create({
-  order: {
+  delivery: {
     padding: 10,
     alignItems: "center",
     overflow: "hidden",

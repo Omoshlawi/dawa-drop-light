@@ -52,6 +52,7 @@ export default Object.freeze({
 
   ORDERS_PROVIDOR_DELIVERY_REQUESTS_SCREEN: "DeliveryRequests Screen",
   ORDERS_PROVIDOR_DELIVERY_HISTORY_SCREEN: "DeliveryHistory Screen",
+  ORDERS_PROVIDOR_DELIVERY_DETAIL_SCREEN: "DeliveryDetail Screen",
 
   ACTION_NAVIGATION: "Actions Nav",
   ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
