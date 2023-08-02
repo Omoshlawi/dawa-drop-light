@@ -51,7 +51,7 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
     }, [])
   );
   return (
-    <SafeArea>
+    <View style={styles.screen}>
       <SectionList
         sections={deliveryToSectionListData(deliveries)}
         renderSectionHeader={({ section: { title, data } }) =>
@@ -100,7 +100,7 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
           );
         }}
       />
-    </SafeArea>
+    </View>
   );
 };
 
@@ -111,5 +111,8 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     padding: 10,
     fontWeight: "bold",
+  },
+  screen: {
+    flex: 1,
   },
 });

@@ -1,4 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import AuthNavigation from "./app/navigation/AuthNavigation";
@@ -14,7 +14,15 @@ export default function App() {
   return (
     <UserContextProvider value={{ token, setToken, clearToken }}>
       <MainTheme>
-        <NavigationContainer>
+        <NavigationContainer
+          theme={{
+            ...DefaultTheme,
+            colors: {
+              ...DefaultTheme.colors,
+              background: "#E1EDED",
+            },
+          }}
+        >
           <MainStackNavigation />
         </NavigationContainer>
       </MainTheme>
