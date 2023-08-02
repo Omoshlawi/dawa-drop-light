@@ -11,7 +11,7 @@ const OrderDetail = ({ navigation, route }) => {
   const { colors, roundness } = useTheme();
 
   return (
-    <ScrollView style={[styles.screen, { backgroundColor: colors.background }]}>
+    <ScrollView style={styles.screen}>
       <View style={[styles.order, { bordderRadius: roundness }]}>
         <QRCodeStyled
           data={order._id}

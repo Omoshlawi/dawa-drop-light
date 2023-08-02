@@ -116,10 +116,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   if (loadEligibility) {
     return (
       <View
-        style={[
-          styles.screen,
-          { backgroundColor: colors.background, padding: 20 },
-        ]}
+        style={styles.screen}
       >
         <ActivityIndicator size={50} />
         <Text>Checking Eligibility...</Text>
@@ -128,7 +125,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   }
 
   return (
-    <View style={[styles.screen, { backgroundColor: colors.background }]}>
+    <View style={styles.screen}>
       <Form
         validationSchema={validationSchema}
         initialValues={

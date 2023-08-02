@@ -9,7 +9,7 @@ const DeliveryDetail = ({ navigation, route }) => {
   const { colors, roundness } = useTheme();
   const delivery = route.params;
   return (
-    <ScrollView style={[styles.screen, { backgroundColor: colors.background }]}>
+    <ScrollView style={styles.screen}>
       <View style={[styles.delivery, { bordderRadius: roundness }]}>
         <QRCodeStyled
           data={delivery._id}

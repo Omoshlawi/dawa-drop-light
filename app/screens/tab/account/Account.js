@@ -35,7 +35,7 @@ const Account = ({ navigation }) => {
     }
   };
   return (
-    <SafeArea>
+    <View style={styles.screen}>
       {user && (
         <TouchableOpacity
           onPress={() =>
@@ -116,7 +116,7 @@ const Account = ({ navigation }) => {
           </Button>
         </View>
       </Dialog>
-    </SafeArea>
+    </View>
   );
 };
 
@@ -131,5 +131,8 @@ const styles = StyleSheet.create({
   },
   dialog: {
     width: 300,
+  },
+  screen: {
+    paddingTop: 10,
   },
 });

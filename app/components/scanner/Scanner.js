@@ -40,7 +40,7 @@ const Scanner = ({ onScanned, requestCancel }) => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
       <Text style={styles.titleText} variant="titleLarge">
         Point the camera QR code
       </Text>
