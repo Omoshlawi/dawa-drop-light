@@ -1,53 +1,111 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { SafeArea } from "../../components/layout";
 import { CardTitle } from "../../components/common";
-import { ActivityIndicator, useTheme } from "react-native-paper";
+import { useTheme, FAB, Portal } from "react-native-paper";
 import moment from "moment/moment";
 import QRCodeStyled from "react-native-qrcode-styled";
+import { callNumber } from "../../utils/helpers";
+import { NestedProvider } from "../../theme";
 const DeliveryDetail = ({ navigation, route }) => {
-  const { colors, roundness } = useTheme();
+  const theme = useTheme();
+  const { colors, roundness } = theme;
   const delivery = route.params;
-  return (
-    <ScrollView style={styles.screen}>
-      <View style={[styles.delivery, { bordderRadius: roundness }]}>
-        <QRCodeStyled
-          data={delivery._id}
-          style={{ backgroundColor: "white" }}
-          color={colors.primary}
-          // pieceBorderRadius={10}
-          padding={10}
-          pieceSize={8}
-        />
-      </View>
-      <CardTitle text="Delivery id" subText={delivery._id} icon="cart" />
-      <CardTitle
-        text={"Date accepted"}
-        subText={moment(delivery.created).format("dddd Do MMMM yyy hh:mm")}
-        icon="clock"
-      />
-      <CardTitle
-        text={"Phone number"}
-        subText={delivery.order.phoneNumber}
-        icon="phone"
-      />
-      <CardTitle
-        text={"Adress"}
-        subText={`${delivery.order.deliveryAddress.address}(${delivery.order.deliveryAddress.latitude},${delivery.order.deliveryAddress.longitude})`}
-        icon="google-maps"
-      />
+  const [state, setState] = useState({ open: false });
 
-      <CardTitle
-        text={"Delivere Through"}
-        subText={delivery.order.deliveryMode.name}
-        icon="bicycle"
-      />
-      <CardTitle
-        text={"Delivery time"}
-        subText={delivery.order.deliveryTimeSlot.label}
-        icon="timelapse"
-      />
-    </ScrollView>
+  const onStateChange = ({ open }) => setState({ open });
+
+  const { open } = state;
+
+  return (
+    <NestedProvider>
+      <ScrollView style={styles.screen}>
+        <View style={[styles.delivery, { bordderRadius: roundness }]}>
+          <QRCodeStyled
+            data={delivery._id}
+            style={{ backgroundColor: "white" }}
+            color={colors.primary}
+            // pieceBorderRadius={10}
+            padding={10}
+            pieceSize={8}
+          />
+        </View>
+        <CardTitle text="Delivery id" subText={delivery._id} icon="cart" />
+        <CardTitle
+          text={"Date accepted"}
+          subText={moment(delivery.created).format("dddd Do MMMM yyy hh:mm")}
+          icon="clock"
+        />
+        <CardTitle
+          text={"Phone number"}
+          subText={delivery.order.phoneNumber}
+          icon="phone"
+        />
+        <CardTitle
+          text={"Delivery Status"}
+          subText={delivery.status}
+          icon="progress-clock"
+        />
+        <CardTitle
+          text={"Adress"}
+          subText={`${delivery.order.deliveryAddress.address}(${delivery.order.deliveryAddress.latitude},${delivery.order.deliveryAddress.longitude})`}
+          icon="google-maps"
+        />
+
+        <CardTitle
+          text={"Delivere Through"}
+          subText={delivery.order.deliveryMode.name}
+          icon="bicycle"
+        />
+        <CardTitle
+          text={"Delivery time"}
+          subText={delivery.order.deliveryTimeSlot.label}
+          icon="timelapse"
+        />
+      </ScrollView>
+
+      <Portal>
+        <FAB.Group
+          open={open}
+          fabStyle={[styles.fab, { backgroundColor: colors.secondary }]}
+          color={colors.surface}
+          label={open ? "Close" : "Actions"}
+          backdropColor={colors.backdrop}
+          visible
+          icon={open ? "close" : "dots-vertical"}
+          actions={[
+            {
+              icon: "google-maps",
+              onPress: () => console.log("Pressed add"),
+              color: colors.secondary,
+            },
+            {
+              icon: "truck",
+              label: "Truck",
+              color: colors.secondary,
+              onPress: () => console.log("Pressed star"),
+            },
+            {
+              icon: "cancel",
+              label: "Cancel Delivery",
+              color: colors.secondary,
+              onPress: () => console.log("Pressed email"),
+            },
+            {
+              icon: "phone-plus-outline",
+              label: `Call ${delivery.order.phoneNumber}`,
+              color: colors.secondary,
+              onPress: () => callNumber(delivery.order.phoneNumber),
+            },
+          ]}
+          onStateChange={onStateChange}
+          onPress={() => {
+            if (open) {
+              // do something if the speed dial is open
+            }
+          }}
+        />
+      </Portal>
+    </NestedProvider>
   );
 };
 
@@ -61,5 +119,8 @@ const styles = StyleSheet.create({
   },
   screen: {
     paddingHorizontal: 5,
+  },
+  fab: {
+    marginVertical: 3,
   },
 });

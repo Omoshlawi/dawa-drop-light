@@ -26,9 +26,9 @@ const MainTheme = ({ children }) => {
           waningLight: "#FBF0DC",
           // onSurfaceVariant: "red",
           surfaceVariant: "red",
+          backdrop: "#FFFFFFBF", //Uesd as background in modals, should have transparency to enable see what is in the back a little
         },
         roundness: 10,
-        
       }}
     >
       {children}
