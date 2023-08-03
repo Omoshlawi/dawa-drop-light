@@ -1,3 +1,4 @@
+import { Linking } from "react-native";
 import { BASE_URL } from "./contants";
 
 const _ = require("lodash");

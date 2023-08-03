@@ -6,6 +6,7 @@ import moment from "moment/moment";
 import QRCodeStyled from "react-native-qrcode-styled";
 import { callNumber } from "../../utils/helpers";
 import { NestedProvider } from "../../theme";
+import routes from "../../navigation/routes";
 const DeliveryDetail = ({ navigation, route }) => {
   const theme = useTheme();
   const { colors, roundness } = theme;
@@ -82,7 +83,12 @@ const DeliveryDetail = ({ navigation, route }) => {
               icon: "truck",
               label: "Truck",
               color: colors.secondary,
-              onPress: () => console.log("Pressed star"),
+              onPress: () => {
+                navigation.navigate(routes.ORDERS_NAVIGATION, {
+                  screen: routes.ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN,
+                  params: delivery,
+                });
+              },
             },
             {
               icon: "cancel",

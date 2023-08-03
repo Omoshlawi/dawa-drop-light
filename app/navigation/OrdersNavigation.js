@@ -13,6 +13,7 @@ import {
   OrderDetail,
   Orders,
   PatientOrderForm,
+  ProviderTruckDelivery,
   ProvidorDeliveryRequests,
   ProvidorDeliveryTasks,
 } from "../screens/orders";
@@ -116,6 +117,11 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_PROVIDOR_DELIVERY_DETAIL_SCREEN}
         component={DeliveryDetail}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN}
+        component={ProviderTruckDelivery}
         options={{ title: "" }}
       />
     </Navigator>
