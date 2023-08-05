@@ -43,7 +43,13 @@ const DeliveryDetail = ({ navigation, route }) => {
         />
         <CardTitle
           text={"Delivery Status"}
-          subText={delivery.status}
+          subText={`${
+            !delivery.status
+              ? "Pending"
+              : delivery.status === "pending"
+              ? "On Transit"
+              : delivery.status
+          }`}
           icon="progress-clock"
         />
         <CardTitle

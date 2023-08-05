@@ -16,6 +16,7 @@ import routes from "../../navigation/routes";
 const ProvidorDeliveryTasks = ({ navigation }) => {
   const { getDeliveryHistory } = useProvidor();
   const [deliveries, setDeliveries] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { colors } = useTheme();
 
   const handFetch = async () => {
@@ -26,13 +27,20 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
   };
 
   const deliveryToSectionListData = (deliveries = []) => {
-    const pending = deliveries.filter(({ status }) => status === "pending");
+    const onTransit = deliveries.filter(({ status }) => status === "pending");
     const cancelled = deliveries.filter(({ status }) => status === "canceled");
     const delivered = deliveries.filter(({ status }) => status === "delivered");
+    const pending = deliveries.filter(
+      ({ status }) => Boolean(status) === false
+    );
     return [
       {
         title: "Pending Deliveries",
         data: pending,
+      },
+      {
+        title: "On Transit Deliveries",
+        data: onTransit,
       },
       {
         title: "Cancelled Deliveries",
@@ -53,6 +61,8 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <SectionList
+        refreshing={loading}
+        onRefresh={handFetch}
         sections={deliveryToSectionListData(deliveries)}
         renderSectionHeader={({ section: { title, data } }) =>
           data.length ? <Text style={styles.title}>{title}</Text> : null
@@ -85,7 +95,13 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
                 }`}
                 subtitle={`Date: ${moment(created).format(
                   "ddd Do MMM yyy"
-                )} | Status: ${status}`}
+                )} | Status: ${
+                  Boolean(status) === false
+                    ? "Pending"
+                    : status === "pending"
+                    ? "On Transit"
+                    : status
+                }`}
                 left={(props) => <Avatar.Icon {...props} icon="truck" />}
                 right={(props) => (
                   <Avatar.Icon

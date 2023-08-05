@@ -5,3 +5,4 @@ export { default as useAuthorize } from "./hooks/useAuthorize";
 export { default as useProvidor } from "./hooks/useProvidor";
 export { default as useOrder } from "./hooks/useOrder";
 export { default as useGeoService } from "./hooks/useGeoService";
+export { default as useSocket } from "./hooks/useSocket";
