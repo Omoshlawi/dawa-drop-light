@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapView, { Marker, Callout, Polyline } from "react-native-maps";
 import { useGeoService, useOrder, useSocket } from "../../api";
 import { useLocation } from "../../components/map";
@@ -7,22 +7,24 @@ import { Avatar, Button, Card, List, useTheme } from "react-native-paper";
 import { callNumber } from "../../utils/helpers";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import routes from "../../navigation/routes";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
-  const delivery = navRoute.params;
+  const _delivery = navRoute.params;
   const { direction } = useGeoService();
   const location = useLocation();
   const [route, setRoute] = useState([]);
   const [currLocation, setCurrLocation] = useState();
   const { subscribe } = useSocket();
   const { colors, roundness } = useTheme();
-  const { tripAction } = useOrder();
+  const { tripAction, getDelivery } = useOrder();
   const [loading, setLoading] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message: "Yor trip was ended successfully!",
     mode: "success",
   });
+  const [delivery, setDelivery] = useState(_delivery);
   const handleFetchRoute = async () => {
     if (location) {
       const response = await direction({
@@ -79,6 +81,7 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
           action === "start" ? "started" : "ended"
         } successfully!`,
       });
+      await handleFetch();
     } else if (response.status === 400) {
       setDialogInfo({
         ...dialogInfo,
@@ -98,7 +101,20 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
     }
   };
 
+  const handleFetch = async () => {
+    const response = await getDelivery(_delivery._id);
+    if (response.ok) {
+      setDelivery(response.data);
+    }
+  };
+
   const mapRef = useRef(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      handleFetch();
+    }, [])
+  );
 
   useEffect(() => {
     if (location) {
@@ -199,13 +215,13 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
           message={dialogInfo.message}
           mode={dialogInfo.mode}
           onButtonPress={() => {
+            setDialogInfo({ ...dialogInfo, show: false });
             if (dialogInfo.mode === "success") {
             } else {
               navigation.navigate(routes.ORDERS_NAVIGATION, {
                 screen: routes.ORDERS_PROVIDOR_DELIVERY_HISTORY_SCREEN,
               });
             }
-            // setDialogInfo({ ...dialogInfo, show: false });
           }}
         />
       </Dialog>

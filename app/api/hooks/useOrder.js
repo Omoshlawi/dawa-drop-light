@@ -20,6 +20,7 @@ const useOrder = () => {
     apiClient.put(`deliveries/methods/${_id}`, data);
   const tripAction = (deliveryId, action, data) =>
     apiClient.post(`deliveries/${deliveryId}/${action}`, data);
+  const getDelivery = (deliveryId) => apiClient.get(`deliveries/${deliveryId}`);
   return {
     getDeliveryModes,
     updateDeliveryMode,
@@ -31,6 +32,7 @@ const useOrder = () => {
     addDeliveryMethod,
     updateDeliveryMethod,
     tripAction,
+    getDelivery
   };
 };
 

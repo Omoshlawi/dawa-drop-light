@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CardTitle } from "../../components/common";
 import { useTheme, FAB, Portal } from "react-native-paper";
 import moment from "moment/moment";
@@ -7,14 +7,27 @@ import QRCodeStyled from "react-native-qrcode-styled";
 import { callNumber } from "../../utils/helpers";
 import { NestedProvider } from "../../theme";
 import routes from "../../navigation/routes";
+import { useFocusEffect } from "@react-navigation/native";
+import { useOrder } from "../../api";
 const DeliveryDetail = ({ navigation, route }) => {
   const theme = useTheme();
   const { colors, roundness } = theme;
-  const delivery = route.params;
+  const _delivery = route.params;
   const [state, setState] = useState({ open: false });
-
+  const [delivery, setDelivery] = useState(_delivery);
   const onStateChange = ({ open }) => setState({ open });
-
+  const { getDelivery } = useOrder();
+  const handleFetch = async () => {
+    const response = await getDelivery(_delivery._id);
+    if (response.ok) {
+      setDelivery(response.data);
+    }
+  };
+  useFocusEffect(
+    useCallback(() => {
+      handleFetch();
+    }, [])
+  );
   const { open } = state;
 
   return (
