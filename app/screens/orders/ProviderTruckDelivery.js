@@ -26,6 +26,7 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
     mode: "success",
   });
   const [delivery, setDelivery] = useState(_delivery);
+  const [covered, setCovered] = useState([]);
   const handleFetchRoute = async () => {
     if (location) {
       const response = await direction({
@@ -114,27 +115,27 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
   }, [location]);
 
   useEffect(() => {
-    const locationReceiver = (data) => {
-      // console.log("Received location:", data, typeof data);
-      setCurrLocation(data);
-    };
-
     const locationSubscription = subscribe({
       name: "stream_location",
-      receiver: locationReceiver,
+      receiver: setCurrLocation,
     });
-
     // Unsubscribe when the component is unmounted
     return () => {
       locationSubscription.unsubscribe();
     };
   }, []);
 
+  useEffect(() => {
+    if (currLocation) {
+      setCovered([...covered, currLocation]);
+    }
+  }, [currLocation]);
   const sendLocation = () => {
-    for (const loc of route) {
+    route.forEach((loc, index) => {
       setStreaming(true);
       socket.emit("stream_location", loc);
-    }
+    });
+    setCovered([]);
     setStreaming(false);
   };
   return (
@@ -157,6 +158,12 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
           >
             <>
               <Polyline coordinates={route} strokeWidth={3} />
+              <Polyline
+                coordinates={covered}
+                strokeWidth={4}
+                strokeColor="blue"
+                zIndex={2}
+              />
               <Marker
                 coordinate={location} //Source(Ahent curent location marker)
                 title={"Start Location"}
@@ -273,6 +280,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 30,
     alignSelf: "center",
-    width: "80%",
+    width: "90%",
   },
 });
