@@ -1,9 +1,11 @@
 import { io } from "socket.io-client";
 import { BASE_URL } from "../../utils/contants";
+import { useUserContext } from "../../context/hooks";
 
-const useSocket = () => {
-  const socket = io(BASE_URL);
-
+const useSocket = (namespace) => {
+  const { token } = useUserContext();
+  const uri = `${BASE_URL}${namespace}`;
+  const socket = io(uri, { query: { token } });
   const subscribe = ({ name, receiver }) => {
     socket.on(name, receiver);
     const unsubscribe = () => {
@@ -13,20 +15,18 @@ const useSocket = () => {
       socket.emit(name, data);
     };
 
-    const disconect = () => {
-      socket.disconnect();
-    };
-
     return {
       name,
       receiver,
       emit,
       unsubscribe,
-      disconect,
     };
   };
+  const disconect = () => {
+    socket.disconnect();
+  };
 
-  return { socket, subscribe };
+  return { socket, subscribe, disconect };
 };
 
 export default useSocket;

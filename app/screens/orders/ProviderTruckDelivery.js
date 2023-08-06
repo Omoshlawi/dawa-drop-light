@@ -15,10 +15,11 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
   const location = useLocation();
   const [route, setRoute] = useState([]);
   const [currLocation, setCurrLocation] = useState();
-  const { subscribe } = useSocket();
+  const { socket, subscribe, disconnect } = useSocket("delivery");
   const { colors, roundness } = useTheme();
   const { tripAction, getDelivery } = useOrder();
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message: "Yor trip was ended successfully!",
@@ -53,17 +54,6 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
         }
       }
     }
-  };
-
-  const simulateMovement = () => {
-    const { emit, disconect } = subscribe({
-      name: "join",
-      receiver: (data) => {
-        console.log("Received data", data);
-        disconect();
-      },
-    });
-    emit("omosh");
   };
 
   const handleTripAction = async (action) => {
@@ -122,6 +112,31 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
       handleFetchRoute();
     }
   }, [location]);
+
+  useEffect(() => {
+    const locationReceiver = (data) => {
+      // console.log("Received location:", data, typeof data);
+      setCurrLocation(data);
+    };
+
+    const locationSubscription = subscribe({
+      name: "stream_location",
+      receiver: locationReceiver,
+    });
+
+    // Unsubscribe when the component is unmounted
+    return () => {
+      locationSubscription.unsubscribe();
+    };
+  }, []);
+
+  const sendLocation = () => {
+    for (const loc of route) {
+      setStreaming(true);
+      socket.emit("stream_location", loc);
+    }
+    setStreaming(false);
+  };
   return (
     <View style={styles.screen}>
       {currLocation && (
@@ -143,12 +158,21 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
             <>
               <Polyline coordinates={route} strokeWidth={3} />
               <Marker
-                coordinate={currLocation} //Source(Ahent curent location marker)
-                title={"Your Current Location"}
+                coordinate={location} //Source(Ahent curent location marker)
+                title={"Start Location"}
                 identifier="currLocation"
               >
                 <Image
                   source={require("../../assets/hospital.png")}
+                  style={{ width: 60, height: 60 }}
+                />
+              </Marker>
+              <Marker
+                coordinate={currLocation} //Source(Ahent curent location marker)
+                title={"Your Current Location"}
+              >
+                <Image
+                  source={require("../../assets/rec.png")}
                   style={{ width: 60, height: 60 }}
                 />
               </Marker>
@@ -187,6 +211,13 @@ const ProviderTruckDelivery = ({ navigation, route: navRoute }) => {
             <Card.Actions>
               <Button onPress={() => callNumber(delivery.order.phoneNumber)}>
                 {"Call receiver"}
+              </Button>
+              <Button
+                loading={streaming}
+                disabled={streaming}
+                onPress={sendLocation}
+              >
+                Simulate
               </Button>
               {Boolean(delivery.status) === false && (
                 <Button
