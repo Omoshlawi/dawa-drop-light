@@ -1,7 +1,7 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { CardTitle } from "../../components/common";
-import { useTheme, FAB, Portal } from "react-native-paper";
+import { useTheme, FAB, Portal, Text, IconButton } from "react-native-paper";
 import moment from "moment/moment";
 import QRCodeStyled from "react-native-qrcode-styled";
 import { callNumber } from "../../utils/helpers";
@@ -9,6 +9,9 @@ import { NestedProvider } from "../../theme";
 import routes from "../../navigation/routes";
 import { useFocusEffect } from "@react-navigation/native";
 import { useOrder } from "../../api";
+import { Dialog } from "../../components/dialog";
+import Logo from "../../components/Logo";
+import { screenWidth } from "../../utils/contants";
 const DeliveryDetail = ({ navigation, route }) => {
   const theme = useTheme();
   const { colors, roundness } = theme;
@@ -28,20 +31,19 @@ const DeliveryDetail = ({ navigation, route }) => {
       handleFetch();
     }, [])
   );
+  const [dialogInfo, setDialogInfo] = useState({
+    show: false,
+    mode: "qr",
+    message: "",
+  });
   const { open } = state;
 
   return (
     <NestedProvider>
       <ScrollView style={styles.screen}>
         <View style={[styles.delivery, { bordderRadius: roundness }]}>
-          <QRCodeStyled
-            data={delivery._id}
-            style={{ backgroundColor: "white" }}
-            color={colors.primary}
-            // pieceBorderRadius={10}
-            padding={10}
-            pieceSize={8}
-          />
+          <Logo size={screenWidth * 0.5} />
+          <Text variant="headlineLarge">Delivery Detail</Text>
         </View>
         <CardTitle text="Delivery id" subText={delivery._id} icon="cart" />
         <CardTitle
@@ -94,12 +96,18 @@ const DeliveryDetail = ({ navigation, route }) => {
           icon={open ? "close" : "dots-vertical"}
           actions={[
             {
-              icon: "google-maps",
-              onPress: () => console.log("Pressed add"),
+              icon: "cart",
+              onPress: () =>
+                setDialogInfo({
+                  ...dialogInfo,
+                  show: true,
+                  message: delivery.order._id,
+                }),
               color: colors.secondary,
             },
+
             {
-              icon: "truck",
+              icon: "map-marker-distance",
               label: "Truck",
               color: colors.secondary,
               onPress: () => {
@@ -108,6 +116,28 @@ const DeliveryDetail = ({ navigation, route }) => {
                   params: delivery,
                 });
               },
+            },
+            {
+              label: "Patient",
+              icon: "account",
+              onPress: () =>
+                setDialogInfo({
+                  ...dialogInfo,
+                  show: true,
+                  message: delivery.order.patient,
+                }),
+              color: colors.secondary,
+            },
+            {
+              icon: "truck-delivery",
+              label: "Delivery",
+              onPress: () =>
+                setDialogInfo({
+                  ...dialogInfo,
+                  show: true,
+                  message: delivery._id,
+                }),
+              color: colors.secondary,
             },
             {
               icon: "cancel",
@@ -130,6 +160,23 @@ const DeliveryDetail = ({ navigation, route }) => {
           }}
         />
       </Portal>
+      <Dialog
+        visible={dialogInfo.show}
+        swipable
+        onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
+      >
+        <View style={[styles.delivery, { bordderRadius: roundness }]}>
+          <QRCodeStyled
+            data={dialogInfo.message}
+            style={{ backgroundColor: "white" }}
+            color={colors.primary}
+            // pieceBorderRadius={10}
+            padding={10}
+            pieceSize={8}
+          />
+          <Text variant="titleMedium">{dialogInfo.message}</Text>
+        </View>
+      </Dialog>
     </NestedProvider>
   );
 };
@@ -143,7 +190,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   screen: {
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
   },
   fab: {
     marginVertical: 3,

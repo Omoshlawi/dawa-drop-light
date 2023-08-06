@@ -1,18 +1,39 @@
-import { Modal, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { Modal, StyleSheet, Text, View, PanResponder } from "react-native";
+import React, { useRef, useState } from "react";
 
-const Dialog = ({ children, title, onDismiss, visible, onRequestClose }) => {
+const Dialog = ({ children, swipable, onDismiss, visible, onRequestClose }) => {
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gestureState) => {
+        // Handle the swipe down gesture here (optional)
+      },
+      onPanResponderRelease: (event, gestureState) => {
+        if (gestureState.dy > 0 && gestureState.vy > 1) {
+          // Close the modal on swipe down
+          if (onRequestClose instanceof Function) {
+            onRequestClose();
+            if (onDismiss instanceof Function) {
+              onDismiss();
+            }
+          }
+        }
+      },
+    })
+  ).current;
   return (
     <Modal
       transparent
       visible={visible}
-      animationType="fade"
+      animationType={swipable ? "slide" : "fade"}
       onRequestClose={onRequestClose}
       onDismiss={onDismiss}
     >
-      <View style={styles.screen}>
+      <View style={styles.screen} {...panResponder.panHandlers}>
         <View style={styles.dialog}>
-          <View style={styles.dialogBody}>{children}</View>
+          <View style={styles.dialogBody} {...panResponder.panHandlers}>
+            {children}
+          </View>
           <View style={styles.dialogActions}></View>
         </View>
       </View>
