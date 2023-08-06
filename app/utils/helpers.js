@@ -99,3 +99,15 @@ export function getRandomColor() {
 
   return color;
 }
+
+export const openGoogleMapsDirections = (startLocation, stopLocation) => {
+  const url = `https://www.google.com/maps/dir/?api=1&origin=${startLocation.latitude},${startLocation.longitude}&destination=${stopLocation.latitude},${stopLocation.longitude}`;
+  Linking.openURL(url);
+};
+
+const extractUrlsFromText = (text) => {
+  // Regular expression to match URLs in the text
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urls = text.match(urlRegex);
+  return urls;
+};

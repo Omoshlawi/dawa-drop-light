@@ -16,6 +16,7 @@ import { SwipableBottomSheet } from "../../components/display";
 import { Avatar, Button, Card, List, useTheme } from "react-native-paper";
 import { pick } from "lodash";
 import { AlertDialog, Dialog } from "../../components/dialog";
+import { AcceptDeliveryTaskForm } from "../../components/order";
 
 const ProvidorDeliveryRequests = ({ navigation }) => {
   const location = useLocation();
@@ -39,7 +40,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
   });
 
   const [route, setRoute] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const handleFetch = async () => {
     const response = await getPendingOrderRequests();
     if (response.ok) {
@@ -95,18 +96,21 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
     }
   };
 
-  const handleAcceptJob = async () => {
+  const handleAcceptJob = async (values, { setFieldError }) => {
     if (location && currIndex !== -1) {
+      setLoading(true);
       const response = await createDelivery({
         order: requests[currIndex]._id,
         deliveredBy: getUserId(),
-        location,
         status: "pending",
+        ...values,
       });
+      setLoading(false);
       if (response.ok) {
         setDialogInfo({
           ...dialogInfo,
           show: true,
+          mode: "success",
           message:
             "The delivery task has been assigned to you succesfully Successfully!",
         });
@@ -265,14 +269,11 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                       </Button>
                       <Button
                         onPress={() => {
-                          Alert.alert(
-                            "Confirmation!",
-                            "Are you sure you wanna accept this delivery task?",
-                            [
-                              { text: "Accept", onPress: handleAcceptJob },
-                              { text: "Cancel" },
-                            ]
-                          );
+                          setDialogInfo({
+                            ...dialogInfo,
+                            show: true,
+                            mode: "form",
+                          });
                         }}
                       >
                         Take Task
@@ -286,14 +287,24 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
         </SwipableBottomSheet>
       )}
       <Dialog visible={dialogInfo.show}>
-        <AlertDialog
-          message={dialogInfo.message}
-          mode={dialogInfo.mode}
-          onButtonPress={() => {
-            setDialogInfo({ ...dialogInfo, show: false });
-            navigation.goBack();
-          }}
-        />
+        {dialogInfo.mode === "form" ? (
+          <>
+            <AcceptDeliveryTaskForm
+              defaultValues={{ location, streamUrl: "" }}
+              onSubmit={handleAcceptJob}
+              loading={loading}
+            />
+          </>
+        ) : (
+          <AlertDialog
+            message={dialogInfo.message}
+            mode={dialogInfo.mode}
+            onButtonPress={() => {
+              setDialogInfo({ ...dialogInfo, show: false });
+              navigation.goBack();
+            }}
+          />
+        )}
       </Dialog>
     </View>
   );

@@ -4,7 +4,11 @@ import { CardTitle } from "../../components/common";
 import { useTheme, FAB, Portal, Text, IconButton } from "react-native-paper";
 import moment from "moment/moment";
 import QRCodeStyled from "react-native-qrcode-styled";
-import { callNumber } from "../../utils/helpers";
+import {
+  callNumber,
+  openGoogleMapsDirections,
+  pickX,
+} from "../../utils/helpers";
 import { NestedProvider } from "../../theme";
 import routes from "../../navigation/routes";
 import { useFocusEffect } from "@react-navigation/native";
@@ -12,6 +16,7 @@ import { useOrder } from "../../api";
 import { Dialog } from "../../components/dialog";
 import Logo from "../../components/Logo";
 import { screenWidth } from "../../utils/contants";
+import { useLocation } from "../../components/map";
 const DeliveryDetail = ({ navigation, route }) => {
   const theme = useTheme();
   const { colors, roundness } = theme;
@@ -37,6 +42,7 @@ const DeliveryDetail = ({ navigation, route }) => {
     message: "",
   });
   const { open } = state;
+  const location = useLocation();
 
   return (
     <NestedProvider>
@@ -111,10 +117,19 @@ const DeliveryDetail = ({ navigation, route }) => {
               label: "Truck",
               color: colors.secondary,
               onPress: () => {
-                navigation.navigate(routes.ORDERS_NAVIGATION, {
-                  screen: routes.ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN,
-                  params: delivery,
-                });
+                // navigation.navigate(routes.ORDERS_NAVIGATION, {
+                //   screen: routes.ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN,
+                //   params: delivery,
+                // });
+                console.log(location);
+                if (location)
+                  openGoogleMapsDirections(
+                    location,
+                    pickX(delivery.order.deliveryAddress, [
+                      "latitude",
+                      "longitude",
+                    ])
+                  );
               },
             },
             {

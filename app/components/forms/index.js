@@ -11,3 +11,4 @@ export { default as FormLocationPicker } from "./FormLocationPicker";
 export { default as FormRatingBar } from "./FormRatingBar";
 export { default as FormScanner } from "./FormScanner";
 export { default as FormCheckBox } from "./FormCheckBox";
+export { default as FormUrlField } from "./FormUrlField";

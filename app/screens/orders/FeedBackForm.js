@@ -102,7 +102,6 @@ const FeedBackForm = ({ navigation }) => {
       </View>
       <Dialog
         visible={dialogInfo.show}
-        // title={dialogInfo.success ? "Success!" : "Failure!"}
       >
         <AlertDialog
           message={dialogInfo.message}
