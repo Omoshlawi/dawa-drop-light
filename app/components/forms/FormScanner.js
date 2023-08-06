@@ -4,7 +4,7 @@ import { useFormikContext } from "formik";
 import { useTheme } from "react-native-paper";
 import { CodeScanner } from "../scanner";
 
-const FormScanner = ({ name }) => {
+const FormScanner = ({ name, showError = false }) => {
   const { setFieldValue, errors, values, touched, handleChange } =
     useFormikContext();
   const {
@@ -13,7 +13,7 @@ const FormScanner = ({ name }) => {
   return (
     <View>
       <CodeScanner onScaned={(value) => setFieldValue(name, value)} />
-      {errors[name] && touched[name] && (
+      {errors[name] && touched[name] && showError && (
         <Text style={{ color: error, paddingLeft: 5 }}>{errors[name]}</Text>
       )}
     </View>

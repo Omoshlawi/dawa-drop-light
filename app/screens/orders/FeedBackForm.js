@@ -16,33 +16,37 @@ import {
 import routes from "../../navigation/routes";
 
 const validationSchemer = Yup.object().shape({
-  code: Yup.string().label("Delivery Code").required(),
+  delivery: Yup.string().label("Delivery Code").required(),
   review: Yup.string().label("Review").required(),
   rating: Yup.number().required().label("Rating"),
 });
 const initalValues = {
-  code: "",
+  delivery: "",
   review: "",
-  rating: "",
+  rating: 4,
 };
-const FeedBackForm = () => {
+const FeedBackForm = ({ navigation }) => {
   const { colors } = useTheme();
-  const { createProfile } = usePatient();
+  const { checkoutDelivery } = usePatient();
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Profile created successfully!",
+    message:
+      "Thank you for the review \nIt will be used to improve delivery service!",
     mode: "success",
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values, { setErrors, errors }) => {
     setLoading(true);
-    const response = await createProfile(values);
+    const response = await checkoutDelivery(values);
     setLoading(false);
     if (response.ok) {
-      navigation.navigate(routes.USER_NAVIGATION, {
-        screen: routes.USER_ACCOUNT_VERIFY_SCREEN,
-        params: response.data.message,
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "success",
+        message:
+          "Thank you for the review \nIt will be used to improve delivery service!",
       });
     } else {
       if (response.status === 400) {
@@ -70,9 +74,9 @@ const FeedBackForm = () => {
             validationSchema={validationSchemer}
             onSubmit={handleSubmit}
           >
-            <FormScanner name="code" />
+            <FormScanner name="delivery" />
             <FormField
-              name="code"
+              name="delivery"
               placeholder="Enter/Scan delivery code"
               label="Delivery Code"
               icon="data-matrix-scan"
@@ -81,7 +85,7 @@ const FeedBackForm = () => {
               name="review"
               placeholder="Enter review"
               label="Delivery review"
-              icon="account"
+              icon="comment-processing"
             />
             <FormRatingBar name="rating" />
             <FormSubmitButton
