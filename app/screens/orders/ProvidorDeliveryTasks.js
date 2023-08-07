@@ -75,6 +75,7 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
           } = item;
           return (
             <TouchableOpacity
+              style={{ marginBottom: 5 }}
               onPress={() => {
                 navigation.navigate(routes.ORDERS_NAVIGATION, {
                   screen: routes.ORDERS_PROVIDOR_DELIVERY_DETAIL_SCREEN,

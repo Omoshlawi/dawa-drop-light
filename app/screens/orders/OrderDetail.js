@@ -121,7 +121,7 @@ const OrderDetail = ({ navigation, route }) => {
         swipable
         onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
       >
-        <View style={[styles.delivery, { bordderRadius: roundness }]}>
+        <View style={[styles.order, { bordderRadius: roundness }]}>
           <QRCodeStyled
             data={dialogInfo.message}
             style={{ backgroundColor: "white" }}

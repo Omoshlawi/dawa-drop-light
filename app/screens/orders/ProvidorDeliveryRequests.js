@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapView, { Marker, Callout, Polyline } from "react-native-maps";
 import { useLocation } from "../../components/map";
 import { useGeoService, useProvidor, useUser } from "../../api";
@@ -29,6 +29,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
     currIndex: -1,
     showPath: false,
   });
+  const mapRef = useRef(null);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message:
@@ -45,8 +46,14 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const handleFetch = async () => {
     const response = await getPendingOrderRequests();
+    setOptions({ ...options, currIndex: -1 });
     if (response.ok) {
       setRequests(response.data.results);
+      setTimeout(() => {
+        mapRef.current?.fitToSuppliedMarkers(
+          response.data.results.map((re) => re._id)
+        );
+      }, 2000);
     }
   };
 
@@ -116,6 +123,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
           message:
             "The delivery task has been assigned to you succesfully Successfully!",
         });
+        await handleFetch();
       } else if (response.status === 400) {
         setDialogInfo({
           ...dialogInfo,
@@ -155,6 +163,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
     <View style={styles.screen}>
       {location && (
         <MapView
+          ref={mapRef}
           style={styles.map}
           mapType="mutedStandard"
           provider="google"
@@ -179,6 +188,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                   onPress={() => {
                     setOptions({ ...options, currIndex: index });
                   }}
+                  identifier={_id}
                 >
                   <Image
                     source={require("../../assets/hospitalmarker.png")}
