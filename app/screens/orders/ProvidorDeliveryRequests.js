@@ -17,6 +17,8 @@ import { Avatar, Button, Card, List, useTheme } from "react-native-paper";
 import { pick } from "lodash";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { AcceptDeliveryTaskForm } from "../../components/order";
+import { ScrollView } from "react-native";
+import { openGoogleMapsDirections, pickX } from "../../utils/helpers";
 
 const ProvidorDeliveryRequests = ({ navigation }) => {
   const location = useLocation();
@@ -233,7 +235,10 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                     ]}
                   >
                     <Card.Title
-                      title={deliveryAddress.address || _id}
+                      title={
+                        deliveryAddress.address ||
+                        `(${deliveryAddress.latitude},${deliveryAddress.longitude})`
+                      }
                       left={(props) => (
                         <Avatar.Icon {...props} icon="google-maps" />
                       )}
@@ -259,15 +264,42 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                         left={(props) => <List.Icon {...props} icon="clock" />}
                       />
                     </Card.Content>
-                    <Card.Actions>
+                    <View style={{ padding: 10 }}>
                       <Button
+                        mode="contained"
+                        icon="google"
+                        disabled={
+                          Boolean(location && currIndex !== -1) === false
+                        }
+                        style={{ marginTop: 5 }}
+                        onPress={() => {
+                          if (location && currIndex !== -1) {
+                            openGoogleMapsDirections(
+                              location,
+                              pickX(requests[currIndex].deliveryAddress, [
+                                "latitude",
+                                "longitude",
+                              ])
+                            );
+                          }
+                        }}
+                      >
+                        Open in Google maps
+                      </Button>
+                      <Button
+                        mode="contained"
+                        icon="map-marker-distance"
+                        style={{ marginTop: 5 }}
                         onPress={() =>
                           setOptions({ ...options, showPath: !showPath })
                         }
                       >
-                        Toggle Show Route
+                        Toggle show route
                       </Button>
                       <Button
+                        mode="contained"
+                        icon="check"
+                        style={{ marginTop: 5 }}
                         onPress={() => {
                           setDialogInfo({
                             ...dialogInfo,
@@ -278,7 +310,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                       >
                         Take Task
                       </Button>
-                    </Card.Actions>
+                    </View>
                   </View>
                 );
               }}
@@ -286,7 +318,13 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
           </View>
         </SwipableBottomSheet>
       )}
-      <Dialog visible={dialogInfo.show}>
+      <Dialog
+        visible={dialogInfo.show}
+        swipable
+        onRequestClose={() => {
+          setDialogInfo({ ...dialogInfo, show: false });
+        }}
+      >
         {dialogInfo.mode === "form" ? (
           <>
             <AcceptDeliveryTaskForm

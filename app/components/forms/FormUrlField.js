@@ -26,7 +26,7 @@ const FormUrlField = ({
     setFieldValue,
   } = useFormikContext();
   const {
-    colors: { secondary, error },
+    colors: { secondary, error, primary },
   } = useTheme();
   const [hide, setHide] = useState(true);
   const handlePasteFromClipboard = async () => {

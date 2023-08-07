@@ -25,7 +25,7 @@ const SwipableBottomSheet = ({ children }) => {
         const newHeight = bottomSheetHeight._value - dy;
         if (
           newHeight >= BOTTOM_SHEET_HEIGHT &&
-          newHeight <= screenHeight * 0.5
+          newHeight <= screenHeight * 0.75
         ) {
           bottomSheetHeight.setValue(newHeight);
         }

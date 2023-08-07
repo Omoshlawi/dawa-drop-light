@@ -3,7 +3,7 @@ import React from "react";
 import * as Yup from "yup";
 import { Form, FormField, FormSubmitButton, FormUrlField } from "../forms";
 import { screenWidth } from "../../utils/contants";
-import { List, useTheme, Text } from "react-native-paper";
+import { List, useTheme, Text, IconButton } from "react-native-paper";
 
 const validationSchemer = Yup.object().shape({
   streamUrl: Yup.string()
