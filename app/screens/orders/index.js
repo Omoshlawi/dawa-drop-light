@@ -13,3 +13,4 @@ export { default as ProvidorDeliveryRequests } from "./ProvidorDeliveryRequests"
 export { default as ProvidorDeliveryTasks } from "./ProvidorDeliveryTasks";
 export { default as DeliveryDetail } from "./DeliveryDetail";
 export { default as ProviderTruckDelivery } from "./ProviderTruckDelivery";
+export { default as DispenseDrugs } from "./DispenseDrugs";

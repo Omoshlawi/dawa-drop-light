@@ -49,6 +49,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_PROVIDOR_DELIVERY_HISTORY_SCREEN,
   },
+  DispenseDrugs: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_PROVIDOR_DISPENSE_DRUGS_SCREEN,
+  },
 };
 
 export const get = (link) => {
