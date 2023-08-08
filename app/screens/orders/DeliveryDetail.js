@@ -12,11 +12,12 @@ import {
 import { NestedProvider } from "../../theme";
 import routes from "../../navigation/routes";
 import { useFocusEffect } from "@react-navigation/native";
-import { useOrder } from "../../api";
-import { Dialog } from "../../components/dialog";
+import { useOrder, useProvidor } from "../../api";
+import { AlertDialog, Dialog } from "../../components/dialog";
 import Logo from "../../components/Logo";
 import { screenWidth } from "../../utils/contants";
 import { useLocation } from "../../components/map";
+import { AcceptDeliveryTaskForm } from "../../components/order";
 const DeliveryDetail = ({ navigation, route }) => {
   const theme = useTheme();
   const { colors, roundness } = theme;
@@ -25,12 +26,15 @@ const DeliveryDetail = ({ navigation, route }) => {
   const [delivery, setDelivery] = useState(_delivery);
   const onStateChange = ({ open }) => setState({ open });
   const { getDelivery } = useOrder();
+  const { updateDelivery } = useProvidor();
   const handleFetch = async () => {
     const response = await getDelivery(_delivery._id);
     if (response.ok) {
       setDelivery(response.data);
     }
   };
+  const [loading, setLoading] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       handleFetch();
@@ -43,7 +47,38 @@ const DeliveryDetail = ({ navigation, route }) => {
   });
   const { open } = state;
   const location = useLocation();
-
+  const handleDeliveryJobUpdate = async (values, { setFieldError }) => {
+    setLoading(true);
+    const response = await updateDelivery(_delivery._id, values);
+    setLoading(false);
+    if (response.ok) {
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "success",
+        message: "The delivery task has been Updated Successfully!",
+      });
+      await handleFetch();
+    } else if (response.status === 400) {
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "error",
+        message: JSON.stringify(response.data),
+      });
+      console.log(response.data);
+    } else {
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "error",
+        message: response.data.detail
+          ? response.data.detail
+          : "Unknow Error Occured",
+      });
+      console.log(response.data);
+    }
+  };
   return (
     <NestedProvider>
       <ScrollView style={styles.screen}>
@@ -107,29 +142,30 @@ const DeliveryDetail = ({ navigation, route }) => {
                 setDialogInfo({
                   ...dialogInfo,
                   show: true,
+                  mode: "qr",
                   message: delivery.order._id,
                 }),
               color: colors.secondary,
             },
-
             {
-              icon: "map-marker-distance",
-              label: "Truck",
-              color: colors.secondary,
+              icon: "square-edit-outline",
+              label: "Edit",
+              color:
+                Boolean(delivery.status) && delivery.status === "pending"
+                  ? colors.secondary
+                  : colors.disabled,
+              labelTextColor:
+                Boolean(delivery.status) && delivery.status === "pending"
+                  ? colors.secondary
+                  : colors.disabled,
               onPress: () => {
                 // navigation.navigate(routes.ORDERS_NAVIGATION, {
                 //   screen: routes.ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN,
                 //   params: delivery,
                 // });
-                console.log(location);
-                if (location)
-                  openGoogleMapsDirections(
-                    location,
-                    pickX(delivery.order.deliveryAddress, [
-                      "latitude",
-                      "longitude",
-                    ])
-                  );
+                if (Boolean(delivery.status) && delivery.status === "pending") {
+                  setDialogInfo({ ...dialogInfo, show: true, mode: "form" });
+                }
               },
             },
             {
@@ -139,6 +175,7 @@ const DeliveryDetail = ({ navigation, route }) => {
                 setDialogInfo({
                   ...dialogInfo,
                   show: true,
+                  mode: "qr",
                   message: delivery.order.patient,
                 }),
               color: colors.secondary,
@@ -150,10 +187,12 @@ const DeliveryDetail = ({ navigation, route }) => {
                 setDialogInfo({
                   ...dialogInfo,
                   show: true,
+                  mode: "qr",
                   message: delivery._id,
                 }),
               color: colors.secondary,
             },
+
             {
               icon: "cancel",
               label: "Cancel Delivery",
@@ -180,17 +219,39 @@ const DeliveryDetail = ({ navigation, route }) => {
         swipable
         onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
       >
-        <View style={[styles.delivery, { bordderRadius: roundness }]}>
-          <QRCodeStyled
-            data={dialogInfo.message}
-            style={{ backgroundColor: "white" }}
-            color={colors.primary}
-            // pieceBorderRadius={10}
-            padding={10}
-            pieceSize={8}
+        {dialogInfo.mode === "form" && (
+          <AcceptDeliveryTaskForm
+            loading={loading}
+            onSubmit={handleDeliveryJobUpdate}
+            defaultValues={{
+              order: delivery.order._id,
+              location:
+                location || pickX(delivery.location, ["latitude", "longitude"]),
+              deliveredBy: delivery.deliveredBy._id,
+              streamUrl: delivery.streamUrl,
+            }}
           />
-          <Text variant="titleMedium">{dialogInfo.message}</Text>
-        </View>
+        )}
+        {dialogInfo.mode === "qr" && (
+          <View style={[styles.delivery, { bordderRadius: roundness }]}>
+            <QRCodeStyled
+              data={dialogInfo.message}
+              style={{ backgroundColor: "white" }}
+              color={colors.primary}
+              // pieceBorderRadius={10}
+              padding={10}
+              pieceSize={8}
+            />
+            <Text variant="titleMedium">{dialogInfo.message}</Text>
+          </View>
+        )}
+        {(dialogInfo.mode === "success" || dialogInfo.mode === "error") && (
+          <AlertDialog
+            mode={dialogInfo.mode}
+            message={dialogInfo.message}
+            onButtonPress={() => setDialogInfo({ ...dialogInfo, show: false })}
+          />
+        )}
       </Dialog>
     </NestedProvider>
   );

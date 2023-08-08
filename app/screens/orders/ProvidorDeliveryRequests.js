@@ -235,7 +235,12 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
               data={[requests[currIndex]]}
               keyExtractor={({ _id }) => _id}
               renderItem={({ item, index }) => {
-                const { _id, deliveryAddress } = item;
+                const {
+                  _id,
+                  deliveryAddress,
+                  deliveryTimeSlot: { label },
+                  deliveryMode: { name },
+                } = item;
                 const active = index === currIndex;
                 return (
                   <View
@@ -254,6 +259,28 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                       )}
                     />
                     <Card.Content>
+                      <List.Item
+                        style={{
+                          backgroundColor: colors.surface,
+                          marginBottom: 5,
+                        }}
+                        title="Time of Delivery"
+                        description={label}
+                        left={(props) => (
+                          <List.Icon {...props} icon="timelapse" />
+                        )}
+                      />
+                      <List.Item
+                        style={{
+                          backgroundColor: colors.surface,
+                          marginBottom: 5,
+                        }}
+                        title="Delivered Through"
+                        description={name}
+                        left={(props) => (
+                          <List.Icon {...props} icon="bicycle" />
+                        )}
+                      />
                       <List.Item
                         style={{
                           backgroundColor: colors.surface,
