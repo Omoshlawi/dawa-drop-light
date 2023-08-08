@@ -125,3 +125,9 @@ export const getOrderStatus = (deliveries = []) => {
     ? "Delivered"
     : "Pending";
 };
+
+export const getStreamUrl = (deliveries = []) => {
+  if (getOrderStatus(deliveries) === "On Transit") {
+    return deliveries.filter((dev) => dev.status !== "canceled")[0].streamUrl;
+  }
+};

@@ -106,9 +106,12 @@ const Orders = ({ navigation, route }) => {
                 style={[styles.listItem, { backgroundColor: colors.surface }]}
                 left={(props) => <Avatar.Icon {...props} icon="cart" />}
                 right={(props) => (
-                  <Text variant="labelSmall" style={{ paddingHorizontal: 5 }}>
-                    {getOrderStatus(item.deliveries)}
-                  </Text>
+                  <Avatar.Icon
+                    {...props}
+                    icon="chevron-right"
+                    color={colors.primary}
+                    style={{ backgroundColor: colors.surface }}
+                  />
                 )}
                 subtitle={`${moment(created).format(
                   "Do dddd MMM YYYY hh:mm"
@@ -140,6 +143,7 @@ export default Orders;
 const styles = StyleSheet.create({
   screen: {
     paddingTop: 5,
+    flex: 1,
   },
   fab: {
     position: "absolute",

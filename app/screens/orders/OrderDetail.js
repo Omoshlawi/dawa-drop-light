@@ -14,8 +14,9 @@ import QRCodeStyled from "react-native-qrcode-styled";
 import { screenWidth } from "../../utils/contants";
 import Logo from "../../components/Logo";
 import { NestedProvider } from "../../theme";
-import { callNumber, getOrderStatus } from "../../utils/helpers";
+import { callNumber, getOrderStatus, getStreamUrl } from "../../utils/helpers";
 import { Dialog } from "../../components/dialog";
+import { Linking } from "react-native";
 
 const OrderDetail = ({ navigation, route }) => {
   const { modes, timeSlots, methods, order } = route.params;
@@ -113,14 +114,21 @@ const OrderDetail = ({ navigation, route }) => {
               color: colors.secondary,
             },
             {
-              icon: "account",
-              onPress: () =>
-                setDialogInfo({
-                  ...dialogInfo,
-                  show: true,
-                  message: order.patient._id,
-                }),
-              color: colors.secondary,
+              icon: "google-maps",
+              label: "Open in Google maps",
+              labelTextColor:
+                getOrderStatus(order.deliveries) === "On Transit"
+                  ? colors.secondary
+                  : colors.disabled,
+              onPress: () => {
+                if (getOrderStatus(order.deliveries) === "On Transit") {
+                  Linking.openURL(getStreamUrl(order.deliveries));
+                }
+              },
+              color:
+                getOrderStatus(order.deliveries) === "On Transit"
+                  ? colors.secondary
+                  : colors.disabled,
             },
           ]}
           onStateChange={onStateChange}
