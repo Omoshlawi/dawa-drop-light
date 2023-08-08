@@ -14,7 +14,7 @@ import QRCodeStyled from "react-native-qrcode-styled";
 import { screenWidth } from "../../utils/contants";
 import Logo from "../../components/Logo";
 import { NestedProvider } from "../../theme";
-import { callNumber } from "../../utils/helpers";
+import { callNumber, getOrderStatus } from "../../utils/helpers";
 import { Dialog } from "../../components/dialog";
 
 const OrderDetail = ({ navigation, route }) => {
@@ -42,6 +42,11 @@ const OrderDetail = ({ navigation, route }) => {
           text={"Date Ordered"}
           subText={moment(order.created).format("dddd Do MMMM yyy hh:mm")}
           icon="clock"
+        />
+        <CardTitle
+          text={"Status"}
+          subText={getOrderStatus(order.deliveries)}
+          icon="progress-clock"
         />
         <CardTitle text={"Drug ordered"} subText={order.drug} icon="pill" />
 
@@ -107,6 +112,16 @@ const OrderDetail = ({ navigation, route }) => {
                 }),
               color: colors.secondary,
             },
+            {
+              icon: "account",
+              onPress: () =>
+                setDialogInfo({
+                  ...dialogInfo,
+                  show: true,
+                  message: order.patient._id,
+                }),
+              color: colors.secondary,
+            },
           ]}
           onStateChange={onStateChange}
           onPress={() => {
@@ -121,17 +136,19 @@ const OrderDetail = ({ navigation, route }) => {
         swipable
         onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
       >
-        <View style={[styles.order, { bordderRadius: roundness }]}>
-          <QRCodeStyled
-            data={dialogInfo.message}
-            style={{ backgroundColor: "white" }}
-            color={colors.primary}
-            // pieceBorderRadius={10}
-            padding={10}
-            pieceSize={8}
-          />
-          <Text variant="titleMedium">{dialogInfo.message}</Text>
-        </View>
+        {dialogInfo.mode === "qr" && (
+          <View style={[styles.order, { bordderRadius: roundness }]}>
+            <QRCodeStyled
+              data={dialogInfo.message}
+              style={{ backgroundColor: "white" }}
+              color={colors.primary}
+              // pieceBorderRadius={10}
+              padding={10}
+              pieceSize={8}
+            />
+            <Text variant="titleMedium">{dialogInfo.message}</Text>
+          </View>
+        )}
       </Dialog>
     </NestedProvider>
   );

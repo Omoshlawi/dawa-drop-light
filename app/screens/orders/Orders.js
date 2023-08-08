@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../components/layout";
-import { Avatar, Card, FAB, useTheme } from "react-native-paper";
+import { Avatar, Card, FAB, useTheme, Text } from "react-native-paper";
 import { useOrder, usePatient } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import routes from "../../navigation/routes";
 import moment from "moment";
 import { TouchableOpacity } from "react-native";
+import { getOrderStatus } from "../../utils/helpers";
+import { SectionList } from "react-native";
 
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
@@ -45,10 +47,46 @@ const Orders = ({ navigation, route }) => {
       handleFetch();
     }, [])
   );
+
+  const ordersToSectionListData = (orders = []) => {
+    const onTransit = orders.filter(
+      ({ deliveries }) => getOrderStatus(deliveries) === "On Transit"
+    );
+    const cancelled = orders.filter(
+      ({ deliveries }) => getOrderStatus(deliveries) === "Canceled"
+    );
+    const delivered = orders.filter(
+      ({ deliveries }) => getOrderStatus(deliveries) === "Delivered"
+    );
+    const pending = orders.filter(
+      ({ deliveries }) => getOrderStatus(deliveries) === "Pending"
+    );
+    return [
+      {
+        title: "Pending Orders",
+        data: pending,
+      },
+      {
+        title: "On Transit Orders",
+        data: onTransit,
+      },
+      {
+        title: "Cancelled Orders",
+        data: cancelled,
+      },
+      {
+        title: "Delivered Orders",
+        data: delivered,
+      },
+    ];
+  };
   return (
-    <SafeArea>
-      <FlatList
-        data={orders}
+    <View style={styles.screen}>
+      <SectionList
+        sections={ordersToSectionListData(orders)}
+        renderSectionHeader={({ section: { title, data } }) =>
+          data.length ? <Text style={styles.title}>{title}</Text> : null
+        }
         refreshing={loading}
         onRefresh={handleFetch}
         keyExtractor={({ _id }) => _id}
@@ -67,6 +105,11 @@ const Orders = ({ navigation, route }) => {
                 title={drug}
                 style={[styles.listItem, { backgroundColor: colors.surface }]}
                 left={(props) => <Avatar.Icon {...props} icon="cart" />}
+                right={(props) => (
+                  <Text variant="labelSmall" style={{ paddingHorizontal: 5 }}>
+                    {getOrderStatus(item.deliveries)}
+                  </Text>
+                )}
                 subtitle={`${moment(created).format(
                   "Do dddd MMM YYYY hh:mm"
                 )} hrs`}
@@ -88,13 +131,16 @@ const Orders = ({ navigation, route }) => {
           });
         }}
       />
-    </SafeArea>
+    </View>
   );
 };
 
 export default Orders;
 
 const styles = StyleSheet.create({
+  screen: {
+    paddingTop: 5,
+  },
   fab: {
     position: "absolute",
     margin: 16,
@@ -102,6 +148,11 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   listItem: {
-    marginBottom: 10,
+    marginBottom: 5,
+  },
+  title: {
+    textTransform: "capitalize",
+    padding: 10,
+    fontWeight: "bold",
   },
 });

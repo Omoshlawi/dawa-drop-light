@@ -111,3 +111,17 @@ const extractUrlsFromText = (text) => {
   const urls = text.match(urlRegex);
   return urls;
 };
+
+export const getOrderStatus = (deliveries = []) => {
+  if (deliveries.length === 0) return "Pending";
+  const uncanceled = deliveries.filter((dev) => dev.status !== "canceled");
+  if (uncanceled.length === 0) {
+    return "Canceled";
+  }
+  const status = uncanceled[0].status;
+  return status === "pending"
+    ? "On Transit"
+    : status === "delivered"
+    ? "Delivered"
+    : "Pending";
+};

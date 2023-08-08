@@ -17,6 +17,8 @@ const usePatient = () => {
   const verifySelf = (data) => apiClient.post("patients/verify", data);
   const checkoutDelivery = (data) =>
     apiClient.post("patients/delivery-feedback", data);
+  const getDeliveries = (params) =>
+    apiClient.get(`patients/deliveries/`, params);
   return {
     getAppointments,
     getOrders,
@@ -28,6 +30,7 @@ const usePatient = () => {
     getAppointment,
     getOrder,
     checkoutDelivery,
+    getDeliveries,
   };
 };
 
