@@ -5,7 +5,7 @@ import { screenWidth } from "../../utils/contants";
 import { Modal } from "react-native";
 import Scanner from "./Scanner";
 
-const CodeScanner = ({ onRequestClose, onScaned }) => {
+const CodeScanner = ({ onScaned, label = "Scan QR Code" }) => {
   const { colors } = useTheme();
   const [show, setShow] = useState(false);
   return (
@@ -18,10 +18,10 @@ const CodeScanner = ({ onRequestClose, onScaned }) => {
         iconColor={colors.surface}
         onPress={() => setShow(true)}
       />
-      <Text>Scan QR Code</Text>
+      <Text>{label}</Text>
       <Modal
         visible={show}
-        onRequestClose={onRequestClose}
+        onRequestClose={(onRequestClose) => setShow(false)}
         animationType="slide"
       >
         <Scanner
