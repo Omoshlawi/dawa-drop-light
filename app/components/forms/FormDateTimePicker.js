@@ -21,7 +21,6 @@ const FormDateTimePicker = ({ name, ...otherProps }) => {
       <DateTimePicker
         value={values[name] ? new Date(values[name]) : null}
         onChangeValue={(value) => {
-          console.log(values);
           setFieldValue(name, new Date(value).toISOString());
         }}
         {...otherProps}

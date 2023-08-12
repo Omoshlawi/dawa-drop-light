@@ -41,6 +41,7 @@ export default Object.freeze({
   ORDERS_ORDERS_SCREEN: "Orders Screen",
   ORDERS_ORDER_DETAIL_SCREEN: "OrderDetail sCREEN",
   ORDERS_PATIENT_ORDER_FORM_SCREEN: "PatientOrderForm Screen",
+  // ORDERS_PROVIDOR_DISPENSE_DRUGS_FORM_SCREEN: "DispenseDrugForm Screen",
 
   ORDERS_DELIVERY_FEEDBACK_FORM_SCREEN: "DeliveryFeedBackForm Screen",
 

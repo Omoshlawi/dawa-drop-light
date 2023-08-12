@@ -9,6 +9,7 @@ import {
   DeliveryModes,
   DeliveryTimeSlotForm,
   DeliveryTimeSlots,
+  DispenseDrugForm,
   DispenseDrugs,
   FeedBackForm,
   OrderDetail,
@@ -130,6 +131,11 @@ const OrdersNavigation = () => {
         component={DispenseDrugs}
         options={{ title: "Dispense Drugs" }}
       />
+      {/* <Screen
+        name={routes.ORDERS_PROVIDOR_DISPENSE_DRUGS_FORM_SCREEN}
+        component={DispenseDrugForm}
+        options={{ title: "" }}
+      /> */}
     </Navigator>
   );
 };

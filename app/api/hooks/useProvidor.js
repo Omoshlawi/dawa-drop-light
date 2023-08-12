@@ -10,12 +10,14 @@ const useProvidor = () => {
   const getDeliveryHistory = () => apiClient.get("deliveries/history");
   const getDrugDispenseDetail = (params) =>
     apiClient.get("orders/dispense", params);
+  const dispenseDrug = (data) => apiClient.post("orders/dispense", data);
   return {
     getPendingOrderRequests,
     createDelivery,
     getDeliveryHistory,
     updateDelivery,
     getDrugDispenseDetail,
+    dispenseDrug,
   };
 };
 
