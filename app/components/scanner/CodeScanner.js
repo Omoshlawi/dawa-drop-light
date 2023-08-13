@@ -5,14 +5,18 @@ import { screenWidth } from "../../utils/contants";
 import { Modal } from "react-native";
 import Scanner from "./Scanner";
 
-const CodeScanner = ({ onScaned, label = "Scan QR Code" }) => {
+const CodeScanner = ({
+  onScaned,
+  label = "Scan QR Code",
+  widthRation = 0.15,
+}) => {
   const { colors } = useTheme();
   const [show, setShow] = useState(false);
   return (
     <View style={styles.container}>
       <IconButton
         icon="qrcode-scan"
-        size={screenWidth * 0.15}
+        size={screenWidth * widthRation}
         mode="outlined"
         containerColor={colors.secondary}
         iconColor={colors.surface}

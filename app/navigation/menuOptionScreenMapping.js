@@ -53,6 +53,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_PROVIDOR_DISPENSE_DRUGS_SCREEN,
   },
+  ProvidorTreatmentSurport: {
+    route: routes.TREATMENT_SURPORT_NAVIGATION,
+    screen: routes.TREATMENT_SURPORT_SCREEN,
+  },
 };
 
 export const get = (link) => {

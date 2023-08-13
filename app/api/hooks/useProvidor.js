@@ -11,6 +11,10 @@ const useProvidor = () => {
   const getDrugDispenseDetail = (params) =>
     apiClient.get("orders/dispense", params);
   const dispenseDrug = (data) => apiClient.post("orders/dispense", data);
+  const getPatients = (params) => apiClient.get("patients", params);
+  const getUsers = (params) => apiClient.get("auth/users", params);
+  const addTreatmentSurporter = (data) =>
+    apiClient.post("auth/user/relations", data);
   return {
     getPendingOrderRequests,
     createDelivery,
@@ -18,6 +22,9 @@ const useProvidor = () => {
     updateDelivery,
     getDrugDispenseDetail,
     dispenseDrug,
+    getPatients,
+    getUsers,
+    addTreatmentSurporter,
   };
 };
 

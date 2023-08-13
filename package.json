@@ -21,6 +21,7 @@
     "expo": "~48.0.18",
     "expo-barcode-scanner": "~12.3.2",
     "expo-checkbox": "^2.4.0",
+    "expo-clipboard": "~4.1.2",
     "expo-image-picker": "^14.3.1",
     "expo-local-authentication": "^13.4.1",
     "expo-location": "^16.0.0",
@@ -44,11 +45,11 @@
     "react-native-svg": "13.4.0",
     "react-native-tab-view": "^3.5.2",
     "socket.io-client": "^4.7.2",
-    "yup": "^1.2.0",
-    "expo-clipboard": "~4.1.2"
+    "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@types/react": "^18.2.20"
   },
   "private": true
 }

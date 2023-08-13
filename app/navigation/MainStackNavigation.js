@@ -4,7 +4,7 @@ import AuthNavigation from "./AuthNavigation";
 import BottomTabNavigation from "./BottomTabNavigation";
 import routes from "./routes";
 import UserNavigation from "./UserNavigation";
-import ActionsNavigation from "./ActionsNavigation";
+import TreatmentSurportNavigation from "./TreatmentSurportNavigation";
 import PermisionsNavigation from "./PermisionsNavigation";
 import OrdersNavigation from "./OrdersNavigation";
 
@@ -23,8 +23,8 @@ const MainStackNavigation = () => {
           />
           <Screen name={routes.USER_NAVIGATION} component={UserNavigation} />
           <Screen
-            name={routes.ACTION_NAVIGATION}
-            component={ActionsNavigation}
+            name={routes.TREATMENT_SURPORT_NAVIGATION}
+            component={TreatmentSurportNavigation}
           />
           <Screen
             name={routes.PERMISIONS_NAVIGATION}

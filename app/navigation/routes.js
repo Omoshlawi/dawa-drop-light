@@ -57,6 +57,7 @@ export default Object.freeze({
   ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN: "DeliveryTruck Screen",
   ORDERS_PROVIDOR_DISPENSE_DRUGS_SCREEN: "DispenseDrugs Screen",
 
-  ACTION_NAVIGATION: "Actions Nav",
-  ACTION_APPOINTMENTS_SCREEN: "Appointments Screen",
+  TREATMENT_SURPORT_NAVIGATION: "tSurport Nav",
+  TREATMENT_SURPORT_SCREEN: "TreatmentSurporters Screen",
+  TREATMENT_SURPORT_PROVIDOR_FORM_SCREEN: "TreatmentSurporteForm Screen",
 });
