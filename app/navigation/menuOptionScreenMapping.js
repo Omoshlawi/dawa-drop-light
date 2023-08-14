@@ -57,6 +57,10 @@ const mapping = {
     route: routes.TREATMENT_SURPORT_NAVIGATION,
     screen: routes.TREATMENT_SURPORT_SCREEN,
   },
+  CareGiversAndReceivers: {
+    route: routes.TREATMENT_SURPORT_NAVIGATION,
+    screen: routes.TREATMENT_SURPORT_MY_SURPORTERS_FORM_SCREEN,
+  },
 };
 
 export const get = (link) => {

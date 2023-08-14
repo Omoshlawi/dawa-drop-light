@@ -43,7 +43,7 @@ const TreatmentSurporters = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <CodeScanner
-        label="Scan Patient QRCode"
+        label="Scan Patient/User QRCode"
         widthRation={0.1}
         onScaned={setQ}
       />
@@ -64,7 +64,6 @@ const TreatmentSurporters = ({ navigation }) => {
           keyExtractor={({ _id }) => _id}
           renderItem={({ item }) => {
             const {
-              careGiver: careGiver_,
               patientCareReceiver,
               userCareGiver,
             } = item;

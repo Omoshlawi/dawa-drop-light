@@ -60,4 +60,5 @@ export default Object.freeze({
   TREATMENT_SURPORT_NAVIGATION: "tSurport Nav",
   TREATMENT_SURPORT_SCREEN: "TreatmentSurporters Screen",
   TREATMENT_SURPORT_PROVIDOR_FORM_SCREEN: "TreatmentSurporteForm Screen",
+  TREATMENT_SURPORT_MY_SURPORTERS_FORM_SCREEN: "MyTreatmentSurport Screen",
 });
