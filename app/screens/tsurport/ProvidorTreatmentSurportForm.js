@@ -12,6 +12,8 @@ import {
 import { screenWidth } from "../../utils/contants";
 import { useProvidor } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
+import { AlertDialog, Dialog } from "../../components/dialog";
+import { pickX } from "../../utils/helpers";
 const initialValues = {
   careGiver: "",
   careReceiver: "",
@@ -26,24 +28,52 @@ const validationSchemer = Yup.object().shape({
   canOrderDrug: Yup.bool().label("Can order drugs?"),
 });
 
-const ProvidorTreatmentSurportForm = () => {
+const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
+  const { treatmentSurport } = route.params;
   const [loading, setLoading] = useState(false);
   const [careReceivers, setCareReceivers] = useState([]);
   const [careGivers, setCareGivers] = useState([]);
 
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Role Added Successfully!",
-    success: true,
+    message: "Treatment surporter added successfully",
+    mode: "success",
   });
-  const { getPatients, getUsers, addTreatmentSurporter } = useProvidor();
+  const {
+    getPatients,
+    getUsers,
+    addTreatmentSurporter,
+    updateTreatmentSurporter,
+  } = useProvidor();
   const { colors, roundness } = useTheme();
-  const handleSubmit = async (values, { setFieldError }) => {
+  const handleSubmit = async (values, { setErrors, errors }) => {
+    let response;
     setLoading(true);
-    const response = await addTreatmentSurporter(values);
+    if (treatmentSurport)
+      response = await updateTreatmentSurporter(treatmentSurport._id, values);
+    else response = await addTreatmentSurporter(values);
     setLoading(false);
     if (response.ok) {
-      setCareReceivers(response.data.results);
+      setDialogInfo({
+        ...dialogInfo,
+        show: response.ok,
+        mode: "success",
+        message: "Treatment surporter added successfully",
+      });
+    } else {
+      if (response.status === 400) {
+        setErrors({ ...errors, ...response.data.errors });
+      } else {
+        setDialogInfo({
+          ...dialogInfo,
+          show: true,
+          mode: "error",
+          message: response.data.detail
+            ? response.data.detail
+            : "Unknow Error Occured",
+        });
+        console.log(response.data);
+      }
     }
   };
   const handleFetch = async () => {
@@ -68,7 +98,16 @@ const ProvidorTreatmentSurportForm = () => {
       <Text variant="headlineLarge">Add Treatment Surporter</Text>
       <View style={styles.form}>
         <Form
-          initialValues={initialValues}
+          initialValues={
+            treatmentSurport
+              ? {
+                  careGiver: treatmentSurport.careGiver,
+                  careReceiver: treatmentSurport.careReceiver,
+                  canPickUpDrugs: treatmentSurport.canPickUpDrugs,
+                  canOrderDrug: treatmentSurport.canOrderDrug,
+                }
+              : initialValues
+          }
           validationSchema={validationSchemer}
           onSubmit={handleSubmit}
         >
@@ -133,6 +172,24 @@ const ProvidorTreatmentSurportForm = () => {
           />
         </Form>
       </View>
+      <Dialog
+        visible={dialogInfo.show}
+        swipable
+        onRequestClose={() => {
+          setDialogInfo({ ...dialogInfo, show: false });
+        }}
+      >
+        <AlertDialog
+          message={dialogInfo.message}
+          mode={dialogInfo.mode}
+          onButtonPress={() => {
+            setDialogInfo({ ...dialogInfo, show: false });
+            if (dialogInfo.mode === "success") {
+              navigation.goBack();
+            }
+          }}
+        />
+      </Dialog>
     </View>
   );
 };
