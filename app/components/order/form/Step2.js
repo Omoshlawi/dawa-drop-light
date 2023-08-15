@@ -11,7 +11,8 @@ import { useFormikContext } from "formik";
 
 const Step2 = ({ onPrevious, onNext, methods }) => {
   const { colors, roundness } = useTheme();
-  const { validateForm, values } = useFormikContext();
+  const { validateForm, values, setFieldError, setFieldTouched } =
+    useFormikContext();
   return (
     <View style={styles.container}>
       <View>
@@ -36,9 +37,17 @@ const Step2 = ({ onPrevious, onNext, methods }) => {
           onPress={async () => {
             const errors = await validateForm(values);
             if (errors["deliveryMethod"]) {
+            } else if (
+              methods.find(({ _id }) => _id === values["deliveryMethod"])
+                ?.blockOnTimeSlotFull === false &&
+              !values["careGiver"]
+            ) {
+              setFieldError("careGiver", "Care giver is required");
+              setFieldTouched("careGiver", true);
             } else {
               onNext();
             }
+            console.log(errors);
           }}
           style={styles.btn}
         >

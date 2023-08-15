@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { SafeArea } from "../../components/layout";
 import { Avatar, Card, FAB, useTheme, Text } from "react-native-paper";
-import { useOrder, usePatient } from "../../api";
+import { useOrder, usePatient, useUser } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import routes from "../../navigation/routes";
@@ -14,6 +14,7 @@ import { SectionList } from "react-native";
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { getOrders } = usePatient();
+  const { getTreatmentSurport } = useUser();
   const { getDeliveryModes, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
   const [modes, setModes] = useState([]);
@@ -21,6 +22,8 @@ const Orders = ({ navigation, route }) => {
   const [methods, setMethods] = useState([]);
   const [loading, setLoading] = useState(false);
   const [timeSlots, setTimeSlots] = useState([]);
+  const [treatmentSurpoters, seTtreatmentSurpoters] = useState([]);
+  
 
   const handleFetch = async () => {
     setLoading(true);
@@ -28,6 +31,10 @@ const Orders = ({ navigation, route }) => {
     const dResp = await getDeliveryModes();
     const tResp = await getDeliveryTimeSlots();
     const mResp = await getDeliveryMethods();
+    const sResp = await getTreatmentSurport({
+      canPickUpDrugs: true,
+      onlyCareGiver: true,
+    });
     setLoading(false);
     if (response.ok) {
       setOrders(response.data.results);
@@ -40,6 +47,9 @@ const Orders = ({ navigation, route }) => {
     }
     if (mResp.ok) {
       setMethods(mResp.data.results);
+    }
+    if (sResp.ok) {
+      seTtreatmentSurpoters(sResp.data.results);
     }
   };
   useFocusEffect(
@@ -130,7 +140,7 @@ const Orders = ({ navigation, route }) => {
         onPress={() => {
           navigation.navigate(routes.ORDERS_NAVIGATION, {
             screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-            params: { modes, timeSlots, methods },
+            params: { modes, timeSlots, methods, treatmentSurpoters },
           });
         }}
       />

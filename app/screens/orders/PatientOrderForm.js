@@ -28,6 +28,7 @@ const validationSchema = Yup.object().shape({
   deliveryTimeSlot: Yup.string().required().label("Time slot"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
+  careGiver: Yup.string().label("Care giver"),
   deliveryMethod: Yup.string()
     .required("You must specify how you want your drug delivered to you")
     .label("Delivery Method"),
@@ -46,8 +47,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [loadEligibility, setLoadEligibility] = useState(false);
   const [step, setStep] = useState(1);
   const { addOrder, updateOrder, checkEligibility } = usePatient();
-  const { modes, order, timeSlots, methods } = route.params;
-
+  const { modes, order, timeSlots, methods, treatmentSurpoters } = route.params;
   const handleCheckEligible = async () => {
     setLoadEligibility(true);
     const response = await checkEligibility();
@@ -115,9 +115,7 @@ const PatientOrderForm = ({ navigation, route }) => {
 
   if (loadEligibility) {
     return (
-      <View
-        style={styles.screen}
-      >
+      <View style={styles.screen}>
         <ActivityIndicator size={50} />
         <Text>Checking Eligibility...</Text>
       </View>
@@ -136,6 +134,8 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryMode: order.deliveryMode._id,
                 phoneNumber: order.phoneNumber,
                 deliveryMethod: order.deliveryMethod._id,
+                careGiver:
+                  order.careGiver.length > 0 ? order.careGiver[0]._id : "",
               }
             : {
                 deliveryAddress: null,
@@ -143,6 +143,7 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryMode: "",
                 phoneNumber: "",
                 deliveryMethod: "",
+                careGiver: "",
               }
         }
         onSubmit={handleSubmit}
@@ -155,7 +156,12 @@ const PatientOrderForm = ({ navigation, route }) => {
           />
         )}
         {step === 2 && eligible && (
-          <Step2 onNext={next} onPrevious={previous} methods={methods} />
+          <Step2
+            onNext={next}
+            onPrevious={previous}
+            methods={methods}
+            treatmentSurpoters={treatmentSurpoters}
+          />
         )}
         {step === 3 && eligible && (
           <Step3

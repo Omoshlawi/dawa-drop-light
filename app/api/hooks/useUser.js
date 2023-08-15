@@ -14,7 +14,8 @@ const useUser = () => {
       headers: { "Content-Type": "multipart/form-data" },
     });
   const getMenuOptions = () => apiClient.get("/auth/my-menu-options");
-  const getTreatmentSurport = () => apiClient.get("auth/user/relations");
+  const getTreatmentSurport = (params) =>
+    apiClient.get("auth/user/relations", params);
   const getUserId = () => jwtDecode(token)._id;
   const searchUser = (params) => apiClient.get("auth/profile");
 
@@ -26,7 +27,7 @@ const useUser = () => {
     getMenuOptions,
     getUserId,
     getTreatmentSurport,
-    searchUser
+    searchUser,
   };
 };
 
