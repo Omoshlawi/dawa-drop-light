@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
+import { ScrollView } from "react-native";
 
 const TreatmentSurportDetail = ({ navigation, route }) => {
+  const treatmentSurport = route.params;
   return (
-    <View>
-      <Text>TreatmentSurportDetail</Text>
-    </View>
+    <ScrollView>
+    </ScrollView>
   );
 };
 
