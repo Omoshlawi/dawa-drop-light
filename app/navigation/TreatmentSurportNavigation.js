@@ -6,6 +6,7 @@ import {
   CareReceiversForm,
   MyTreatmentSurport,
   ProvidorTreatmentSurportForm,
+  TreatmentSurportDetail,
   TreatmentSurporters,
 } from "../screens/tsurport";
 
@@ -37,6 +38,11 @@ const TreatmentSurportNavigation = () => {
       <Screen
         name={routes.TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN}
         component={CareReceiversForm}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.TREATMENT_SURPORT_DETAIL_SCREEN}
+        component={TreatmentSurportDetail}
         options={{ title: "" }}
       />
     </Navigator>

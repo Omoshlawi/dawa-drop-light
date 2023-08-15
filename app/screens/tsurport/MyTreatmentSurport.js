@@ -86,9 +86,9 @@ const MyTreatmentSurport = ({ navigation }) => {
             return (
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate(routes.ORDERS_NAVIGATION, {
-                    screen: routes.ORDERS_ORDER_DETAIL_SCREEN,
-                    params: { modes, timeSlots, methods, order: item },
+                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
+                    screen: routes.TREATMENT_SURPORT_DETAIL_SCREEN,
+                    params: item,
                   })
                 }
               >
