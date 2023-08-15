@@ -18,7 +18,13 @@ const useProvidor = () => {
     apiClient.put(`auth/user/relations/${relationId}`, data);
   const searchTreatmentSurporter = (q) =>
     apiClient.get("auth/user/relations/search", { q });
-  
+  const addCareReceiver = (data) =>
+    apiClient.post("auth/user/relations/add-care-receiver", data);
+  const updateCareReceiver = (relation_id, data) =>
+    apiClient.put(
+      `auth/user/relations/${relation_id}/update-care-receiver`,
+      data
+    );
 
   return {
     getPendingOrderRequests,
@@ -31,6 +37,8 @@ const useProvidor = () => {
     addTreatmentSurporter,
     searchTreatmentSurporter,
     updateTreatmentSurporter,
+    addCareReceiver,
+    updateCareReceiver,
   };
 };
 

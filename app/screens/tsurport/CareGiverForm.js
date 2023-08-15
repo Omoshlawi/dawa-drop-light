@@ -2,20 +2,16 @@ import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { useTheme, Text } from "react-native-paper";
-import Logo from "../../components/Logo";
 import {
   Form,
   FormCheckBox,
   FormField,
-  FormItemPicker,
   FormScanner,
   FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { AlertDialog, Dialog } from "../../components/dialog";
-import { RemoteItemPicker } from "../../components/input";
-import { useAuthorize, usePatient, useUser } from "../../api";
-import { CodeScanner } from "../../components/scanner";
+import { useAuthorize, usePatient } from "../../api";
 const initialValues = {
   careGiver: "",
   canPickUpDrugs: false,
