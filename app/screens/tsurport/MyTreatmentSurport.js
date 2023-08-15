@@ -5,11 +5,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useUser } from "../../api";
 import routes from "../../navigation/routes";
 import { Avatar, Card, useTheme, Portal, FAB } from "react-native-paper";
 import { NestedProvider } from "../../theme";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MyTreatmentSurport = ({ navigation }) => {
   const { getTreatmentSurport, getUserId } = useUser();
@@ -34,16 +35,18 @@ const MyTreatmentSurport = ({ navigation }) => {
   });
   const { open } = state;
 
-  useEffect(() => {
-    handleFetch();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      handleFetch();
+    }, [])
+  );
 
   const asociationsToSectionListData = (asociations = []) => {
     const careGivers = asociations.filter(
-      ({ careGiver }) => careGiver === userId
+      ({ careGiver }) => careGiver !== userId
     );
     const careReceivers = asociations.filter(
-      ({ careGiver }) => careGiver !== userId
+      ({ careGiver }) => careGiver === userId
     );
     return [
       {
@@ -124,7 +127,6 @@ const MyTreatmentSurport = ({ navigation }) => {
                 onPress: () => {
                   navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
                     screen: routes.TREATMENT_SURPORT_CAREGIVER_FORM_SCREEN,
-                    params: {},
                   });
                 },
                 color: colors.secondary,
@@ -137,7 +139,6 @@ const MyTreatmentSurport = ({ navigation }) => {
                 onPress: () => {
                   navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
                     screen: routes.TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN,
-                    params: {},
                   });
                 },
               },

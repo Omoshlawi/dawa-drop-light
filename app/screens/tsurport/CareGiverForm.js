@@ -6,13 +6,16 @@ import Logo from "../../components/Logo";
 import {
   Form,
   FormCheckBox,
+  FormField,
   FormItemPicker,
+  FormScanner,
   FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { RemoteItemPicker } from "../../components/input";
-import { useAuthorize, useUser } from "../../api";
+import { useAuthorize, usePatient, useUser } from "../../api";
+import { CodeScanner } from "../../components/scanner";
 const initialValues = {
   careGiver: "",
   canPickUpDrugs: false,
@@ -20,7 +23,7 @@ const initialValues = {
 };
 
 const validationSchemer = Yup.object().shape({
-  careGiver: Yup.string().label("Username").required(),
+  careGiver: Yup.string().label("Care giver").required(),
   canPickUpDrugs: Yup.bool().label("Can pick up drugs?"),
   canOrderDrug: Yup.bool().label("Can order drugs?"),
 });
@@ -33,14 +36,16 @@ const CareGiverForm = ({ navigation, route }) => {
     message: "Care giver added successfully",
     mode: "success",
   });
+  const { addCareGiver, updateCareGiver } = usePatient();
   const { colors, roundness } = useTheme();
   const { getUsers } = useAuthorize();
   const handleSubmit = async (values, { setErrors, errors }) => {
+    console.log(values);
     let response;
     setLoading(true);
     if (treatmentSurport)
-      response = await updateTreatmentSurporter(treatmentSurport._id, values);
-    else response = await addTreatmentSurporter(values);
+      response = await updateCareGiver(treatmentSurport._id, values);
+    else response = await addCareGiver(values);
     setLoading(false);
     if (response.ok) {
       setDialogInfo({
@@ -67,8 +72,6 @@ const CareGiverForm = ({ navigation, route }) => {
   };
   return (
     <View style={styles.screen}>
-      <Logo />
-      <Text variant="headlineLarge">Add Caregiver</Text>
       <View style={styles.form}>
         <Form
           initialValues={
@@ -83,34 +86,11 @@ const CareGiverForm = ({ navigation, route }) => {
           validationSchema={validationSchemer}
           onSubmit={handleSubmit}
         >
-          <RemoteItemPicker
+          <FormScanner label="Scan Caregiver code" name="careGiver" />
+          <FormField
             name="careGiver"
-            searchable
-            remoteConfig={{
-              get: getUsers,
-              paramKey: "q",
-              responseResultsExtractor: (response) => response.results,
-              isRequestSuccessfull: (response) => response.ok,
-            }}
-            labelExtractor={(item) =>
-              `${item.firstName} ${item.lastName} (${item.email})`
-            }
-            placeholder="Select Care giver"
-            valueExtractor={(item) => item._id}
-            renderItem={({ item, selected }) => (
-              <List.Item
-                title={`${item.firstName} ${item.lastName} (${item.email})`}
-                left={(props) => (
-                  <List.Icon {...props} icon="shield-lock-outline" />
-                )}
-              />
-            )}
-            itemContainerStyle={[
-              styles.itemContainer,
-              { borderRadius: roundness },
-            ]}
-            icon="format-list-checks"
-            label="Care giver"
+            label="Care Giver"
+            icon="account-outline"
           />
           <FormCheckBox name="canPickUpDrugs" label="Can pick up drugs?" />
           <FormCheckBox name="canOrderDrug" label="Can Order drugs?" />

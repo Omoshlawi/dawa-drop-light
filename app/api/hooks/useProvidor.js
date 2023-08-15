@@ -18,6 +18,8 @@ const useProvidor = () => {
     apiClient.put(`auth/user/relations/${relationId}`, data);
   const searchTreatmentSurporter = (q) =>
     apiClient.get("auth/user/relations/search", { q });
+  
+
   return {
     getPendingOrderRequests,
     createDelivery,
