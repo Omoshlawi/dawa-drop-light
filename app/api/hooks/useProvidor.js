@@ -12,7 +12,6 @@ const useProvidor = () => {
     apiClient.get("orders/dispense", params);
   const dispenseDrug = (data) => apiClient.post("orders/dispense", data);
   const getPatients = (params) => apiClient.get("patients", params);
-  const getUsers = (params) => apiClient.get("auth/users", params);
   const addTreatmentSurporter = (data) =>
     apiClient.post("auth/user/relations", data);
   const updateTreatmentSurporter = (relationId, data) =>
@@ -27,7 +26,6 @@ const useProvidor = () => {
     getDrugDispenseDetail,
     dispenseDrug,
     getPatients,
-    getUsers,
     addTreatmentSurporter,
     searchTreatmentSurporter,
     updateTreatmentSurporter,

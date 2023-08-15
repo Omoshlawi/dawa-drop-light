@@ -61,4 +61,6 @@ export default Object.freeze({
   TREATMENT_SURPORT_SCREEN: "TreatmentSurporters Screen",
   TREATMENT_SURPORT_PROVIDOR_FORM_SCREEN: "TreatmentSurporteForm Screen",
   TREATMENT_SURPORT_MY_SURPORTERS_FORM_SCREEN: "MyTreatmentSurport Screen",
+  TREATMENT_SURPORT_CAREGIVER_FORM_SCREEN: "CareGiverForm Screen",
+  TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN: "CareReceiverForm Screen",
 });

@@ -1,7 +1,8 @@
 import { StyleSheet, View } from "react-native";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
+import * as Yup from "yup";
+import { useTheme, Text } from "react-native-paper";
 import Logo from "../../components/Logo";
-import { Text, useTheme, List } from "react-native-paper";
 import {
   Form,
   FormCheckBox,
@@ -9,40 +10,31 @@ import {
   FormSubmitButton,
 } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
-import { useAuthorize, useProvidor } from "../../api";
-import { useFocusEffect } from "@react-navigation/native";
 import { AlertDialog, Dialog } from "../../components/dialog";
-import { pickX } from "../../utils/helpers";
-import * as Yup from "yup";
+import { RemoteItemPicker } from "../../components/input";
+import { useAuthorize, useUser } from "../../api";
 const initialValues = {
   careGiver: "",
-  careReceiver: "",
   canPickUpDrugs: false,
   canOrderDrug: false,
 };
 
 const validationSchemer = Yup.object().shape({
   careGiver: Yup.string().label("Username").required(),
-  careReceiver: Yup.string().label("Password").required(),
   canPickUpDrugs: Yup.bool().label("Can pick up drugs?"),
   canOrderDrug: Yup.bool().label("Can order drugs?"),
 });
 
-const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
-  const { treatmentSurport } = route.params;
+const CareGiverForm = ({ navigation, route }) => {
+  const treatmentSurport = route.params;
   const [loading, setLoading] = useState(false);
-  const [careReceivers, setCareReceivers] = useState([]);
-  const [careGivers, setCareGivers] = useState([]);
-
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Treatment surporter added successfully",
+    message: "Care giver added successfully",
     mode: "success",
   });
-  const { getPatients, addTreatmentSurporter, updateTreatmentSurporter } =
-    useProvidor();
-  const { getUsers } = useAuthorize();
   const { colors, roundness } = useTheme();
+  const { getUsers } = useAuthorize();
   const handleSubmit = async (values, { setErrors, errors }) => {
     let response;
     setLoading(true);
@@ -73,33 +65,16 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
       }
     }
   };
-  const handleFetch = async () => {
-    let response = await getPatients();
-    if (response.ok) {
-      setCareReceivers(response.data.results);
-    }
-    response = await getUsers();
-    if (response.ok) {
-      setCareGivers(response.data.results);
-    }
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      handleFetch();
-    }, [])
-  );
   return (
     <View style={styles.screen}>
       <Logo />
-      <Text variant="headlineLarge">Add Treatment Surporter</Text>
+      <Text variant="headlineLarge">Add Caregiver</Text>
       <View style={styles.form}>
         <Form
           initialValues={
             treatmentSurport
               ? {
                   careGiver: treatmentSurport.careGiver,
-                  careReceiver: treatmentSurport.careReceiver,
                   canPickUpDrugs: treatmentSurport.canPickUpDrugs,
                   canOrderDrug: treatmentSurport.canOrderDrug,
                 }
@@ -108,10 +83,15 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
           validationSchema={validationSchemer}
           onSubmit={handleSubmit}
         >
-          <FormItemPicker
+          <RemoteItemPicker
             name="careGiver"
             searchable
-            data={careGivers}
+            remoteConfig={{
+              get: getUsers,
+              paramKey: "q",
+              responseResultsExtractor: (response) => response.results,
+              isRequestSuccessfull: (response) => response.ok,
+            }}
             labelExtractor={(item) =>
               `${item.firstName} ${item.lastName} (${item.email})`
             }
@@ -131,31 +111,6 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
             ]}
             icon="format-list-checks"
             label="Care giver"
-          />
-          <FormItemPicker
-            name="careReceiver"
-            data={careReceivers}
-            searchable
-            labelExtractor={(item) =>
-              `${item.surName} ${item.firstName} ${item.lastName} (${item.cccNumber})`
-            }
-            placeholder="Select Care giver"
-            valueExtractor={(item) => item._id}
-            renderItem={({ item, selected }) => {
-              const name = `${item.surName} ${item.firstName} ${item.lastName} (${item.cccNumber})`;
-              return (
-                <List.Item
-                  title={name}
-                  left={(props) => <List.Icon {...props} icon="account" />}
-                />
-              );
-            }}
-            itemContainerStyle={[
-              styles.itemContainer,
-              { borderRadius: roundness },
-            ]}
-            icon="format-list-checks"
-            label="Care receiver"
           />
           <FormCheckBox name="canPickUpDrugs" label="Can pick up drugs?" />
           <FormCheckBox name="canOrderDrug" label="Can Order drugs?" />
@@ -191,7 +146,7 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
   );
 };
 
-export default ProvidorTreatmentSurportForm;
+export default CareGiverForm;
 
 const styles = StyleSheet.create({
   screen: {
@@ -205,23 +160,7 @@ const styles = StyleSheet.create({
   btn: {
     marginVertical: 20,
   },
-  btn: {
-    marginVertical: 20,
-  },
   dialog: {
     width: screenWidth * 0.75,
-  },
-  img: {
-    alignSelf: "center",
-    width: 100,
-    height: 100,
-  },
-  text: {
-    textAlign: "center",
-    padding: 10,
-  },
-  itemContainer: {
-    margin: 5,
-    // padding: 10,
   },
 });

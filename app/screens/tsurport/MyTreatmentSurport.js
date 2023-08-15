@@ -121,7 +121,12 @@ const MyTreatmentSurport = ({ navigation }) => {
               {
                 icon: "account-plus-outline",
                 label: "Add care giver",
-                onPress: () => {},
+                onPress: () => {
+                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
+                    screen: routes.TREATMENT_SURPORT_CAREGIVER_FORM_SCREEN,
+                    params: {},
+                  });
+                },
                 color: colors.secondary,
               },
               {
@@ -129,7 +134,12 @@ const MyTreatmentSurport = ({ navigation }) => {
                 label: "Add care receiver",
                 color: true ? colors.secondary : colors.disabled,
                 labelTextColor: true ? colors.secondary : colors.disabled,
-                onPress: () => {},
+                onPress: () => {
+                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
+                    screen: routes.TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN,
+                    params: {},
+                  });
+                },
               },
             ]}
             onStateChange={onStateChange}

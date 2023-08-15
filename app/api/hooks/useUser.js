@@ -16,6 +16,8 @@ const useUser = () => {
   const getMenuOptions = () => apiClient.get("/auth/my-menu-options");
   const getTreatmentSurport = () => apiClient.get("auth/user/relations");
   const getUserId = () => jwtDecode(token)._id;
+  const searchUser = (params) => apiClient.get("auth/profile");
+
   return {
     getUser,
     logout,
@@ -24,6 +26,7 @@ const useUser = () => {
     getMenuOptions,
     getUserId,
     getTreatmentSurport,
+    searchUser
   };
 };
 

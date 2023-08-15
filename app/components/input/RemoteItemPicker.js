@@ -7,9 +7,9 @@ import { Modal } from "react-native";
 import { getRandomColor } from "../../utils/helpers";
 import _ from "lodash";
 import SearchHeader from "./SearchHeader";
-const ItemPicker = ({
+
+const RemoteItemPicker = ({
   icon,
-  data = [],
   valueExtractor, //required
   renderItem,
   title,
@@ -27,18 +27,39 @@ const ItemPicker = ({
   outline = true,
   label,
   searchable,
+  remoteConfig = {
+    get: undefined,
+    paramKey: "q",
+    responseResultsExtractor: (response) => response.results,
+    isRequestSuccessfull: (response) => response.ok,
+  },
 }) => {
   const { colors, roundness } = useTheme();
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState([]);
+  const [params, setParams] = useState();
   const current = multiple
     ? data.filter((item) => value.includes(valueExtractor(item)))
     : data.find((item) => valueExtractor(item) === value);
-  const [listedData, setListedData] = useState(data);
   useEffect(() => {
-    if (!showModal) {
-      setListedData(data);
+    handleFetch();
+  }, [params]);
+  const handleFetch = async () => {
+    console.log(params);
+    if (
+      remoteConfig.get instanceof Function &&
+      remoteConfig.paramKey &&
+      remoteConfig.resultExtractor instanceof Function &&
+      remoteConfig.isRequestSuccessfull instanceof Function
+    ) {
+      const response = await remoteConfig.get({
+        [remoteConfig.paramKey]: params,
+      });
+      if (remoteConfig.isRequestSuccessfull(response)) {
+        setData(remoteConfig.responseResultsExtractor(response));
+      }
     }
-  }, [showModal]);
+  };
   return (
     <View style={styles.container}>
       {outline && label && !_.isEmpty(current) && (
@@ -149,15 +170,10 @@ const ItemPicker = ({
           </View>
           {searchable && (
             <SearchHeader
-              onTextChange={(value) =>
-                setListedData(
-                  data.filter((v) =>
-                    String(labelExtractor(v))
-                      .toLowerCase()
-                      .includes(value.toLowerCase())
-                  )
-                )
-              }
+              onTextChange={(q) => {
+                setParams(q);
+              }}
+              text={params}
               backgroundColor={colors.background}
             />
           )}
@@ -165,7 +181,7 @@ const ItemPicker = ({
             contentContainerStyle={contentContainerStyle}
             numColumns={numColumns}
             horizontal={horozontal}
-            data={listedData}
+            data={data}
             keyExtractor={valueExtractor}
             renderItem={({ item, index }) => (
               <TouchableOpacity
@@ -219,7 +235,7 @@ const ItemPicker = ({
   );
 };
 
-export default ItemPicker;
+export default RemoteItemPicker;
 
 const styles = StyleSheet.create({
   container: { marginTop: 5 },
