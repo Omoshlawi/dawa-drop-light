@@ -11,7 +11,7 @@ import { useFormikContext } from "formik";
 
 const Step2 = ({ onPrevious, onNext, methods }) => {
   const { colors, roundness } = useTheme();
-  const { validateForm, values, setFieldError, setFieldTouched } =
+  const { validateForm, values, setFieldError, setFieldTouched, errors } =
     useFormikContext();
   return (
     <View style={styles.container}>
@@ -35,19 +35,25 @@ const Step2 = ({ onPrevious, onNext, methods }) => {
         <Button
           mode="contained"
           onPress={async () => {
-            const errors = await validateForm(values);
-            if (errors["deliveryMethod"]) {
-            } else if (
+            console.log("Checking condition...");
+            const isBlockOnTimeSlotFull =
               methods.find(({ _id }) => _id === values["deliveryMethod"])
-                ?.blockOnTimeSlotFull === false &&
-              !values["careGiver"]
-            ) {
+                ?.blockOnTimeSlotFull === false;
+            const hasNoCareGiver = !values["careGiver"];
+
+            console.log("isBlockOnTimeSlotFull:", isBlockOnTimeSlotFull);
+            console.log("hasNoCareGiver:", hasNoCareGiver);
+            // if treatment surport and no caregiver specified set error for careGiver
+            if (isBlockOnTimeSlotFull && hasNoCareGiver) {
+              console.log("Setting field error and touched...");
               setFieldError("careGiver", "Care giver is required");
               setFieldTouched("careGiver", true);
+              console.log("Care giver error: ", errors["careGiver"]);
             } else {
+              console.log("Proceeding to next step...");
+              console.log(values["careGiver"]);
               onNext();
             }
-            console.log(errors);
           }}
           style={styles.btn}
         >

@@ -43,10 +43,10 @@ const MyTreatmentSurport = ({ navigation }) => {
 
   const asociationsToSectionListData = (asociations = []) => {
     const careGivers = asociations.filter(
-      ({ careGiver }) => careGiver !== userId
+      ({ careGiver }) => careGiver && careGiver !== userId
     );
     const careReceivers = asociations.filter(
-      ({ careGiver }) => careGiver === userId
+      ({ careGiver }) => careGiver && careGiver === userId
     );
     return [
       {
@@ -76,13 +76,28 @@ const MyTreatmentSurport = ({ navigation }) => {
               patientCareReceiver,
               userCareGiver,
               careGiver: careGiver_,
+              userCareReceiver,
             } = item;
             const careReceiver = patientCareReceiver[0];
             const careGiver = userCareGiver[0];
-            const isCareGiver = careGiver_ === userId;
+            const careReceiverUser = userCareReceiver[0];
+            const isCareGiver = careGiver_ !== userId;
             const name = isCareGiver
-              ? `${careGiver.phoneNumber} (${careGiver.email})`
-              : `${careReceiver.firstName} ${careReceiver.lastName} (${careReceiver.cccNumber})`;
+              ? `${
+                  careGiver.firstName && careGiver.lastName
+                    ? careGiver.firstName + " " + careGiver.lastName
+                    : careGiver.username
+                }`
+              : `${
+                  careReceiverUser.firstName && careReceiverUser.lastName
+                    ? careReceiverUser.firstName +
+                      " " +
+                      careReceiverUser.lastName
+                    : careReceiverUser.username
+                } (${careReceiver.cccNumber})`;
+            const description = isCareGiver
+              ? `${careGiver.phoneNumber} | ${careGiver.email}`
+              : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`;
             return (
               <TouchableOpacity
                 onPress={() =>
@@ -104,7 +119,7 @@ const MyTreatmentSurport = ({ navigation }) => {
                       style={{ backgroundColor: colors.surface }}
                     />
                   )}
-                  subtitle={careReceiver._id}
+                  subtitle={description}
                   subtitleStyle={{ color: colors.disabled }}
                 />
               </TouchableOpacity>
