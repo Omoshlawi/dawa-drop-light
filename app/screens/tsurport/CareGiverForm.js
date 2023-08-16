@@ -2,24 +2,18 @@ import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { useTheme, Text } from "react-native-paper";
-import {
-  Form,
-  FormCheckBox,
-  FormField,
-  FormScanner,
-  FormSubmitButton,
-} from "../../components/forms";
+import { Form, FormCheckBox, FormSubmitButton } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { useAuthorize, usePatient } from "../../api";
+import Logo from "../../components/Logo";
+import { CodeDisplayCopy } from "../../components/scanner";
 const initialValues = {
-  careGiver: "",
   canPickUpDrugs: false,
   canOrderDrug: false,
 };
 
 const validationSchemer = Yup.object().shape({
-  careGiver: Yup.string().label("Care giver").required(),
   canPickUpDrugs: Yup.bool().label("Can pick up drugs?"),
   canOrderDrug: Yup.bool().label("Can order drugs?"),
 });
@@ -47,8 +41,8 @@ const CareGiverForm = ({ navigation, route }) => {
       setDialogInfo({
         ...dialogInfo,
         show: response.ok,
-        mode: "success",
-        message: "Treatment surporter added successfully",
+        mode: "qr",
+        message: response.data._id,
       });
     } else {
       if (response.status === 400) {
@@ -73,7 +67,6 @@ const CareGiverForm = ({ navigation, route }) => {
           initialValues={
             treatmentSurport
               ? {
-                  careGiver: treatmentSurport.careGiver,
                   canPickUpDrugs: treatmentSurport.canPickUpDrugs,
                   canOrderDrug: treatmentSurport.canOrderDrug,
                 }
@@ -82,17 +75,15 @@ const CareGiverForm = ({ navigation, route }) => {
           validationSchema={validationSchemer}
           onSubmit={handleSubmit}
         >
-          <FormScanner label="Scan Caregiver code" name="careGiver" />
-          <FormField
-            name="careGiver"
-            label="Care Giver"
-            icon="account-outline"
-          />
+          <View style={{ alignItems: "center" }}>
+            <Logo />
+            <Text variant="headlineLarge">Add Caregiver</Text>
+          </View>
           <FormCheckBox name="canPickUpDrugs" label="Can pick up drugs?" />
           <FormCheckBox name="canOrderDrug" label="Can Order drugs?" />
 
           <FormSubmitButton
-            title="Submit"
+            title="Get invitation code"
             mode="contained"
             loading={loading}
             disabled={loading}
@@ -105,18 +96,26 @@ const CareGiverForm = ({ navigation, route }) => {
         swipable
         onRequestClose={() => {
           setDialogInfo({ ...dialogInfo, show: false });
+          if (dialogInfo.mode === "qr") {
+            navigation.goBack();
+          }
         }}
       >
-        <AlertDialog
-          message={dialogInfo.message}
-          mode={dialogInfo.mode}
-          onButtonPress={() => {
-            setDialogInfo({ ...dialogInfo, show: false });
-            if (dialogInfo.mode === "success") {
-              navigation.goBack();
-            }
-          }}
-        />
+        {dialogInfo.mode === "qr" && (
+          <CodeDisplayCopy message={dialogInfo.message} />
+        )}
+        {(dialogInfo.mode === "success" || dialogInfo.mode === "error") && (
+          <AlertDialog
+            mode={dialogInfo.mode}
+            message={dialogInfo.message}
+            onButtonPress={() => {
+              setDialogInfo({ ...dialogInfo, show: false });
+              if (dialogInfo.mode === "success") {
+                navigation.goBack();
+              }
+            }}
+          />
+        )}
       </Dialog>
     </View>
   );

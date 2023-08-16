@@ -43,10 +43,18 @@ const MyTreatmentSurport = ({ navigation }) => {
 
   const asociationsToSectionListData = (asociations = []) => {
     const careGivers = asociations.filter(
-      ({ careGiver }) => careGiver && careGiver !== userId
+      ({ careGiver, careReceiver }) =>
+        careGiver && careReceiver && careGiver !== userId
     );
     const careReceivers = asociations.filter(
-      ({ careGiver }) => careGiver && careGiver === userId
+      ({ careGiver, careReceiver }) =>
+        careGiver && careReceiver && careGiver === userId
+    );
+    const pendingCaregiverInvites = asociations.filter(
+      ({ careGiver, careReceiver }) => careReceiver && !careGiver
+    );
+    const pendingCareReceiverInvites = asociations.filter(
+      ({ careGiver, careReceiver }) => !careReceiver && careGiver
     );
     return [
       {
@@ -56,6 +64,14 @@ const MyTreatmentSurport = ({ navigation }) => {
       {
         title: "Care Receivers",
         data: careReceivers,
+      },
+      {
+        title: "Pending caregiver Invites",
+        data: pendingCaregiverInvites,
+      },
+      {
+        title: "Pending care receiver Invites",
+        data: pendingCareReceiverInvites,
       },
     ];
   };
@@ -76,28 +92,35 @@ const MyTreatmentSurport = ({ navigation }) => {
               patientCareReceiver,
               userCareGiver,
               careGiver: careGiver_,
+              careReceiver: careReceiver_,
               userCareReceiver,
+              _id,
             } = item;
+            const isEstablished = careReceiver_ && careGiver_;
             const careReceiver = patientCareReceiver[0];
             const careGiver = userCareGiver[0];
             const careReceiverUser = userCareReceiver[0];
             const isCareGiver = careGiver_ !== userId;
-            const name = isCareGiver
-              ? `${
-                  careGiver.firstName && careGiver.lastName
-                    ? careGiver.firstName + " " + careGiver.lastName
-                    : careGiver.username
-                }`
-              : `${
-                  careReceiverUser.firstName && careReceiverUser.lastName
-                    ? careReceiverUser.firstName +
-                      " " +
-                      careReceiverUser.lastName
-                    : careReceiverUser.username
-                } (${careReceiver.cccNumber})`;
-            const description = isCareGiver
-              ? `${careGiver.phoneNumber} | ${careGiver.email}`
-              : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`;
+            const name = isEstablished
+              ? isCareGiver
+                ? `${
+                    careGiver.firstName && careGiver.lastName
+                      ? careGiver.firstName + " " + careGiver.lastName
+                      : careGiver.username
+                  }`
+                : `${
+                    careReceiverUser.firstName && careReceiverUser.lastName
+                      ? careReceiverUser.firstName +
+                        " " +
+                        careReceiverUser.lastName
+                      : careReceiverUser.username
+                  } (${careReceiver.cccNumber})`
+              : undefined;
+            const description = isEstablished
+              ? isCareGiver
+                ? `${careGiver.phoneNumber} | ${careGiver.email}`
+                : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
+              : undefined;
             return (
               <TouchableOpacity
                 onPress={() =>
@@ -108,7 +131,7 @@ const MyTreatmentSurport = ({ navigation }) => {
                 }
               >
                 <Card.Title
-                  title={name}
+                  title={name ? name : "Invitation code"}
                   style={[styles.listItem, { backgroundColor: colors.surface }]}
                   left={(props) => <Avatar.Icon {...props} icon="connection" />}
                   right={(props) => (
@@ -119,7 +142,7 @@ const MyTreatmentSurport = ({ navigation }) => {
                       style={{ backgroundColor: colors.surface }}
                     />
                   )}
-                  subtitle={description}
+                  subtitle={description ? description : _id}
                   subtitleStyle={{ color: colors.disabled }}
                 />
               </TouchableOpacity>
@@ -136,6 +159,17 @@ const MyTreatmentSurport = ({ navigation }) => {
             visible
             icon={open ? "close" : "dots-vertical"}
             actions={[
+              {
+                icon: "link-variant-plus",
+                label: "Accept invite",
+                color: true ? colors.secondary : colors.disabled,
+                labelTextColor: true ? colors.secondary : colors.disabled,
+                onPress: () => {
+                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
+                    screen: routes.TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN,
+                  });
+                },
+              },
               {
                 icon: "account-plus-outline",
                 label: "Add care giver",

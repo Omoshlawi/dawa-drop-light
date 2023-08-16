@@ -2,24 +2,18 @@ import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { useTheme, Text } from "react-native-paper";
-import {
-  Form,
-  FormCheckBox,
-  FormField,
-  FormScanner,
-  FormSubmitButton,
-} from "../../components/forms";
+import { Form, FormCheckBox, FormSubmitButton } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { useAuthorize, usePatient, useProvidor } from "../../api";
+import Logo from "../../components/Logo";
+import { CodeDisplayCopy } from "../../components/scanner";
 const initialValues = {
-  careReceiver: "",
   canPickUpDrugs: false,
   canOrderDrug: false,
 };
 
 const validationSchemer = Yup.object().shape({
-  careReceiver: Yup.string().label("Care giver").required(),
   canPickUpDrugs: Yup.bool().label("Can pick up drugs?"),
   canOrderDrug: Yup.bool().label("Can order drugs?"),
 });
@@ -32,7 +26,7 @@ const CareReceiversForm = ({ navigation, route }) => {
     message: "Care giver added successfully",
     mode: "success",
   });
-  const {  addCareReceiver,  updateCareReceiver } = useProvidor();
+  const { addCareReceiver, updateCareReceiver } = useProvidor();
   const { colors, roundness } = useTheme();
   const { getUsers } = useAuthorize();
   const handleSubmit = async (values, { setErrors, errors }) => {
@@ -47,8 +41,8 @@ const CareReceiversForm = ({ navigation, route }) => {
       setDialogInfo({
         ...dialogInfo,
         show: response.ok,
-        mode: "success",
-        message: "Treatment surporter added successfully",
+        mode: "qr",
+        message: response.data._id,
       });
     } else {
       if (response.status === 400) {
@@ -73,7 +67,6 @@ const CareReceiversForm = ({ navigation, route }) => {
           initialValues={
             treatmentSurport
               ? {
-                  careReceiver: treatmentSurport.careGiver,
                   canPickUpDrugs: treatmentSurport.canPickUpDrugs,
                   canOrderDrug: treatmentSurport.canOrderDrug,
                 }
@@ -82,17 +75,15 @@ const CareReceiversForm = ({ navigation, route }) => {
           validationSchema={validationSchemer}
           onSubmit={handleSubmit}
         >
-          <FormScanner label="Scan care receiver code" name="careReceiver" />
-          <FormField
-            name="careReceiver"
-            label="Care receiver"
-            icon="account-outline"
-          />
+          <View style={{ alignItems: "center" }}>
+            <Logo />
+            <Text variant="headlineLarge">Add Care Receiver</Text>
+          </View>
           <FormCheckBox name="canPickUpDrugs" label="Can pick up drugs?" />
           <FormCheckBox name="canOrderDrug" label="Can Order drugs?" />
 
           <FormSubmitButton
-            title="Submit"
+            title="Get invitation code"
             mode="contained"
             loading={loading}
             disabled={loading}
@@ -105,18 +96,27 @@ const CareReceiversForm = ({ navigation, route }) => {
         swipable
         onRequestClose={() => {
           setDialogInfo({ ...dialogInfo, show: false });
+          setDialogInfo({ ...dialogInfo, show: false });
+          if (dialogInfo.mode === "qr") {
+            navigation.goBack();
+          }
         }}
       >
-        <AlertDialog
-          message={dialogInfo.message}
-          mode={dialogInfo.mode}
-          onButtonPress={() => {
-            setDialogInfo({ ...dialogInfo, show: false });
-            if (dialogInfo.mode === "success") {
-              navigation.goBack();
-            }
-          }}
-        />
+        {dialogInfo.mode === "qr" && (
+          <CodeDisplayCopy message={dialogInfo.message} />
+        )}
+        {(dialogInfo.mode === "success" || dialogInfo.mode === "error") && (
+          <AlertDialog
+            mode={dialogInfo.mode}
+            message={dialogInfo.message}
+            onButtonPress={() => {
+              setDialogInfo({ ...dialogInfo, show: false });
+              if (dialogInfo.mode === "success") {
+                navigation.goBack();
+              }
+            }}
+          />
+        )}
       </Dialog>
     </View>
   );

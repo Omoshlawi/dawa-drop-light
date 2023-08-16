@@ -17,6 +17,7 @@ import { NestedProvider } from "../../theme";
 import { callNumber, getOrderStatus, getStreamUrl } from "../../utils/helpers";
 import { Dialog } from "../../components/dialog";
 import { Linking } from "react-native";
+import { CodeDisplayCopy } from "../../components/scanner";
 
 const OrderDetail = ({ navigation, route }) => {
   const { modes, timeSlots, methods, order } = route.params;
@@ -145,17 +146,7 @@ const OrderDetail = ({ navigation, route }) => {
         onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
       >
         {dialogInfo.mode === "qr" && (
-          <View style={[styles.order, { bordderRadius: roundness }]}>
-            <QRCodeStyled
-              data={dialogInfo.message}
-              style={{ backgroundColor: "white" }}
-              color={colors.primary}
-              // pieceBorderRadius={10}
-              padding={10}
-              pieceSize={8}
-            />
-            <Text variant="titleMedium">{dialogInfo.message}</Text>
-          </View>
+          <CodeDisplayCopy message={dialogInfo.message} />
         )}
       </Dialog>
     </NestedProvider>

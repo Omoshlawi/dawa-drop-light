@@ -18,6 +18,7 @@ import Logo from "../../components/Logo";
 import { screenWidth } from "../../utils/contants";
 import { useLocation } from "../../components/map";
 import { AcceptDeliveryTaskForm } from "../../components/order";
+import { CodeDisplayCopy } from "../../components/scanner";
 const DeliveryDetail = ({ navigation, route }) => {
   const theme = useTheme();
   const { colors, roundness } = theme;
@@ -233,17 +234,7 @@ const DeliveryDetail = ({ navigation, route }) => {
           />
         )}
         {dialogInfo.mode === "qr" && (
-          <View style={[styles.delivery, { bordderRadius: roundness }]}>
-            <QRCodeStyled
-              data={dialogInfo.message}
-              style={{ backgroundColor: "white" }}
-              color={colors.primary}
-              // pieceBorderRadius={10}
-              padding={10}
-              pieceSize={8}
-            />
-            <Text variant="titleMedium">{dialogInfo.message}</Text>
-          </View>
+          <CodeDisplayCopy message={dialogInfo.message} />
         )}
         {(dialogInfo.mode === "success" || dialogInfo.mode === "error") && (
           <AlertDialog
