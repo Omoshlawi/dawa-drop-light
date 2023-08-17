@@ -23,7 +23,6 @@ const Orders = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [timeSlots, setTimeSlots] = useState([]);
   const [treatmentSurpoters, seTtreatmentSurpoters] = useState([]);
-  
 
   const handleFetch = async () => {
     setLoading(true);

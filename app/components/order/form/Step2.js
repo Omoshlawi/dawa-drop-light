@@ -9,10 +9,16 @@ import { RadioButton } from "../../input";
 import DeliveryMethodChoice from "../DeliveryMethodChoice";
 import { useFormikContext } from "formik";
 
-const Step2 = ({ onPrevious, onNext, methods }) => {
+const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
   const { colors, roundness } = useTheme();
-  const { validateForm, values, setFieldError, setFieldTouched, errors } =
-    useFormikContext();
+  const {
+    validateForm,
+    values,
+    setFieldError,
+    setFieldTouched,
+    errors,
+    setErrors,
+  } = useFormikContext();
   return (
     <View style={styles.container}>
       <View>
@@ -24,7 +30,10 @@ const Step2 = ({ onPrevious, onNext, methods }) => {
       </View>
       <Text variant="headlineLarge">Step 2: Delivery Preference</Text>
       <View style={styles.form}>
-        <DeliveryMethodChoice methods={methods} />
+        <DeliveryMethodChoice
+          methods={methods}
+          treatmentSurpoters={treatmentSurpoters}
+        />
         <Button
           mode="contained"
           onPress={onPrevious}
@@ -45,9 +54,12 @@ const Step2 = ({ onPrevious, onNext, methods }) => {
             console.log("hasNoCareGiver:", hasNoCareGiver);
             // if treatment surport and no caregiver specified set error for careGiver
             if (isBlockOnTimeSlotFull && hasNoCareGiver) {
-              console.log("Setting field error and touched...");
-              setFieldError("careGiver", "Care giver is required");
-              setFieldTouched("careGiver", true);
+              // console.log("Setting field error and touched...");
+              // setErrors({
+              //   ...errors,
+              //   careGiver: "Care giver field is required",
+              // });
+              // setFieldTouched("careGiver", true);
               console.log("Care giver error: ", errors["careGiver"]);
             } else {
               console.log("Proceeding to next step...");

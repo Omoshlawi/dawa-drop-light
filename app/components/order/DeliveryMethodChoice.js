@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFormikContext } from "formik";
 import { screenWidth } from "../../utils/contants";
 import { FormItemPicker } from "../forms";
+import { useUser } from "../../api";
 
 const DeliveryMethodChoice = ({
   methods = [],
@@ -16,6 +17,8 @@ const DeliveryMethodChoice = ({
   const { values, setFieldValue, errors } = useFormikContext();
   const { colors, roundness } = useTheme();
   const currMethod = methods.find(({ _id }) => _id === values[fieldName]);
+  const { getUserId } = useUser();
+  const userId = getUserId();
   return (
     <View
       style={[
@@ -70,14 +73,81 @@ const DeliveryMethodChoice = ({
           label="Care giver"
           data={treatmentSurpoters}
           valueExtractor={({ _id }) => _id}
-          labelExtractor={({ _id }) => _id}
-          renderItem={({ item }) => (
-            <List.Item
-              title={item._id}
-              style={styles.listItem}
-              left={(props) => <List.Icon {...props} icon="account" />}
-            />
-          )}
+          labelExtractor={(item) => {
+            const {
+              patientCareReceiver,
+              userCareGiver,
+              careGiver: careGiver_,
+              careReceiver: careReceiver_,
+              userCareReceiver,
+              _id,
+            } = item;
+            const isEstablished = careReceiver_ && careGiver_;
+            const careReceiver = patientCareReceiver[0];
+            const careGiver = userCareGiver[0];
+            const careReceiverUser = userCareReceiver[0];
+            const isCareGiver = careGiver_ !== userId;
+            const name = isEstablished
+              ? isCareGiver
+                ? `${
+                    careGiver.firstName && careGiver.lastName
+                      ? careGiver.firstName + " " + careGiver.lastName
+                      : careGiver.username
+                  }`
+                : `${
+                    careReceiverUser.firstName && careReceiverUser.lastName
+                      ? careReceiverUser.firstName +
+                        " " +
+                        careReceiverUser.lastName
+                      : careReceiverUser.username
+                  } (${careReceiver.cccNumber})`
+              : undefined;
+            return name;
+          }}
+          renderItem={({ item }) => {
+            const {
+              patientCareReceiver,
+              userCareGiver,
+              careGiver: careGiver_,
+              careReceiver: careReceiver_,
+              userCareReceiver,
+              _id,
+            } = item;
+            const isEstablished = careReceiver_ && careGiver_;
+            const careReceiver = patientCareReceiver[0];
+            const careGiver = userCareGiver[0];
+            const careReceiverUser = userCareReceiver[0];
+            const isCareGiver = careGiver_ !== userId;
+            const name = isEstablished
+              ? isCareGiver
+                ? `${
+                    careGiver.firstName && careGiver.lastName
+                      ? careGiver.firstName + " " + careGiver.lastName
+                      : careGiver.username
+                  }`
+                : `${
+                    careReceiverUser.firstName && careReceiverUser.lastName
+                      ? careReceiverUser.firstName +
+                        " " +
+                        careReceiverUser.lastName
+                      : careReceiverUser.username
+                  } (${careReceiver.cccNumber})`
+              : undefined;
+            const description = isEstablished
+              ? isCareGiver
+                ? `${careGiver.phoneNumber} | ${careGiver.email}`
+                : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
+              : undefined;
+            return (
+              <List.Item
+                title={name}
+                style={styles.listItem}
+                left={(props) => <List.Icon {...props} icon="account" />}
+                description={description}
+                descriptionStyle={{ color: colors.disabled }}
+              />
+            );
+          }}
           itemContainerStyle={[
             styles.itemContainer,
             { borderRadius: roundness },
