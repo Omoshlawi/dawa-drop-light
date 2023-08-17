@@ -14,7 +14,7 @@ import { SectionList } from "react-native";
 const Orders = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { getOrders } = usePatient();
-  const { getTreatmentSurport } = useUser();
+  const { getTreatmentSurport, getUserId } = useUser();
   const { getDeliveryModes, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
   const [modes, setModes] = useState([]);
@@ -23,7 +23,7 @@ const Orders = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [timeSlots, setTimeSlots] = useState([]);
   const [treatmentSurpoters, seTtreatmentSurpoters] = useState([]);
-
+  const userId = getUserId();
   const handleFetch = async () => {
     setLoading(true);
     const response = await getOrders();
@@ -48,7 +48,13 @@ const Orders = ({ navigation, route }) => {
       setMethods(mResp.data.results);
     }
     if (sResp.ok) {
-      seTtreatmentSurpoters(sResp.data.results);
+      seTtreatmentSurpoters(
+        sResp.data.results.filter((item) => {
+          const { careGiver: careGiver_, careReceiver: careReceiver_ } = item;
+          // asociation fully established and user is caregiver
+          return careReceiver_ && careGiver_ && careGiver_ !== userId;
+        })
+      );
     }
   };
   useFocusEffect(

@@ -11,14 +11,9 @@ import { useFormikContext } from "formik";
 
 const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
   const { colors, roundness } = useTheme();
-  const {
-    validateForm,
-    values,
-    setFieldError,
-    setFieldTouched,
-    errors,
-    setErrors,
-  } = useFormikContext();
+  const { validateForm, values, setFieldError, setFieldTouched, setErrors } =
+    useFormikContext();
+  const [careGiverField, setCareGiverField] = useState("");
   return (
     <View style={styles.container}>
       <View>
@@ -33,6 +28,7 @@ const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
         <DeliveryMethodChoice
           methods={methods}
           treatmentSurpoters={treatmentSurpoters}
+          careGiverMessage={careGiverField}
         />
         <Button
           mode="contained"
@@ -52,16 +48,19 @@ const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
 
             console.log("isBlockOnTimeSlotFull:", isBlockOnTimeSlotFull);
             console.log("hasNoCareGiver:", hasNoCareGiver);
+            let isValid = true;
+            const errors = await validateForm(values);
             // if treatment surport and no caregiver specified set error for careGiver
-            if (isBlockOnTimeSlotFull && hasNoCareGiver) {
+            if (errors["deliveryMethod"]) {
+              isValid = false;
+            } else if (isBlockOnTimeSlotFull && hasNoCareGiver) {
+              isValid = false;
+              setCareGiverField("Care giver is required");
               // console.log("Setting field error and touched...");
-              // setErrors({
-              //   ...errors,
-              //   careGiver: "Care giver field is required",
-              // });
-              // setFieldTouched("careGiver", true);
-              console.log("Care giver error: ", errors["careGiver"]);
-            } else {
+            }
+
+            if (isValid) {
+              setCareGiverField("");
               console.log("Proceeding to next step...");
               console.log(values["careGiver"]);
               onNext();

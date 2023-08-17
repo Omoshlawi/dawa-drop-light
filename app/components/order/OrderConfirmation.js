@@ -9,12 +9,16 @@ const OrderConfirmation = ({
   deliveryModes = [],
   onSubmit,
   deliveryMethods = [],
+  treatmentSurpoters = [],
 }) => {
   const { values, handleSubmit } = useFormikContext();
   const slot = deliveryTimeSlots.find(({ url }) => url === values["time_slot"]);
   const mode = deliveryModes.find(({ _id }) => _id === values["deliveryMode"]);
   const method = deliveryMethods.find(
     ({ _id }) => _id === values["deliveryMethod"]
+  );
+  const careGiver = treatmentSurpoters.find(
+    ({ _id }) => _id === values["careGiver"]
   );
   const { colors } = useTheme();
   return (
@@ -40,6 +44,25 @@ const OrderConfirmation = ({
         description={method ? method.name : "None"}
         left={(props) => <List.Icon icon="truck-delivery" {...props} />}
       />
+      {method.blockOnTimeSlotFull === false && careGiver && (
+        <List.Item
+          style={[styles.listItem, { backgroundColor: colors.background }]}
+          title="Care giver"
+          description={
+            careGiver
+              ? `${
+                  careGiver.userCareGiver[0].firstName &&
+                  careGiver.userCareGiver[0].lastName
+                    ? careGiver.userCareGiver[0].firstName +
+                      " " +
+                      careGiver.userCareGiver[0].lastName
+                    : careGiver.userCareGiver[0].username
+                }`
+              : "None"
+          }
+          left={(props) => <List.Icon icon="account" {...props} />}
+        />
+      )}
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.background }]}
         title="Phone Number"

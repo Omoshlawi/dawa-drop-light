@@ -190,6 +190,7 @@ const PatientOrderForm = ({ navigation, route }) => {
               }}
               deliveryTimeSlots={timeSlots}
               deliveryMethods={methods}
+              treatmentSurpoters={treatmentSurpoters}
             />
           ) : (
             <AlertDialog

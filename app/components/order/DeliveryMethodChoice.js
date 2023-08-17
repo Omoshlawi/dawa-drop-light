@@ -13,6 +13,7 @@ const DeliveryMethodChoice = ({
   methods = [],
   fieldName = "deliveryMethod",
   treatmentSurpoters,
+  careGiverMessage,
 }) => {
   const { values, setFieldValue, errors } = useFormikContext();
   const { colors, roundness } = useTheme();
@@ -66,93 +67,78 @@ const DeliveryMethodChoice = ({
         <Text style={{ color: colors.error }}>{errors[fieldName]}</Text>
       )}
       {currMethod?.blockOnTimeSlotFull === false && (
-        <FormItemPicker
-          name="careGiver"
-          icon="account"
-          searchable
-          label="Care giver"
-          data={treatmentSurpoters}
-          valueExtractor={({ _id }) => _id}
-          labelExtractor={(item) => {
-            const {
-              patientCareReceiver,
-              userCareGiver,
-              careGiver: careGiver_,
-              careReceiver: careReceiver_,
-              userCareReceiver,
-              _id,
-            } = item;
-            const isEstablished = careReceiver_ && careGiver_;
-            const careReceiver = patientCareReceiver[0];
-            const careGiver = userCareGiver[0];
-            const careReceiverUser = userCareReceiver[0];
-            const isCareGiver = careGiver_ !== userId;
-            const name = isEstablished
-              ? isCareGiver
-                ? `${
-                    careGiver.firstName && careGiver.lastName
-                      ? careGiver.firstName + " " + careGiver.lastName
-                      : careGiver.username
-                  }`
-                : `${
-                    careReceiverUser.firstName && careReceiverUser.lastName
-                      ? careReceiverUser.firstName +
-                        " " +
-                        careReceiverUser.lastName
-                      : careReceiverUser.username
-                  } (${careReceiver.cccNumber})`
-              : undefined;
-            return name;
-          }}
-          renderItem={({ item }) => {
-            const {
-              patientCareReceiver,
-              userCareGiver,
-              careGiver: careGiver_,
-              careReceiver: careReceiver_,
-              userCareReceiver,
-              _id,
-            } = item;
-            const isEstablished = careReceiver_ && careGiver_;
-            const careReceiver = patientCareReceiver[0];
-            const careGiver = userCareGiver[0];
-            const careReceiverUser = userCareReceiver[0];
-            const isCareGiver = careGiver_ !== userId;
-            const name = isEstablished
-              ? isCareGiver
-                ? `${
-                    careGiver.firstName && careGiver.lastName
-                      ? careGiver.firstName + " " + careGiver.lastName
-                      : careGiver.username
-                  }`
-                : `${
-                    careReceiverUser.firstName && careReceiverUser.lastName
-                      ? careReceiverUser.firstName +
-                        " " +
-                        careReceiverUser.lastName
-                      : careReceiverUser.username
-                  } (${careReceiver.cccNumber})`
-              : undefined;
-            const description = isEstablished
-              ? isCareGiver
-                ? `${careGiver.phoneNumber} | ${careGiver.email}`
-                : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
-              : undefined;
-            return (
-              <List.Item
-                title={name}
-                style={styles.listItem}
-                left={(props) => <List.Icon {...props} icon="account" />}
-                description={description}
-                descriptionStyle={{ color: colors.disabled }}
-              />
-            );
-          }}
-          itemContainerStyle={[
-            styles.itemContainer,
-            { borderRadius: roundness },
-          ]}
-        />
+        <>
+          <FormItemPicker
+            name="careGiver"
+            icon="account"
+            searchable
+            label="Care giver"
+            data={treatmentSurpoters}
+            valueExtractor={({ _id }) => _id}
+            labelExtractor={(careGiver) => {
+              const name = `${
+                careGiver.userCareGiver[0].firstName &&
+                careGiver.userCareGiver[0].lastName
+                  ? careGiver.userCareGiver[0].firstName +
+                    " " +
+                    careGiver.userCareGiver[0].lastName
+                  : careGiver.userCareGiver[0].username
+              }`;
+              return name;
+            }}
+            renderItem={({ item }) => {
+              const {
+                patientCareReceiver,
+                userCareGiver,
+                careGiver: careGiver_,
+                careReceiver: careReceiver_,
+                userCareReceiver,
+                _id,
+              } = item;
+              const isEstablished = careReceiver_ && careGiver_;
+              const careReceiver = patientCareReceiver[0];
+              const careGiver = userCareGiver[0];
+              const careReceiverUser = userCareReceiver[0];
+              const isCareGiver = careGiver_ !== userId;
+              const name = isEstablished
+                ? isCareGiver
+                  ? `${
+                      careGiver.firstName && careGiver.lastName
+                        ? careGiver.firstName + " " + careGiver.lastName
+                        : careGiver.username
+                    }`
+                  : `${
+                      careReceiverUser.firstName && careReceiverUser.lastName
+                        ? careReceiverUser.firstName +
+                          " " +
+                          careReceiverUser.lastName
+                        : careReceiverUser.username
+                    } (${careReceiver.cccNumber})`
+                : undefined;
+              const description = isEstablished
+                ? isCareGiver
+                  ? `${careGiver.phoneNumber} | ${careGiver.email}`
+                  : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
+                : undefined;
+              return (
+                <List.Item
+                  title={name}
+                  style={styles.listItem}
+                  left={(props) => <List.Icon {...props} icon="account" />}
+                  description={description}
+                  descriptionStyle={{ color: colors.disabled }}
+                />
+              );
+            }}
+            itemContainerStyle={[
+              styles.itemContainer,
+              { borderRadius: roundness },
+            ]}
+          />
+          {careGiverMessage && (
+            <Text style={{ color: colors.error }}>{careGiverMessage}</Text>
+          )}
+        </>
       )}
     </View>
   );
