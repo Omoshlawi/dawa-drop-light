@@ -2,4 +2,5 @@ export { default as ChangePassword } from "./ChangePassword";
 export { default as DefaultScreen } from "./DefaultScreen";
 export { default as ProfileUpdate } from "./ProfileUpdate";
 export { default as CreateProfileScreen } from "./CreateProfileScreen";
-export { default as AccountVerificationForm  } from "./AccountVerificationForm";
+export { default as AccountVerificationForm } from "./AccountVerificationForm";
+export { default as SettingsScreen } from "./SettingsScreen";

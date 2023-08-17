@@ -73,7 +73,15 @@ const Account = ({ navigation }) => {
         }}
         icon="key"
       />
-      <CardTitle text="Settings" onPress={() => {}} icon="cogs" />
+      <CardTitle
+        text="Settings"
+        onPress={() => {
+          navigation.navigate(routes.USER_NAVIGATION, {
+            screen: routes.USER_SETTINGS_SCREEN,
+          });
+        }}
+        icon="cogs"
+      />
       <CardTitle
         text="About"
         onPress={() => setShowAbout(true)}

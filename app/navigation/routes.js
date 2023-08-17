@@ -15,6 +15,7 @@ export default Object.freeze({
   USER_DEFAULT_SCREEN: "Default Profile",
   USER_CREATE_PROFILE_SCREEN: "Create Profile",
   USER_ACCOUNT_VERIFY_SCREEN: "AccountVerificationForm Screen",
+  USER_SETTINGS_SCREEN: "Settings Screen",
 
   PERMISIONS_NAVIGATION: "Permisions Nav",
   PERMISIONS_MENU_SCREEN: "PermisionsMenuScreen",

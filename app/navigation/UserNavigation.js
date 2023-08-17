@@ -6,6 +6,7 @@ import {
   CreateProfileScreen,
   DefaultScreen,
   ProfileUpdate,
+  SettingsScreen,
 } from "../screens/user";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -37,6 +38,11 @@ const UserNavigation = () => {
         name={routes.USER_ACCOUNT_VERIFY_SCREEN}
         component={AccountVerificationForm}
         options={{ title: "Verify yourself" }}
+      />
+      <Screen
+        name={routes.USER_SETTINGS_SCREEN}
+        component={SettingsScreen}
+        options={{ title: "Settings" }}
       />
     </Navigator>
   );
