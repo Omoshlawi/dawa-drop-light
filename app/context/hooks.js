@@ -11,7 +11,7 @@ export const useUserContext = () => {
 export const useSettinsContext = () => {
   const { appConfiguration, setAppConfiguration, clearAppConfiguration } =
     useContext(SettingsContext);
-  const { privacy } = appConfiguration;
+  const { privacy, theme } = appConfiguration;
   const {
     pin,
     isAuthenticated,
@@ -65,6 +65,12 @@ export const useSettinsContext = () => {
       privacy: { ...privacy, isAuthenticated: false },
     });
   };
+  const enableDarkTheme = (enable = false) => {
+    setAppConfiguration({
+      ...appConfiguration,
+      theme: enable ? "dark" : "light",
+    });
+  };
   return {
     pin,
     deAuthenticate,
@@ -77,5 +83,7 @@ export const useSettinsContext = () => {
     appConfiguration,
     enableFingerprint,
     useFingerprint,
+    enableDarkTheme,
+    theme: theme ? theme : "light",
   };
 };
