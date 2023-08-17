@@ -1,8 +1,6 @@
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import AuthNavigation from "./app/navigation/AuthNavigation";
-import { PaperProvider } from "react-native-paper";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import { UserContextProvider } from "./app/context/UserContext";
 import useSecureStore from "./app/hooks/useSecureStore";
 import MainStackNavigation from "./app/navigation/MainStackNavigation";
@@ -12,6 +10,7 @@ import { AppState } from "react-native";
 import React, { useEffect } from "react";
 import { SettingsContextProvider } from "./app/context/SettingsContext";
 import ThemedNavigationContainer from "./app/navigation/ThemedNavigationContainer";
+import { Authentication } from "./app/components/localauth";
 
 export default function App() {
   const [token, setToken, clearToken] = useSecureStore("jwtToken", null);
@@ -67,6 +66,13 @@ export default function App() {
           <ThemedNavigationContainer>
             <MainStackNavigation />
           </ThemedNavigationContainer>
+          <Modal
+            visible={
+              !appConf.privacy.isAuthenticated && appConf.privacy.enabled
+            }
+          >
+            <Authentication />
+          </Modal>
         </MainTheme>
       </SettingsContextProvider>
     </UserContextProvider>

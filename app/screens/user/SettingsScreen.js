@@ -17,6 +17,7 @@ const SettingsScreen = () => {
     disablePin,
     enablePin,
     enableFingerprint,
+    pin: userPin,
   } = useSettinsContext();
   const { compatible, enabled, authenticate, fingerPrintOk } = useLocalAuth();
   const { colors } = useTheme();
@@ -29,7 +30,7 @@ const SettingsScreen = () => {
         {
           text: "yes",
           onPress: () => {
-            disablePin(pin);
+            disablePin(userPin);
           },
         },
         { text: "no" },
