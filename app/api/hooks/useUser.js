@@ -16,6 +16,10 @@ const useUser = () => {
   const getMenuOptions = () => apiClient.get("/auth/my-menu-options");
   const getTreatmentSurport = (params) =>
     apiClient.get("auth/user/relations", params);
+  const getTreatmentSurportDetail = (treatmentId) =>
+    apiClient.get(`auth/user/relations/${treatmentId}`);
+  const acceptTreatmentSurportInvite = (treatmentId) =>
+    apiClient.get(`auth/user/relations/${treatmentId}/accept`);
   const getUserId = () => jwtDecode(token)._id;
   const searchUser = (params) => apiClient.get("auth/profile");
 
@@ -28,6 +32,8 @@ const useUser = () => {
     getUserId,
     getTreatmentSurport,
     searchUser,
+    getTreatmentSurportDetail,
+    acceptTreatmentSurportInvite,
   };
 };
 

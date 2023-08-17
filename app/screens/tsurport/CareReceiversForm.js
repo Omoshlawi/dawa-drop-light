@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { useTheme, Text } from "react-native-paper";
+import { useTheme, Text, Portal, FAB } from "react-native-paper";
 import { Form, FormCheckBox, FormSubmitButton } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
 import { AlertDialog, Dialog } from "../../components/dialog";
@@ -93,9 +93,7 @@ const CareReceiversForm = ({ navigation, route }) => {
       </View>
       <Dialog
         visible={dialogInfo.show}
-        swipable
         onRequestClose={() => {
-          setDialogInfo({ ...dialogInfo, show: false });
           setDialogInfo({ ...dialogInfo, show: false });
           if (dialogInfo.mode === "qr") {
             navigation.goBack();

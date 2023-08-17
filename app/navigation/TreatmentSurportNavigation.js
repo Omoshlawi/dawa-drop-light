@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import { RoleDetail, RoleForm, Roles } from "../screens/permisions";
 import {
+  AcceptInvitation,
   CareGiverForm,
   CareReceiversForm,
   MyTreatmentSurport,
@@ -43,6 +44,11 @@ const TreatmentSurportNavigation = () => {
       <Screen
         name={routes.TREATMENT_SURPORT_DETAIL_SCREEN}
         component={TreatmentSurportDetail}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.TREATMENT_SURPORT_ACCEPT_INVITE_SCREEN}
+        component={AcceptInvitation}
         options={{ title: "" }}
       />
     </Navigator>

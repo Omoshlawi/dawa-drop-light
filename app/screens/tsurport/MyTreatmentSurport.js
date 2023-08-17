@@ -166,7 +166,7 @@ const MyTreatmentSurport = ({ navigation }) => {
                 labelTextColor: true ? colors.secondary : colors.disabled,
                 onPress: () => {
                   navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
-                    screen: routes.TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN,
+                    screen: routes.TREATMENT_SURPORT_ACCEPT_INVITE_SCREEN,
                   });
                 },
               },

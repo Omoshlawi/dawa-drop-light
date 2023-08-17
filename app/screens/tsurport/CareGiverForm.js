@@ -93,7 +93,6 @@ const CareGiverForm = ({ navigation, route }) => {
       </View>
       <Dialog
         visible={dialogInfo.show}
-        swipable
         onRequestClose={() => {
           setDialogInfo({ ...dialogInfo, show: false });
           if (dialogInfo.mode === "qr") {
