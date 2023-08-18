@@ -2,6 +2,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import {
   Appointments,
+  CareReceiverOrderForm,
+  CareReceiverOrders,
   DeliveryDetail,
   DeliveryMethod,
   DeliveryMethodForm,
@@ -131,11 +133,16 @@ const OrdersNavigation = () => {
         component={DispenseDrugs}
         options={{ title: "Dispense Drugs" }}
       />
-      {/* <Screen
-        name={routes.ORDERS_PROVIDOR_DISPENSE_DRUGS_FORM_SCREEN}
-        component={DispenseDrugForm}
+      <Screen
+        name={routes.ORDERS_ORDER_FOR_ANOTHER_SCREEN}
+        component={CareReceiverOrders}
+        options={{ title: "CareReceiver Orders" }}
+      />
+      <Screen
+        name={routes.ORDERS_ORDER_FOR_ANOTHER_FORM_SCREEN}
+        component={CareReceiverOrderForm}
         options={{ title: "" }}
-      /> */}
+      />
     </Navigator>
   );
 };

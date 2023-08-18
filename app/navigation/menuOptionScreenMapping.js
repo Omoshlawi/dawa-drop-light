@@ -61,6 +61,10 @@ const mapping = {
     route: routes.TREATMENT_SURPORT_NAVIGATION,
     screen: routes.TREATMENT_SURPORT_MY_SURPORTERS_FORM_SCREEN,
   },
+  OrderForAnother: {
+    route: routes.ORDERS_NAVIGATION,
+    screen: routes.ORDERS_ORDER_FOR_ANOTHER_SCREEN,
+  },
 };
 
 export const get = (link) => {
