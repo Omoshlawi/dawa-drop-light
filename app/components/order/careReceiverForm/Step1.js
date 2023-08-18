@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import React, { useState } from "react";
-import { Button } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import { useUser } from "../../../api";
+import { screenHeight, screenWidth } from "../../../utils/contants";
 /**
  * Choose the care receiver or search carereceiver by cccNumber and create relations
  * STEPS:
@@ -27,10 +28,21 @@ const Step1 = ({ onNext }) => {
   };
   return (
     <View style={styles.screen}>
-      <Text>Step1</Text>
-      <Button onPress={onNext} mode="contained" style={styles.navBtn}>
-        Next
-      </Button>
+      <View style={styles.img}>
+        <Image
+          style={styles.img}
+          source={require("./../../../assets/surport.png")}
+          resizeMode="contain"
+        />
+      </View>
+      <Text style={{ textAlign: "center" }} variant="headlineSmall">
+        Step 1: Care Receiver Information
+      </Text>
+      <View style={styles.content}>
+        <Button onPress={onNext} mode="contained" style={styles.navBtn}>
+          Next
+        </Button>
+      </View>
     </View>
   );
 };
@@ -41,7 +53,14 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
+  img: {
+    width: "100%",
+    height: screenHeight * 0.2,
+  },
   navBtn: {
     marginVertical: 5,
+  },
+  content: {
+    padding: 10,
   },
 });
