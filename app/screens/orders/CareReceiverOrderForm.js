@@ -67,7 +67,11 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
           />
         )}
         {wizardState.step === 2 && (
-          <CareReceiverStep2 onNext={handleNext} onPrevious={handlePrevious} />
+          <CareReceiverStep2
+            onNext={handleNext}
+            onPrevious={handlePrevious}
+            onDialogInfoChange={setDialogInfo}
+          />
         )}
         {wizardState.step === 3 && (
           <CareReceiverStep3 onNext={handleNext} onPrevious={handlePrevious} />

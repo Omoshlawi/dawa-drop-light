@@ -150,6 +150,7 @@ const Step1 = ({ onNext, onDialogInfoChange }) => {
                 onDialogInfoChange((dialogInfo) => ({
                   ...dialogInfo,
                   ...dialog,
+                  onDismiss: null,
                 }));
                 if (dialog.mode === "success") {
                   handleFetch();

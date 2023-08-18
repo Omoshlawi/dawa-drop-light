@@ -25,6 +25,8 @@ const usePatient = () => {
     apiClient.put(`patients/ralations/${relation_id}/update-care-giver`, data);
   const verifyPatientAndAddAsCareReceiver = (data) =>
     apiClient.post(`patients/ralations/verify-and-add-care-receiver`, data);
+  const checkCareReceiverEligibility = (params) =>
+    apiClient.get(`patients/relations/check-order-eligibility`, params);
 
   return {
     getAppointments,
@@ -41,6 +43,7 @@ const usePatient = () => {
     addCareGiver,
     updateCareGiver,
     verifyPatientAndAddAsCareReceiver,
+    checkCareReceiverEligibility,
   };
 };
 
