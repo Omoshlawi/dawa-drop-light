@@ -43,6 +43,7 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
     mode: "success",
     onDismiss: null,
   });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values, {}) => {};
 
@@ -96,7 +97,12 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
           />
         )}
         {wizardState.step === 4 && (
-          <CareReceiverStep4 onPrevious={handlePrevious} />
+          <CareReceiverStep4
+            onPrevious={handlePrevious}
+            modes={modes}
+            timeSlots={timeSlots}
+            loading={loading}
+          />
         )}
         <Dialog
           visible={dialogInfo.show}
