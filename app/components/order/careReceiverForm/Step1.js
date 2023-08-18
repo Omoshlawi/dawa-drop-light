@@ -1,8 +1,19 @@
 import { StyleSheet, View, Image } from "react-native";
-import React, { useState } from "react";
-import { Button, Text } from "react-native-paper";
+import React, { useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  Button,
+  List,
+  RadioButton,
+  Text,
+  useTheme,
+} from "react-native-paper";
 import { useUser } from "../../../api";
 import { screenHeight, screenWidth } from "../../../utils/contants";
+import { useFocusEffect } from "@react-navigation/native";
+import { FormField, FormItemPicker } from "../../forms";
+import { TouchableOpacity } from "react-native";
+import NewCareReceiver from "./NewCareReceiver";
 /**
  * Choose the care receiver or search carereceiver by cccNumber and create relations
  * STEPS:
@@ -13,9 +24,13 @@ import { screenHeight, screenWidth } from "../../../utils/contants";
 const Step1 = ({ onNext }) => {
   const { getTreatmentSurport, getUserId } = useUser();
   const [careReceivers, setCareReceivers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [checked, setChecked] = useState("select");
   const userId = getUserId();
   const handleFetch = async () => {
+    setLoading(true);
     const resp = await getTreatmentSurport({ canOrderDrug: true });
+    setLoading(false);
     if (resp.ok) {
       setCareReceivers(
         resp.data.results.filter((item) => {
@@ -26,6 +41,12 @@ const Step1 = ({ onNext }) => {
       );
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      handleFetch();
+    }, [])
+  );
+  const { colors, roundness } = useTheme();
   return (
     <View style={styles.screen}>
       <View style={styles.img}>
@@ -39,6 +60,89 @@ const Step1 = ({ onNext }) => {
         Step 1: Care Receiver Information
       </Text>
       <View style={styles.content}>
+        {loading && <ActivityIndicator />}
+        <View style={styles.form}>
+          <View
+            style={{
+              backgroundColor: colors.surface,
+              padding: 20,
+              borderRadius: roundness,
+            }}
+          >
+            <Text variant="titleMedium">Who are you ordering for?</Text>
+            <RadioButton.Group onValueChange={setChecked} value={checked}>
+              <RadioButton.Item
+                label="Select from existing relations"
+                value="select"
+                labelVariant="bodySmall"
+              />
+              <RadioButton.Item
+                label="Add new patient care receiver"
+                value="add"
+                labelVariant="bodySmall"
+              />
+            </RadioButton.Group>
+          </View>
+
+          {!loading && checked === "select" && (
+            <>
+              <FormItemPicker
+                name="careReceiver"
+                icon="account"
+                searchable
+                label="Select CareReceiver"
+                data={careReceivers}
+                valueExtractor={({ _id }) => _id}
+                labelExtractor={(careReceiver) => {
+                  const name = `${
+                    careReceiver.userCareReceiver[0].firstName &&
+                    careReceiver.userCareReceiver[0].lastName
+                      ? careReceiver.userCareReceiver[0].firstName +
+                        " " +
+                        careReceiver.userCareReceiver[0].lastName
+                      : `${careReceiver.userCareReceiver[0].username}(${careReceiver.userCareReceiver[0].phoneNumber})`
+                  }`;
+                  return name;
+                }}
+                renderItem={({ item }) => {
+                  const {
+                    patientCareReceiver,
+                    userCareGiver,
+                    careGiver: careGiver_,
+                    careReceiver: careReceiver_,
+                    userCareReceiver,
+                    _id,
+                  } = item;
+                  const careReceiver = patientCareReceiver[0];
+                  const careGiver = userCareGiver[0];
+                  const careReceiverUser = userCareReceiver[0];
+                  const name = careReceiverUser
+                    ? careReceiverUser.firstName && careReceiverUser.lastName
+                      ? `${careReceiverUser.firstName} ${careReceiverUser.lastName}`
+                      : `${careReceiverUser.username}`
+                    : `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
+                  const description = careReceiverUser
+                    ? `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
+                    : undefined;
+                  return (
+                    <List.Item
+                      title={name}
+                      style={styles.listItem}
+                      left={(props) => <List.Icon {...props} icon="account" />}
+                      description={description}
+                      descriptionStyle={{ color: colors.disabled }}
+                    />
+                  );
+                }}
+                itemContainerStyle={[
+                  styles.itemContainer,
+                  { borderRadius: roundness },
+                ]}
+              />
+            </>
+          )}
+          {!loading && checked === "add" && <NewCareReceiver />}
+        </View>
         <Button onPress={onNext} mode="contained" style={styles.navBtn}>
           Next
         </Button>
@@ -62,5 +166,17 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
+  },
+  listItem: {
+    padding: 10,
+  },
+  itemContainer: {
+    margin: 5,
+  },
+  radio: {
+    flexDirection: "row",
+  },
+  form: {
+    padding: 20,
   },
 });

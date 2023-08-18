@@ -95,31 +95,14 @@ const DeliveryMethodChoice = ({
                 userCareReceiver,
                 _id,
               } = item;
-              const isEstablished = careReceiver_ && careGiver_;
               const careReceiver = patientCareReceiver[0];
               const careGiver = userCareGiver[0];
               const careReceiverUser = userCareReceiver[0];
-              const isCareGiver = careGiver_ !== userId;
-              const name = isEstablished
-                ? isCareGiver
-                  ? `${
-                      careGiver.firstName && careGiver.lastName
-                        ? careGiver.firstName + " " + careGiver.lastName
-                        : careGiver.username
-                    }`
-                  : `${
-                      careReceiverUser.firstName && careReceiverUser.lastName
-                        ? careReceiverUser.firstName +
-                          " " +
-                          careReceiverUser.lastName
-                        : careReceiverUser.username
-                    } (${careReceiver.cccNumber})`
-                : undefined;
-              const description = isEstablished
-                ? isCareGiver
-                  ? `${careGiver.phoneNumber} | ${careGiver.email}`
-                  : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
-                : undefined;
+              const name =
+                careGiver.firstName && careGiver.lastName
+                  ? `${careGiver.firstName} ${careGiver.lastName}`
+                  : `${careGiver.username}`;
+              const description = `${careGiver.phoneNumber} | ${careGiver.email}`;
               return (
                 <List.Item
                   title={name}

@@ -22,11 +22,11 @@ const Step3 = ({ onNext, onPrevious }) => {
         Step 3: Almost Done
       </Text>
       <View style={styles.content}>
-        <Button onPress={onNext} mode="contained" style={styles.navBtn}>
-          Next
-        </Button>
         <Button onPress={onPrevious} mode="contained" style={styles.navBtn}>
           Previous
+        </Button>
+        <Button onPress={onNext} mode="contained" style={styles.navBtn}>
+          Next
         </Button>
       </View>
     </View>

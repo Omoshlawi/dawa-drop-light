@@ -8,3 +8,4 @@ export { default as CareReceiverStep1 } from "./careReceiverForm/Step1";
 export { default as CareReceiverStep2 } from "./careReceiverForm/Step2";
 export { default as CareReceiverStep3 } from "./careReceiverForm/Step3";
 export { default as CareReceiverStep4 } from "./careReceiverForm/Step4";
+export { default as NewCareReceiver } from "./careReceiverForm/NewCareReceiver";

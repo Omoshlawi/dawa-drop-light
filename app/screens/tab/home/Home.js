@@ -77,7 +77,9 @@ const Home = ({ navigation }) => {
           <View style={styles.greetings}>
             <Text variant="bodyLarge">👋 Hello!</Text>
             <Text variant="headlineLarge">
-              {`${user.firstName} ${user.lastName}`}
+              {user.firstName && user.lastName
+                ? `${user.firstName} ${user.lastName}`
+                : `${user.username}`}
             </Text>
           </View>
           <Text variant="titleMedium">Services</Text>
