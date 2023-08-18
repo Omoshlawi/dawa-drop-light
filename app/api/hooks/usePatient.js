@@ -23,6 +23,8 @@ const usePatient = () => {
     apiClient.post("patients/ralations/add-care-giver", data);
   const updateCareGiver = (relation_id, data) =>
     apiClient.put(`patients/ralations/${relation_id}/update-care-giver`, data);
+  const verifyPatientAndAddAsCareReceiver = (data) =>
+    apiClient.post(`patients/ralations/verify-and-add-care-receiver`, data);
 
   return {
     getAppointments,
@@ -37,7 +39,8 @@ const usePatient = () => {
     checkoutDelivery,
     getDeliveries,
     addCareGiver,
-    updateCareGiver
+    updateCareGiver,
+    verifyPatientAndAddAsCareReceiver,
   };
 };
 

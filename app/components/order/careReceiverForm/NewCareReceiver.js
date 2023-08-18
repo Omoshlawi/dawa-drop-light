@@ -1,39 +1,117 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import { Button, TextInput } from "react-native-paper";
+import { Button, HelperText, TextInput } from "react-native-paper";
+import { usePatient } from "../../../api";
 
-const NewCareReceiver = () => {
+const NewCareReceiver = ({ onPostVeryfy }) => {
   const [formState, setFormState] = useState({
     cccNumber: "",
     firstName: "",
-    upiNumber: "",
+    upiNo: "",
   });
+  const [errors, setErrors] = useState({
+    cccNumber: "",
+    firstName: "",
+    upiNo: "",
+  });
+  const [loading, setLoading] = useState(false);
 
-  const handleVerify = async ({ onPostVeryfy }) => {};
+  const { verifyPatientAndAddAsCareReceiver } = usePatient();
+
+  const handleVerify = async () => {
+    resetFormErrors;
+    setLoading(true);
+    const response = await verifyPatientAndAddAsCareReceiver(formState);
+    setLoading(false);
+    if (response.ok) {
+      if (onPostVeryfy instanceof Function)
+        onPostVeryfy({
+          dialog: {
+            show: true,
+            mode: "error",
+            message: response.data.detail,
+          },
+          careReceiver: response.data,
+        });
+    } else {
+      if (response.status === 400) {
+        setErrors({ ...errors, ...response.data.errors });
+      } else {
+        if (onPostVeryfy instanceof Function)
+          onPostVeryfy({
+            dialog: {
+              show: true,
+              mode: "error",
+              message: response.data.detail,
+            },
+          });
+      }
+    }
+  };
+
+  const resetFormErrors = (field) => {
+    if (!field) setErrors({ cccNumber: "", firstName: "", upiNo: "" });
+    else if (errors[field] !== undefined) setErrors({ ...errors, [field]: "" });
+  };
   return (
     <View>
-      <TextInput
-        placeholder="Enter Patient ccc Number"
-        label="Patient ccc Number"
-        left={<TextInput.Icon icon="identifier" />}
-        mode="outlined"
-        onChangeText={(cccNumber) => setFormState({ ...formState, cccNumber })}
-      />
-      <TextInput
-        placeholder="Enter patient first name"
-        label="Fist name"
-        left={<TextInput.Icon icon="account" />}
-        mode="outlined"
-        onChangeText={(firstName) => setFormState({ ...formState, firstName })}
-      />
-      <TextInput
-        placeholder="Enter patient UPI no"
-        label="Patient UPI Number(Optional)"
-        left={<TextInput.Icon icon="identifier" />}
-        mode="outlined"
-        onChangeText={(upiNumber) => setFormState({ ...formState, upiNumber })}
-      />
-      <Button>Verify</Button>
+      <View>
+        <TextInput
+          placeholder="Enter Patient ccc Number"
+          label="Patient ccc Number"
+          left={<TextInput.Icon icon="identifier" />}
+          mode="outlined"
+          onChangeText={(cccNumber) => {
+            setFormState({ ...formState, cccNumber });
+            resetFormErrors("cccNumber");
+          }}
+          error={errors.cccNumber}
+        />
+        {errors.cccNumber && (
+          <HelperText type="error" visible={errors.cccNumber}>
+            {errors.cccNumber}
+          </HelperText>
+        )}
+      </View>
+      <View>
+        <TextInput
+          placeholder="Enter patient first name"
+          label="Fist name"
+          left={<TextInput.Icon icon="account" />}
+          mode="outlined"
+          onChangeText={(firstName) => {
+            setFormState({ ...formState, firstName });
+            resetFormErrors("firstName");
+          }}
+          error={errors.firstName}
+        />
+        {errors.firstName && (
+          <HelperText type="error" visible={errors.firstName}>
+            {errors.firstName}
+          </HelperText>
+        )}
+      </View>
+      <View>
+        <TextInput
+          placeholder="Enter patient UPI no"
+          label="Patient UPI Number(Optional)"
+          left={<TextInput.Icon icon="identifier" />}
+          mode="outlined"
+          onChangeText={(upiNo) => {
+            setFormState({ ...formState, upiNo });
+            resetFormErrors("upiNo");
+          }}
+          error={errors.upiNo}
+        />
+        {errors.upiNo && (
+          <HelperText type="error" visible={errors.upiNo}>
+            {errors.upiNo}
+          </HelperText>
+        )}
+      </View>
+      <Button onPress={handleVerify} loading={loading} disabled={loading}>
+        Verify
+      </Button>
     </View>
   );
 };

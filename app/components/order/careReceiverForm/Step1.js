@@ -14,6 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { FormField, FormItemPicker } from "../../forms";
 import { TouchableOpacity } from "react-native";
 import NewCareReceiver from "./NewCareReceiver";
+import { useFormikContext } from "formik";
 /**
  * Choose the care receiver or search carereceiver by cccNumber and create relations
  * STEPS:
@@ -27,6 +28,7 @@ const Step1 = ({ onNext }) => {
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState("select");
   const userId = getUserId();
+  const { values, setFieldValue } = useFormikContext();
   const handleFetch = async () => {
     setLoading(true);
     const resp = await getTreatmentSurport({ canOrderDrug: true });
@@ -141,7 +143,17 @@ const Step1 = ({ onNext }) => {
               />
             </>
           )}
-          {!loading && checked === "add" && <NewCareReceiver />}
+          {!loading && checked === "add" && (
+            <NewCareReceiver
+              onPostVeryfy={({ dialog, careReceiver }) => {
+                console.log(dialog);
+                if (dialog.mode === "success") {
+                  setChecked("select");
+                  setFieldValue("careReceiver", careReceiver._id);
+                }
+              }}
+            />
+          )}
         </View>
         <Button onPress={onNext} mode="contained" style={styles.navBtn}>
           Next

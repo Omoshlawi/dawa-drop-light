@@ -9,7 +9,6 @@ import {
 import { Form } from "../../components/forms";
 import * as Yup from "yup";
 
-
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
     latitude: Yup.number().required().label("Latitude"),
@@ -25,7 +24,8 @@ const validationSchema = Yup.object().shape({
     .label("Delivery Method"),
 });
 
-const CareReceiverOrderForm = ({ navigation }) => {
+const CareReceiverOrderForm = ({ navigation, route }) => {
+  const { order } = route.params;
   const [wizardState, setWizardState] = useState({ step: 1 });
   const handleNext = () => {
     setWizardState({ ...wizardState, step: wizardState.step + 1 });
@@ -39,7 +39,17 @@ const CareReceiverOrderForm = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <Form onSubmit={handleSubmit} validationSchema={validationSchema} initialValues={{}}>
+      <Form
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+        initialValues={
+          order
+            ? { careReceiver: order.careReceiver }
+            : {
+                careReceiver: "",
+              }
+        }
+      >
         {wizardState.step === 1 && <CareReceiverStep1 onNext={handleNext} />}
         {wizardState.step === 2 && (
           <CareReceiverStep2 onNext={handleNext} onPrevious={handlePrevious} />

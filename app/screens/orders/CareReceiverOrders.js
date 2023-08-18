@@ -66,6 +66,7 @@ const CareReceiverOrders = ({ navigation }) => {
         onPress={() => {
           navigation.navigate(routes.ORDERS_NAVIGATION, {
             screen: routes.ORDERS_ORDER_FOR_ANOTHER_FORM_SCREEN,
+            params: {},
           });
         }}
       />
