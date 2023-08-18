@@ -1,10 +1,61 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { FAB, useTheme } from "react-native-paper";
 import routes from "../../navigation/routes";
+import { useOrder, useUser } from "../../api";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CareReceiverOrders = ({ navigation }) => {
   const { colors, roundness } = useTheme();
+
+  const { getTreatmentSurport, getUserId } = useUser();
+  const { getDeliveryModes, getDeliveryTimeSlots, getDeliveryMethods } =
+    useOrder();
+
+  const [modes, setModes] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [methods, setMethods] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [treatmentSurpoters, seTtreatmentSurpoters] = useState([]);
+  const userId = getUserId();
+
+  const handleFetch = async () => {
+    setLoading(true);
+    const dResp = await getDeliveryModes();
+    const tResp = await getDeliveryTimeSlots();
+    const mResp = await getDeliveryMethods();
+    const sResp = await getTreatmentSurport({
+      canPickUpDrugs: true,
+      onlyCareGiver: true,
+    });
+    setLoading(false);
+    if (dResp.ok) {
+      setModes(dResp.data.results);
+    }
+    if (tResp.ok) {
+      setTimeSlots(tResp.data.results);
+    }
+    if (mResp.ok) {
+      setMethods(mResp.data.results);
+    }
+    if (sResp.ok) {
+      seTtreatmentSurpoters(
+        sResp.data.results.filter((item) => {
+          const { careGiver: careGiver_, careReceiver: careReceiver_ } = item;
+          // asociation fully established and user is caregiver
+          return careReceiver_ && careGiver_ && careGiver_ !== userId;
+        })
+      );
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      handleFetch();
+    }, [])
+  );
+
   return (
     <View style={styles.screen}>
       <FAB

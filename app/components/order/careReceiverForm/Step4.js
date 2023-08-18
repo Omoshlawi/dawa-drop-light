@@ -9,13 +9,22 @@ import { Button } from "react-native-paper";
 
 const Step4 = ({ onPrevious }) => {
   return (
-    <View>
+    <View style={styles.screen}>
       <Text>Step4</Text>
-      <Button onPress={onPrevious}>Previous</Button>
+      <Button mode="contained" onPress={onPrevious} style={styles.navBtn}>
+        Previous
+      </Button>
     </View>
   );
 };
 
 export default Step4;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+      },
+  navBtn: {
+    marginVertical: 5,
+  },
+});

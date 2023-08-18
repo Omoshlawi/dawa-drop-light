@@ -7,14 +7,21 @@ import { Button } from "react-native-paper";
  */
 const Step2 = ({ onNext, onPrevious }) => {
   return (
-    <View>
+    <View style={styles.screen}>
       <Text>Step2</Text>
-      <Button onPress={onNext}>Next</Button>
-      <Button onPress={onPrevious}>Previous</Button>
+      <Button onPress={onNext}  mode="contained" style={styles.navBtn}>Next</Button>
+      <Button onPress={onPrevious} mode="contained" style={styles.navBtn}>Previous</Button>
     </View>
   );
 };
 
 export default Step2;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+      },
+    navBtn: {
+        marginVertical: 5,
+      },
+});
