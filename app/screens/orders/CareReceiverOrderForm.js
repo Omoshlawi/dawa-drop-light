@@ -8,8 +8,11 @@ import {
 } from "../../components/order";
 import { Form } from "../../components/forms";
 import * as Yup from "yup";
+import { AlertDialog, Dialog } from "../../components/dialog";
+import routes from "../../navigation/routes";
 
 const validationSchema = Yup.object().shape({
+  careReceiver: Yup.string().label("Care Receiver").required(),
   deliveryAddress: Yup.object({
     latitude: Yup.number().required().label("Latitude"),
     longitude: Yup.number().required().label("Longitude"),
@@ -35,6 +38,13 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
       setWizardState({ ...wizardState, step: wizardState.step - 1 });
   };
 
+  const [dialogInfo, setDialogInfo] = useState({
+    show: false,
+    message: "Order was Successfully!",
+    mode: "success",
+    onDismiss: null,
+  });
+
   const handleSubmit = async (values, {}) => {};
 
   return (
@@ -50,7 +60,12 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
               }
         }
       >
-        {wizardState.step === 1 && <CareReceiverStep1 onNext={handleNext} />}
+        {wizardState.step === 1 && (
+          <CareReceiverStep1
+            onNext={handleNext}
+            onDialogInfoChange={setDialogInfo}
+          />
+        )}
         {wizardState.step === 2 && (
           <CareReceiverStep2 onNext={handleNext} onPrevious={handlePrevious} />
         )}
@@ -60,6 +75,40 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
         {wizardState.step === 4 && (
           <CareReceiverStep4 onPrevious={handlePrevious} />
         )}
+        <Dialog
+          visible={dialogInfo.show}
+          onRequestClose={() => {
+            setDialogInfo({ ...dialogInfo, show: false });
+            if (dialogInfo.mode === "confirm") {
+              previous();
+            }
+          }}
+        >
+          {dialogInfo.mode === "confirm" ? (
+            <>
+              {/* <OrderConfirmation
+                deliveryModes={modes}
+                onSubmit={() => {
+                  previous();
+                  setDialogInfo({ ...dialogInfo, show: false });
+                }}
+                deliveryTimeSlots={timeSlots}
+                deliveryMethods={methods}
+                treatmentSurpoters={treatmentSurpoters}
+              /> */}
+            </>
+          ) : (
+            <AlertDialog
+              message={dialogInfo.message}
+              mode={dialogInfo.mode}
+              onButtonPress={() => {
+                setDialogInfo({ ...dialogInfo, show: false });
+                if (dialogInfo.onDismiss instanceof Function)
+                  dialogInfo.onDismiss();
+              }}
+            />
+          )}
+        </Dialog>
       </Form>
     </View>
   );

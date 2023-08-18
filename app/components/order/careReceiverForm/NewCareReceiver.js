@@ -28,8 +28,8 @@ const NewCareReceiver = ({ onPostVeryfy }) => {
         onPostVeryfy({
           dialog: {
             show: true,
-            mode: "error",
-            message: response.data.detail,
+            mode: "success",
+            message: "Care receiver provided is valid and added to you network",
           },
           careReceiver: response.data,
         });

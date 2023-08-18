@@ -22,13 +22,14 @@ import { useFormikContext } from "formik";
  * 2.
  * @returns
  */
-const Step1 = ({ onNext }) => {
+const Step1 = ({ onNext, onDialogInfoChange }) => {
   const { getTreatmentSurport, getUserId } = useUser();
+  const { validateForm } = useFormikContext();
   const [careReceivers, setCareReceivers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState("select");
   const userId = getUserId();
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue, setFieldTouched } = useFormikContext();
   const handleFetch = async () => {
     setLoading(true);
     const resp = await getTreatmentSurport({ canOrderDrug: true });
@@ -146,8 +147,12 @@ const Step1 = ({ onNext }) => {
           {!loading && checked === "add" && (
             <NewCareReceiver
               onPostVeryfy={({ dialog, careReceiver }) => {
-                console.log(dialog);
+                onDialogInfoChange((dialogInfo) => ({
+                  ...dialogInfo,
+                  ...dialog,
+                }));
                 if (dialog.mode === "success") {
+                  handleFetch();
                   setChecked("select");
                   setFieldValue("careReceiver", careReceiver._id);
                 }
@@ -155,7 +160,20 @@ const Step1 = ({ onNext }) => {
             />
           )}
         </View>
-        <Button onPress={onNext} mode="contained" style={styles.navBtn}>
+        <Button
+          onPress={async () => {
+            let valid = true;
+            const errors = await validateForm(values);
+            if (errors["careReceiver"]) {
+              setFieldTouched("careReceiver", true);
+              valid = false;
+            }
+
+            if (valid) onNext();
+          }}
+          mode="contained"
+          style={styles.navBtn}
+        >
           Next
         </Button>
       </View>
