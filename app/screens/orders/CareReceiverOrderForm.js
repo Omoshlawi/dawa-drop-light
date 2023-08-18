@@ -9,7 +9,6 @@ import {
 import { Form } from "../../components/forms";
 import * as Yup from "yup";
 import { AlertDialog, Dialog } from "../../components/dialog";
-import routes from "../../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   careReceiver: Yup.string().label("Care Receiver").required(),
@@ -28,7 +27,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const CareReceiverOrderForm = ({ navigation, route }) => {
-  const { order } = route.params;
+  const { order, modes, timeSlots, methods, treatmentSurpoters } = route.params;
   const [wizardState, setWizardState] = useState({ step: 1 });
   const handleNext = () => {
     setWizardState({ ...wizardState, step: wizardState.step + 1 });
@@ -54,9 +53,24 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
         validationSchema={validationSchema}
         initialValues={
           order
-            ? { careReceiver: order.careReceiver }
+            ? {
+                careReceiver: order.careReceiver,
+                deliveryAddress: order.deliveryAddress,
+                deliveryTimeSlot: order.deliveryTimeSlot._id,
+                deliveryMode: order.deliveryMode._id,
+                phoneNumber: order.phoneNumber,
+                deliveryMethod: order.deliveryMethod._id,
+                careGiver:
+                  order.careGiver.length > 0 ? order.careGiver[0]._id : "",
+              }
             : {
                 careReceiver: "",
+                deliveryAddress: null,
+                deliveryTimeSlot: "",
+                deliveryMode: "",
+                phoneNumber: "",
+                deliveryMethod: "",
+                careGiver: "",
               }
         }
       >
@@ -74,7 +88,12 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
           />
         )}
         {wizardState.step === 3 && (
-          <CareReceiverStep3 onNext={handleNext} onPrevious={handlePrevious} />
+          <CareReceiverStep3
+            onNext={handleNext}
+            onPrevious={handlePrevious}
+            methods={methods}
+            treatmentSurpoters={treatmentSurpoters}
+          />
         )}
         {wizardState.step === 4 && (
           <CareReceiverStep4 onPrevious={handlePrevious} />

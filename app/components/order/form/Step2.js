@@ -1,11 +1,7 @@
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import React, { useState } from "react";
-import { Button, List, Text, useTheme } from "react-native-paper";
+import { Button, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../../utils/contants";
-import moment from "moment/moment";
-import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { RadioButton } from "../../input";
 import DeliveryMethodChoice from "../DeliveryMethodChoice";
 import { useFormikContext } from "formik";
 
