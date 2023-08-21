@@ -13,7 +13,7 @@ const UserRoles = ({ navigation, route }) => {
   const { getUsers, getRoles } = useAuthorize();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState({ search: "" });
   const [loading, setLoading] = useState(false);
 
   const handFetch = async () => {
@@ -39,7 +39,7 @@ const UserRoles = ({ navigation, route }) => {
     <SafeArea>
       <SearchHeader
         placeholder="Search user..."
-        onTextChange={(value) => setSearch(value)}
+        onTextChange={(value) => setSearch({ ...search, search: value })}
         onSearch={handFetch}
       />
       <Text variant="titleSmall" style={{ padding: 10 }}>

@@ -57,6 +57,7 @@ const Step2 = ({ onNext, onPrevious, onDialogInfoChange }) => {
       handleCheckEligible();
     }, [])
   );
+
   return (
     <View style={styles.screen}>
       <View style={styles.img}>

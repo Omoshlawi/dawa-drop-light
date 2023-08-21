@@ -8,7 +8,13 @@ import {
 } from "../../components/order";
 import { Form } from "../../components/forms";
 import * as Yup from "yup";
-import { AlertDialog, Dialog } from "../../components/dialog";
+import {
+  AlertDialog,
+  Dialog,
+  OrderConfirmation,
+} from "../../components/dialog";
+import { usePatient } from "../../api";
+import routes from "../../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   careReceiver: Yup.string().label("Care Receiver").required(),
@@ -28,7 +34,9 @@ const validationSchema = Yup.object().shape({
 
 const CareReceiverOrderForm = ({ navigation, route }) => {
   const { order, modes, timeSlots, methods, treatmentSurpoters } = route.params;
+  const [careReceiverSurporters, setCareReceiverSupporters] = useState([]);
   const [wizardState, setWizardState] = useState({ step: 1 });
+  const { orderForCareReceiver } = usePatient();
   const handleNext = () => {
     setWizardState({ ...wizardState, step: wizardState.step + 1 });
   };
@@ -45,7 +53,43 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (values, {}) => {};
+  const handleSubmit = async (values, { setErrors, errors }) => {
+    setLoading(true);
+    let response;
+    if (order) {
+      response = await updateOrder(order._id, values);
+    } else {
+      response = await orderForCareReceiver(values);
+    }
+    setLoading(false);
+    if (response.ok) {
+      setDialogInfo({
+        ...dialogInfo,
+        show: response.ok,
+        mode: "success",
+        message: "Order wa successfull!",
+        onDismiss: () => {
+          navigation.navigate(routes.ORDERS_NAVIGATION, {
+            screen: routes.ORDERS_ORDER_FOR_ANOTHER_SCREEN,
+          });
+        },
+      });
+    } else {
+      if (response.status === 400) {
+        setErrors({ ...errors, ...response.data.errors });
+      } else {
+        setDialogInfo({
+          ...dialogInfo,
+          show: true,
+          mode: "error",
+          message: response.data.detail
+            ? response.data.detail
+            : "Unknow Error Occured",
+        });
+        console.log(response.data);
+      }
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -79,6 +123,8 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
           <CareReceiverStep1
             onNext={handleNext}
             onDialogInfoChange={setDialogInfo}
+            careReceivers={careReceiverSurporters}
+            onCareReceiversChange={setCareReceiverSupporters}
           />
         )}
         {wizardState.step === 2 && (
@@ -102,6 +148,9 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
             modes={modes}
             timeSlots={timeSlots}
             loading={loading}
+            onSubmit={() => {
+              setDialogInfo({ ...dialogInfo, mode: "confirm", show: true });
+            }}
           />
         )}
         <Dialog
@@ -115,16 +164,16 @@ const CareReceiverOrderForm = ({ navigation, route }) => {
         >
           {dialogInfo.mode === "confirm" ? (
             <>
-              {/* <OrderConfirmation
+              <OrderConfirmation
                 deliveryModes={modes}
                 onSubmit={() => {
-                  previous();
                   setDialogInfo({ ...dialogInfo, show: false });
                 }}
                 deliveryTimeSlots={timeSlots}
                 deliveryMethods={methods}
-                treatmentSurpoters={treatmentSurpoters}
-              /> */}
+                careGiverSurporters={treatmentSurpoters}
+                careReceiverSuppoters={careReceiverSurporters}
+              />
             </>
           ) : (
             <AlertDialog

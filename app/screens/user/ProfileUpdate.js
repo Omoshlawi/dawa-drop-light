@@ -19,7 +19,7 @@ const validationSchemer = Yup.object().shape({
   firstName: Yup.string().max(20).label("First name"),
   lastName: Yup.string().max(20).label("Last name"),
   phoneNumber: Yup.string().min(9).max(14).label("Phone Number").required(),
-  image: Yup.string().label("Image"),
+  image: Yup.string().label("Image").required(),
 });
 const ProfileUpdate = ({ navigation, route }) => {
   const user = route.params;

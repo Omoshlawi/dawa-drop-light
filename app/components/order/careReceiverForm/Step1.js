@@ -22,10 +22,14 @@ import { useFormikContext } from "formik";
  * 2.
  * @returns
  */
-const Step1 = ({ onNext, onDialogInfoChange }) => {
+const Step1 = ({
+  onNext,
+  onDialogInfoChange,
+  careReceivers,
+  onCareReceiversChange,
+}) => {
   const { getTreatmentSurport, getUserId } = useUser();
   const { validateForm } = useFormikContext();
-  const [careReceivers, setCareReceivers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState("select");
   const userId = getUserId();
@@ -35,7 +39,7 @@ const Step1 = ({ onNext, onDialogInfoChange }) => {
     const resp = await getTreatmentSurport({ canOrderDrug: true });
     setLoading(false);
     if (resp.ok) {
-      setCareReceivers(
+      onCareReceiversChange(
         resp.data.results.filter((item) => {
           const { careGiver: careGiver_, careReceiver: careReceiver_ } = item;
           // asociation fully established and user is caregiver

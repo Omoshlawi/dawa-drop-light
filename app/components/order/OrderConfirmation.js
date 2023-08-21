@@ -9,7 +9,8 @@ const OrderConfirmation = ({
   deliveryModes = [],
   onSubmit,
   deliveryMethods = [],
-  treatmentSurpoters = [],
+  careGiverSurporters = [],
+  careReceiverSuppoters = [],
 }) => {
   const { values, handleSubmit } = useFormikContext();
   const slot = deliveryTimeSlots.find(({ url }) => url === values["time_slot"]);
@@ -17,8 +18,11 @@ const OrderConfirmation = ({
   const method = deliveryMethods.find(
     ({ _id }) => _id === values["deliveryMethod"]
   );
-  const careGiver = treatmentSurpoters.find(
+  const careGiver = careGiverSurporters.find(
     ({ _id }) => _id === values["careGiver"]
+  );
+  const careReceiver = careReceiverSuppoters.find(
+    ({ _id }) => _id === values["careReceiver"]
   );
   const { colors } = useTheme();
   return (
@@ -26,6 +30,21 @@ const OrderConfirmation = ({
       <Text variant="bodyLarge" style={styles.text}>
         Please verify your order details
       </Text>
+      {careReceiver && (
+        <List.Item
+          style={[styles.listItem, { backgroundColor: colors.background }]}
+          title="CareReceiver"
+          description={`${
+            careReceiver.userCareReceiver[0].firstName &&
+            careReceiver.userCareReceiver[0].lastName
+              ? careReceiver.userCareReceiver[0].firstName +
+                " " +
+                careReceiver.userCareReceiver[0].lastName
+              : `${careReceiver.userCareReceiver[0].username}(${careReceiver.userCareReceiver[0].phoneNumber})`
+          }`}
+          left={(props) => <List.Icon icon="account" {...props} />}
+        />
+      )}
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.background }]}
         title="Delivery Mode"
