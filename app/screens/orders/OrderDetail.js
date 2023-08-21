@@ -77,13 +77,13 @@ const OrderDetail = ({ navigation, route }) => {
         {order.deliveryMethod.blockOnTimeSlotFull === false &&
           order.careGiver.length > 0 && (
             <CardTitle
-              text={"Delivery Preference"}
+              text={"Who will deliver the drugs?"}
               subText={
                 order.careGiver[0].firstName && order.careGiver[0].lastName
                   ? `${order.careGiver[0].firstName} ${order.careGiver[0].lastName}`
                   : `${order.careGiver[0].username} (${order.careGiver[0].phoneNumber})`
               }
-              icon="truck"
+              icon="account"
             />
           )}
         <CardTitle

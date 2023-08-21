@@ -88,14 +88,20 @@ const OrdersNavigation = () => {
         options={({ navigation, route }) => ({
           title: "",
           headerRight: ({}) => {
+            const { order, userId } = route.params;
             return (
               <TouchableOpacity
                 style={{ paddingRight: 10 }}
                 onPress={() => {
-                  navigation.navigate(routes.ORDERS_NAVIGATION, {
-                    screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-                    params: route.params,
-                  });
+                  if (true)
+                    navigation.navigate(routes.ORDERS_NAVIGATION, {
+                      screen:
+                        order.patient.length > 0 &&
+                        order.patient[0].user !== userId
+                          ? routes.ORDERS_ORDER_FOR_ANOTHER_FORM_SCREEN
+                          : routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
+                      params: route.params,
+                    });
                 }}
               >
                 <MaterialCommunityIcons

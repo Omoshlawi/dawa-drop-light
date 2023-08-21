@@ -18,7 +18,7 @@ const PrivilegeDetail = ({ navigation, route }) => {
   const { colors } = useTheme();
 
   const handleGetRoles = async () => {
-    const response = await getRoles({ privilege: privilege._id });
+    const response = await getRoles({ privileges: privilege._id });
     if (response.ok) {
       setRoles(response.data.results);
     }

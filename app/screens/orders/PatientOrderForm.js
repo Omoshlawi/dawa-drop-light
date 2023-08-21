@@ -135,7 +135,12 @@ const PatientOrderForm = ({ navigation, route }) => {
                 phoneNumber: order.phoneNumber,
                 deliveryMethod: order.deliveryMethod._id,
                 careGiver:
-                  order.careGiver.length > 0 ? order.careGiver[0]._id : "",
+                  order.careGiver.length > 0 && treatmentSurpoters
+                    ? treatmentSurpoters.find(
+                        (careGiver_) =>
+                          careGiver_.careGiver === order.careGiver[0]._id
+                      )
+                    : "",
               }
             : {
                 deliveryAddress: null,
