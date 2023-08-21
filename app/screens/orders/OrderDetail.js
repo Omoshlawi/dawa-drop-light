@@ -20,7 +20,7 @@ import { Linking } from "react-native";
 import { CodeDisplayCopy } from "../../components/scanner";
 
 const OrderDetail = ({ navigation, route }) => {
-  const { modes, timeSlots, methods, order } = route.params;
+  const { modes, timeSlots, methods, order, userId } = route.params;
   const { colors, roundness } = useTheme();
   const [state, setState] = useState({ open: false });
   const onStateChange = ({ open }) => setState({ open });
@@ -40,6 +40,13 @@ const OrderDetail = ({ navigation, route }) => {
           <Text variant="headlineLarge">Order Detail</Text>
         </View>
         <CardTitle text="Order id" subText={order._id} icon="cart" />
+        {order.patient.length > 0 && order.patient[0].user !== userId && (
+          <CardTitle
+            text={"Ordered for ?"}
+            subText={`${order.patient[0].firstName} ${order.patient[0].lastName}`}
+            icon="account"
+          />
+        )}
         <CardTitle
           text={"Date Ordered"}
           subText={moment(order.created).format("dddd Do MMMM yyy hh:mm")}
@@ -67,6 +74,18 @@ const OrderDetail = ({ navigation, route }) => {
           subText={order.deliveryMethod.name}
           icon="truck"
         />
+        {order.deliveryMethod.blockOnTimeSlotFull === false &&
+          order.careGiver.length > 0 && (
+            <CardTitle
+              text={"Delivery Preference"}
+              subText={
+                order.careGiver[0].firstName && order.careGiver[0].lastName
+                  ? `${order.careGiver[0].firstName} ${order.careGiver[0].lastName}`
+                  : `${order.careGiver[0].username} (${order.careGiver[0].phoneNumber})`
+              }
+              icon="truck"
+            />
+          )}
         <CardTitle
           text={"Adress"}
           subText={`${order.deliveryAddress.address}(${order.deliveryAddress.latitude},${order.deliveryAddress.longitude})`}

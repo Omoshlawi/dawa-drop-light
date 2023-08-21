@@ -29,6 +29,8 @@ const usePatient = () => {
     apiClient.get(`patients/relations/check-order-eligibility`, params);
   const orderForCareReceiver = (data) =>
     apiClient.post(`patients/relations/order`, data);
+  const careReceiverOrders = (params) =>
+    apiClient.get(`patients/relations/order`, params);
 
   return {
     getAppointments,
@@ -47,6 +49,7 @@ const usePatient = () => {
     verifyPatientAndAddAsCareReceiver,
     checkCareReceiverEligibility,
     orderForCareReceiver,
+    careReceiverOrders,
   };
 };
 
