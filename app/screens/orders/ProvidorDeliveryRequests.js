@@ -56,7 +56,6 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
       }, 2000);
     }
   };
-
   const handleFetchMatrix = async (data) => {
     if (location && currIndex !== -1) {
       const response = await aproximateDistanceTime({

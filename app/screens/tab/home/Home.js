@@ -57,7 +57,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     // if user is normal user with no roles then set suggest to true
-    setSuggestProfile(user && !user.isSuperUser && roles.length === 0);
+    setSuggestProfile(user && user.domantUser);
   }, [roles, user]);
 
   if (!user) {
