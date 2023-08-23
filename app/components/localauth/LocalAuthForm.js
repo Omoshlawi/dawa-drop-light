@@ -14,9 +14,11 @@ const LocalAuthForm = ({
   maxDigits = 4,
   onPinChanged,
   pin,
+  scanFingerPrint,
 }) => {
   const { colors } = useTheme();
   const { theme } = useSettinsContext();
+  const textColor = theme === "dark" ? colors.onPrimary : "#000";
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <Logo />
@@ -29,13 +31,14 @@ const LocalAuthForm = ({
         inactiveColor={colors.disabled}
         error={error}
       />
-      <Text style={{ color: error ? colors.error : undefined, padding: 10 }}>
+      <Text style={{ color: error ? colors.error : textColor, padding: 10 }}>
         {message}
       </Text>
       <View>
         <LocalAuthKeyBoard
+          onScanFingerPrint={scanFingerPrint}
           disabled={`${pin}`.length >= maxDigits}
-          keyTextColor={theme === "dark" ? colors.onPrimary : "#000"}
+          keyTextColor={textColor}
           keyBackgroundColor={colors.background}
           onKeyPressed={(key) => {
             if (onPinChanged instanceof Function) {

@@ -12,22 +12,30 @@ const LocalAuthKeyBoard = ({
   keyBackgroundColor,
   backgroundColor,
   onBackSpace,
+  onScanFingerPrint,
 }) => {
+  const supportFingerPrint = onScanFingerPrint instanceof Function;
   return (
     <View style={[styles.keyBoard, { backgroundColor }]}>
+      {supportFingerPrint ? (
+        <View style={[styles.key, { backgroundColor: keyBackgroundColor }]}>
+          <IconButton
+            icon="fingerprint"
+            iconColor={keyTextColor}
+            onPress={onScanFingerPrint}
+          />
+        </View>
+      ) : (
+        <View style={[styles.key, { backgroundColor: keyBackgroundColor }]} />
+      )}
       <View style={[styles.key, { backgroundColor: keyBackgroundColor }]} />
-      <View style={[styles.key, { backgroundColor: keyBackgroundColor }]} />
-      <IconButton
-        icon="backspace"
-        iconColor={keyTextColor}
-        style={[
-          {
-            backgroundColor: keyBackgroundColor,
-            margin: 2,
-          },
-        ]}
-        onPress={onBackSpace}
-      />
+      <View style={[styles.key, { backgroundColor: keyBackgroundColor }]}>
+        <IconButton
+          icon="backspace"
+          iconColor={keyTextColor}
+          onPress={onBackSpace}
+        />
+      </View>
       {keys.map((key) => (
         <TouchableOpacity
           key={key}

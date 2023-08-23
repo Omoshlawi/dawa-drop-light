@@ -14,7 +14,11 @@ const Authentication = () => {
     if (pin) setFormState({ ...formState, error: false, message: "Enter pin" });
     if (`${pin}`.length === 4) {
       if (!authenticate(pin)) {
-        setFormState({ ...formState, error: true, message: "Invalid pin, please retry" });
+        setFormState({
+          ...formState,
+          error: true,
+          message: "Invalid pin, please retry",
+        });
       }
       setPin("");
     }
@@ -25,6 +29,7 @@ const Authentication = () => {
       onPinChanged={setPin}
       error={formState.error}
       message={formState.message}
+      scanFingerPrint={() => {}}
     />
   );
 };
