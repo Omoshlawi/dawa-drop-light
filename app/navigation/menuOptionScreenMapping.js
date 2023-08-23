@@ -65,6 +65,10 @@ const mapping = {
     route: routes.ORDERS_NAVIGATION,
     screen: routes.ORDERS_ORDER_FOR_ANOTHER_SCREEN,
   },
+  ARTModels: {
+    route: routes.PERMISIONS_NAVIGATION,
+    screen: routes.PERMISIONS_ART_MODELS_SCREEN,
+  },
 };
 
 export const get = (link) => {

@@ -9,3 +9,5 @@ export { default as MenuOptionDetail } from "./MenuOptionDetail";
 export { default as MenuOptionForm } from "./MenuOptionForm";
 export { default as UserRoles } from "./UserRoles";
 export { default as UserRoleAssignmentForm } from "./UserRoleAssignmentForm";
+export { default as ARTModelForm } from "./ARTModelForm";
+export { default as ARTModels } from "./ARTModels";

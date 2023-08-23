@@ -12,6 +12,7 @@ import {
   MenuOptionForm,
   UserRoles,
   UserRoleAssignmentForm,
+  ARTModels,
 } from "../screens/permisions";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -73,6 +74,11 @@ const PermisionsNavigation = () => {
       <Screen
         name={routes.PERMISIONS_USER_ROLES_ASSIGNMENT_SCREEN}
         component={UserRoleAssignmentForm}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name={routes.PERMISIONS_ART_MODELS_SCREEN}
+        component={ARTModels}
         options={{ headerShown: false }}
       />
     </Navigator>
