@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { screenWidth } from "../../utils/contants";
+import { IconButton } from "react-native-paper";
 
 const LocalAuthKeyBoard = ({
   keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
@@ -10,9 +11,23 @@ const LocalAuthKeyBoard = ({
   keyTextColor,
   keyBackgroundColor,
   backgroundColor,
+  onBackSpace,
 }) => {
   return (
     <View style={[styles.keyBoard, { backgroundColor }]}>
+      <View style={[styles.key, { backgroundColor: keyBackgroundColor }]} />
+      <View style={[styles.key, { backgroundColor: keyBackgroundColor }]} />
+      <IconButton
+        icon="backspace"
+        iconColor={keyTextColor}
+        style={[
+          {
+            backgroundColor: keyBackgroundColor,
+            margin: 2,
+          },
+        ]}
+        onPress={onBackSpace}
+      />
       {keys.map((key) => (
         <TouchableOpacity
           key={key}

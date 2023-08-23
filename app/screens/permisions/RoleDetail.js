@@ -53,11 +53,19 @@ const RoleDetail = ({ navigation, route }) => {
           <Card.Content>
             <List.Item
               title="Asigned to all patients?"
+              style={{ backgroundColor: colors.background, marginVertical: 2 }}
               description={assignAllPatients ? "Yes" : "No"}
+              left={(props) => (
+                <List.Icon style={styles.img} {...props} icon={"shield"} />
+              )}
             />
             <List.Item
+              style={{ backgroundColor: colors.background, marginVertical: 2 }}
               title="Asigned to all pick up care givers?"
               description={assignPickupCareGivers ? "Yes" : "No"}
+              left={(props) => (
+                <List.Icon style={styles.img} {...props} icon={"shield"} />
+              )}
             />
             <Text>{description}</Text>
             <List.Section>

@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { useUser } from "../../api";
 import Logo from "../Logo";
 import LocalAuthKeyBoard from "./LocalAuthKeyBoard";
 import PinIndicators from "./PinIndicators";
 import { screenHeight } from "../../utils/contants";
-import { useTheme } from "react-native-paper";
+import { useTheme, Text, IconButton } from "react-native-paper";
+import { useSettinsContext } from "../../context/hooks";
 
 const LocalAuthForm = ({
   message,
@@ -15,6 +16,7 @@ const LocalAuthForm = ({
   pin,
 }) => {
   const { colors } = useTheme();
+  const { theme } = useSettinsContext();
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <Logo />
@@ -30,16 +32,23 @@ const LocalAuthForm = ({
       <Text style={{ color: error ? colors.error : undefined, padding: 10 }}>
         {message}
       </Text>
-      <LocalAuthKeyBoard
-        disabled={`${pin}`.length >= maxDigits}
-        keyTextColor={colors.onPrimary}
-        keyBackgroundColor={colors.background}
-        onKeyPressed={(key) => {
-          if (onPinChanged instanceof Function) {
-            onPinChanged(`${pin}${key}`);
-          }
-        }}
-      />
+      <View>
+        <LocalAuthKeyBoard
+          disabled={`${pin}`.length >= maxDigits}
+          keyTextColor={theme === "dark" ? colors.onPrimary : "#000"}
+          keyBackgroundColor={colors.background}
+          onKeyPressed={(key) => {
+            if (onPinChanged instanceof Function) {
+              onPinChanged(`${pin}${key}`);
+            }
+          }}
+          onBackSpace={() => {
+            if (onPinChanged instanceof Function) {
+              onPinChanged(`${pin}`.substring(0, `${pin}`.length - 1));
+            }
+          }}
+        />
+      </View>
     </View>
   );
 };
