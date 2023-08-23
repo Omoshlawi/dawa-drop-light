@@ -17,6 +17,8 @@ const RoleDetail = ({ navigation, route }) => {
     description,
     privileges: rolePrivileges,
     menuOptions: roleMenuOptions,
+    assignPickupCareGivers,
+    assignAllPatients,
   } = role;
   const { colors } = useTheme();
   const { getUsers } = useAuthorize();
@@ -49,6 +51,14 @@ const RoleDetail = ({ navigation, route }) => {
             left={(props) => <Avatar.Icon {...props} icon="account-group" />}
           />
           <Card.Content>
+            <List.Item
+              title="Asigned to all patients?"
+              description={assignAllPatients ? "Yes" : "No"}
+            />
+            <List.Item
+              title="Asigned to all pick up care givers?"
+              description={assignPickupCareGivers ? "Yes" : "No"}
+            />
             <Text>{description}</Text>
             <List.Section>
               <List.Accordion
