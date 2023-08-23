@@ -35,7 +35,7 @@ export default Object.freeze({
   PERMISIONS_USER_ROLES_ASSIGNMENT_SCREEN: "UserRolesAssignment Screen",
 
   PERMISIONS_ART_MODELS_SCREEN: "ARTModels Screen",
-  PERMISIONS_ART_MODELS_FORM_SCREEN: "ARTModels Screen",
+  PERMISIONS_ART_MODELS_FORM_SCREEN: "ARTModelsForm Screen",
 
   ORDERS_NAVIGATION: "Orders Nav",
   ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",
