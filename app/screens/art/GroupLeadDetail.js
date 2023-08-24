@@ -9,6 +9,8 @@ const GroupLeadDetail = ({ navigation, route }) => {
     user: _user,
     artModel: _artModel,
     registeredBy: _registeredBy,
+    groups,
+    members,
   } = artGroupLead;
 
   const user = _user[0];
@@ -62,15 +64,13 @@ const GroupLeadDetail = ({ navigation, route }) => {
           <List.Item
             title="Total Members"
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={"Get total members and place here"}
-            descriptionStyle={{ color: colors.error }}
+            description={members.length}
             left={(props) => <List.Icon {...props} icon="account-group" />}
           />
           <List.Item
             title="Total Groups"
-            descriptionStyle={{ color: colors.error }}
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={"Get numbers and place here"}
+            description={groups.length}
             left={(props) => (
               <List.Icon {...props} icon="account-group-outline" />
             )}

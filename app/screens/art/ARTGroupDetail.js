@@ -16,6 +16,7 @@ const ARTGroupDetail = ({ navigation, route }) => {
     description,
     leadUser: _leadUser,
     artModel: _artModel,
+    enrollments
   } = group;
   const artModel = _artModel[0];
   const user = _leadUser[0];
@@ -86,18 +87,8 @@ const ARTGroupDetail = ({ navigation, route }) => {
           <List.Item
             title="Total Members"
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={"Get total members and place here"}
-            descriptionStyle={{ color: colors.error }}
+            description={enrollments.length + 1}
             left={(props) => <List.Icon {...props} icon="account-group" />}
-          />
-          <List.Item
-            title="Total Groups"
-            descriptionStyle={{ color: colors.error }}
-            style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={"Get numbers and place here"}
-            left={(props) => (
-              <List.Icon {...props} icon="account-group-outline" />
-            )}
           />
         </ScrollView>
         <Portal>
