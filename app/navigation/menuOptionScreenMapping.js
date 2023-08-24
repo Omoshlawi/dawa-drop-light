@@ -73,6 +73,10 @@ const mapping = {
     route: routes.ART_NAVIGATION,
     screen: routes.ART_GROUP_LEADS_SCREEN,
   },
+  ARTDistributionGroups: {
+    route: routes.ART_NAVIGATION,
+    screen: routes.ART_GROUP_SCREEN,
+  },
 };
 
 export const get = (link) => {

@@ -42,6 +42,10 @@ export default Object.freeze({
   ART_GROUP_LEADS_SCREEN: "ARTGroupLeads Screen",
   ART_GROUP_LEAD_DETAIL_SCREEN: "ARTGroupLeadDetail Screen",
 
+  ART_GROUPS_FORM_SCREEN: "ARTGroupForm Screen",
+  ART_GROUP_SCREEN: "ARTGroup Screen",
+  ART_GROUP_DETAIL_SCREEN: "ARTGroupDetail Screen",
+
   ORDERS_NAVIGATION: "Orders Nav",
   ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",
   ORDERS_DELIVERY_MODES_SCREEN: "DeliveryModes Screen",

@@ -1,6 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import {
+  ARTGroupDetail,
+  ARTGroupForm,
+  ARTGroups,
   ARTModelForm,
   ARTModels,
   GroupLeadDetail,
@@ -55,6 +58,21 @@ const ArtNavigation = () => {
         name={routes.ART_GROUP_LEADS_FORM_SCREEN}
         component={GroupLeadForm}
         options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ART_GROUPS_FORM_SCREEN}
+        component={ARTGroupForm}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ART_GROUP_SCREEN}
+        component={ARTGroups}
+        options={{ title: "Manage ART Groups" }}
+      />
+      <Screen
+        name={routes.ART_GROUP_DETAIL_SCREEN}
+        component={ARTGroupDetail}
+        options={{ title: "Manage ART Groups" }}
       />
     </Navigator>
   );
