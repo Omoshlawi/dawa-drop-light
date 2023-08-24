@@ -7,6 +7,9 @@ import {
   ARTModelForm,
   ARTModels,
   AddNewMemberToGroupForm,
+  DistributionEventDetail,
+  DistributionEventForm,
+  DistributionEvents,
   GroupLeadDetail,
   GroupLeadForm,
   GroupLeads,
@@ -73,12 +76,27 @@ const ArtNavigation = () => {
       <Screen
         name={routes.ART_GROUP_DETAIL_SCREEN}
         component={ARTGroupDetail}
-        options={{ title: "Manage ART Groups" }}
+        options={{ title: "" }}
       />
       <Screen
         name={routes.ART_GROUP_ADD_NEW_MEMBER_FORM_SCREEN}
         component={AddNewMemberToGroupForm}
         options={{ title: "Add Paticipant" }}
+      />
+      <Screen
+        name={routes.ART_DISTRIBUTION_EVENTS_SCREEN}
+        component={DistributionEvents}
+        options={{ title: "Distribution Events" }}
+      />
+      <Screen
+        name={routes.ART_DISTRIBUTION_EVENTS_DETAIL_SCREEN}
+        component={DistributionEventDetail}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ART_DISTRIBUTION_EVENTS_FORM_SCREEN}
+        component={DistributionEventForm}
+        options={{ title: "" }}
       />
     </Navigator>
   );
