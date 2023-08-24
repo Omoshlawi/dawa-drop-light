@@ -130,6 +130,7 @@ const ARTGroupDetail = ({ navigation, route }) => {
                 onPress: () => {
                   navigation.navigate(routes.ART_NAVIGATION, {
                     screen: routes.ART_GROUP_ADD_NEW_MEMBER_FORM_SCREEN,
+                    params: group,
                   });
                 },
               },
