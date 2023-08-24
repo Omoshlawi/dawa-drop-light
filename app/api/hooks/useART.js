@@ -13,6 +13,13 @@ const useART = () => {
     apiClient.put(`art/group-leads/${modelId}`, data);
   const getARTGroupLeadDetail = (modelId) =>
     apiClient.get(`art/group-leads/${modelId}`);
+  const getARTGroups = (params) =>
+    apiClient.get("art/distribution-groups", params);
+  const addARTGroup = (data) => apiClient.post("art/distribution-groups", data);
+  const updateARTGroup = (modelId, data) =>
+    apiClient.put(`art/distribution-groups/${modelId}`, data);
+  const getARTGroupDetail = (modelId) =>
+    apiClient.get(`art/distribution-groups/${modelId}`);
   return {
     addARTModels,
     updateARTModels,
@@ -22,6 +29,10 @@ const useART = () => {
     getARTGroupsLeads,
     updateARTGroupLead,
     addARTGroupLead,
+    getARTGroups,
+    getARTGroupDetail,
+    updateARTGroup,
+    addARTGroup,
   };
 };
 

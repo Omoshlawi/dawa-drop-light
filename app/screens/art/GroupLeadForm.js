@@ -13,6 +13,7 @@ import {
 import { screenWidth } from "../../utils/contants";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { List, useTheme } from "react-native-paper";
+import routes from "../../navigation/routes";
 
 const validationSchemer = Yup.object().shape({
   user: Yup.string().label("User").required(),
@@ -42,7 +43,7 @@ const GroupLeadForm = ({ navigation, route }) => {
     }
     setLoading(false);
     if (response.ok) {
-      setDialogInfo({ ...dialogInfo, show: response.ok, success: response.ok });
+      setDialogInfo({ ...dialogInfo, show: response.ok, mode: "success" });
     } else {
       if (response.status === 400) {
         setErrors({ ...errors, ...response.data.errors });
@@ -141,7 +142,11 @@ const GroupLeadForm = ({ navigation, route }) => {
           mode={dialogInfo.mode}
           message={dialogInfo.message}
           onButtonPress={() => {
-            navigation.goBack();
+            if (dialogInfo.mode === "success")
+              navigation.navigate(routes.ART_NAVIGATION, {
+                screen: routes.ART_GROUP_LEADS_SCREEN,
+              });
+            else navigation.goBack();
           }}
         />
       </Dialog>

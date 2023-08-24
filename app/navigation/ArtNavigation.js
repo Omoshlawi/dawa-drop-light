@@ -6,6 +6,7 @@ import {
   ARTGroups,
   ARTModelForm,
   ARTModels,
+  AddNewMemberToGroupForm,
   GroupLeadDetail,
   GroupLeadForm,
   GroupLeads,
@@ -73,6 +74,11 @@ const ArtNavigation = () => {
         name={routes.ART_GROUP_DETAIL_SCREEN}
         component={ARTGroupDetail}
         options={{ title: "Manage ART Groups" }}
+      />
+      <Screen
+        name={routes.ART_GROUP_ADD_NEW_MEMBER_FORM_SCREEN}
+        component={AddNewMemberToGroupForm}
+        options={{ title: "Add Paticipant" }}
       />
     </Navigator>
   );

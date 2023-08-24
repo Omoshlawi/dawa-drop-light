@@ -6,3 +6,4 @@ export { default as GroupLeads } from "./GroupLeads";
 export { default as ARTGroupForm } from "./ARTGroupForm";
 export { default as ARTGroupDetail } from "./ARTGroupDetail";
 export { default as ARTGroups } from "./ARTGroups";
+export { default as AddNewMemberToGroupForm } from "./AddNewMemberToGroupForm";
