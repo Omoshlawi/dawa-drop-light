@@ -7,6 +7,7 @@ import {
   GroupLeadForm,
   GroupLeads,
 } from "../screens/art";
+import { IconButton } from "react-native-paper";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -31,7 +32,24 @@ const ArtNavigation = () => {
       <Screen
         name={routes.ART_GROUP_LEAD_DETAIL_SCREEN}
         component={GroupLeadDetail}
-        options={{ title: "" }}
+        options={({ navigation, route }) => {
+          const { artGroupLead, artModels, users } = route.params;
+          return {
+            headerRight: (props) => (
+              <IconButton
+                icon="square-edit-outline"
+                {...props}
+                onPress={() =>
+                  navigation.navigate(routes.ART_NAVIGATION, {
+                    screen: routes.ART_GROUP_LEADS_FORM_SCREEN,
+                    params: { artModels, users, artGroupLead },
+                  })
+                }
+              />
+            ),
+            title: "Group Lead Detail",
+          };
+        }}
       />
       <Screen
         name={routes.ART_GROUP_LEADS_FORM_SCREEN}
