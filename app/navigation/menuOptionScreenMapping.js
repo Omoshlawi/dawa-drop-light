@@ -69,6 +69,10 @@ const mapping = {
     route: routes.ART_NAVIGATION,
     screen: routes.ART_MODELS_SCREEN,
   },
+  ARTGroupLeads: {
+    route: routes.ART_NAVIGATION,
+    screen: routes.ART_GROUP_LEADS_SCREEN,
+  },
 };
 
 export const get = (link) => {
