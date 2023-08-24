@@ -23,12 +23,6 @@ const useAuthorize = () => {
   const getMenuOptions = (params) => apiClient.get("auth/menu-options", params);
   const getUsers = (params) => apiClient.get("auth/users", params);
   const getUserAuthInfo = (userId) => apiClient.get(`auth/user/${userId}`);
-  const getARTModels = (params) => apiClient.get("patients/art-models", params);
-  const addARTModels = (data) => apiClient.post("patients/art-models", data);
-  const updateARTModels = (modelId, data) =>
-    apiClient.put(`patients/art-models/${modelId}`, data);
-  const getARTModelDetail = (modelId) =>
-    apiClient.get(`patients/art-models/${modelId}`);
 
   return {
     getRoles,
@@ -43,10 +37,6 @@ const useAuthorize = () => {
     addMenuOption,
     asignUserRoles,
     getUserAuthInfo,
-    addARTModels,
-    updateARTModels,
-    getARTModelDetail,
-    getARTModels,
   };
 };
 

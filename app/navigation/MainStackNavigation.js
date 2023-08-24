@@ -7,6 +7,7 @@ import UserNavigation from "./UserNavigation";
 import TreatmentSurportNavigation from "./TreatmentSurportNavigation";
 import PermisionsNavigation from "./PermisionsNavigation";
 import OrdersNavigation from "./OrdersNavigation";
+import ArtNavigation from "./ArtNavigation";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -34,6 +35,7 @@ const MainStackNavigation = () => {
             name={routes.ORDERS_NAVIGATION}
             component={OrdersNavigation}
           />
+          <Screen name={routes.ART_NAVIGATION} component={ArtNavigation} />
         </>
       ) : (
         <Screen name={routes.AUTH_NAVIGATION} component={AuthNavigation} />

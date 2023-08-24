@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { useAuthorize } from "../../api";
+import { useART } from "../../api";
 import Logo from "../../components/Logo";
 import { Form, FormField, FormSubmitButton } from "../../components/forms";
 import { screenWidth } from "../../utils/contants";
@@ -15,7 +15,7 @@ const validationSchemer = Yup.object().shape({
 });
 
 const ARTModelForm = ({ navigation, route }) => {
-  const { addARTModels, updateARTModels } = useAuthorize();
+  const { addARTModels, updateARTModels } = useART();
   const [loading, setLoading] = useState(false);
   const artModel = route.params;
   const [dialogInfo, setDialogInfo] = useState({
@@ -96,7 +96,7 @@ const ARTModelForm = ({ navigation, route }) => {
           />
 
           <FormSubmitButton
-            title={artModel ? "Update Role" : "Add Role"}
+            title={artModel ? "Update ART Model" : "Add ART Model"}
             mode="contained"
             style={styles.btn}
             loading={loading}

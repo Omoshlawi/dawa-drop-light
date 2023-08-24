@@ -6,13 +6,13 @@ import {
   View,
 } from "react-native";
 import React, { useCallback, useState } from "react";
-import { useAuthorize } from "../../api";
+import { useART } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { Avatar, Card, FAB, useTheme } from "react-native-paper";
 import routes from "../../navigation/routes";
 
 const ARTModels = ({ navigation }) => {
-  const { getARTModels } = useAuthorize();
+  const { getARTModels } = useART();
   const [loading, setLoading] = useState(false);
   const [artModels, setARTModels] = useState([]);
   const { colors, roundness } = useTheme();
@@ -44,8 +44,8 @@ const ARTModels = ({ navigation }) => {
           return (
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate(routes.PERMISIONS_NAVIGATION, {
-                  screen: routes.PERMISIONS_ART_MODELS_FORM_SCREEN,
+                navigation.navigate(routes.ART_NAVIGATION, {
+                  screen: routes.ART_MODELS_FORM_SCREEN,
                   params: item,
                 })
               }
@@ -79,8 +79,8 @@ const ARTModels = ({ navigation }) => {
         style={[styles.fab, { backgroundColor: colors.secondary }]}
         color={colors.surface}
         onPress={() => {
-          navigation.navigate(routes.PERMISIONS_NAVIGATION, {
-            screen: routes.PERMISIONS_ART_MODELS_FORM_SCREEN,
+          navigation.navigate(routes.ART_NAVIGATION, {
+            screen: routes.ART_MODELS_FORM_SCREEN,
           });
         }}
       />

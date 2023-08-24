@@ -66,8 +66,8 @@ const mapping = {
     screen: routes.ORDERS_ORDER_FOR_ANOTHER_SCREEN,
   },
   ARTModels: {
-    route: routes.PERMISIONS_NAVIGATION,
-    screen: routes.PERMISIONS_ART_MODELS_SCREEN,
+    route: routes.ART_NAVIGATION,
+    screen: routes.ART_MODELS_SCREEN,
   },
 };
 
