@@ -1,13 +1,14 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { FlatList } from "react-native";
 import { TouchableOpacity } from "react-native";
-import { Card, useTheme, Text, List } from "react-native-paper";
+import { Card, useTheme, Text, List, RadioButton } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFormikContext } from "formik";
 import { screenWidth } from "../../utils/contants";
-import { FormItemPicker } from "../forms";
+import { FormField, FormItemPicker } from "../forms";
 import { useUser } from "../../api";
+import DeliveryPersonDetails from "./form/DeliveryPersonDetails";
 
 const DeliveryMethodChoice = ({
   methods = [],
@@ -16,10 +17,16 @@ const DeliveryMethodChoice = ({
   careGiverMessage,
 }) => {
   const { values, setFieldValue, errors } = useFormikContext();
+  const [checked, setChecked] = useState("no");
   const { colors, roundness } = useTheme();
   const currMethod = methods.find(({ _id }) => _id === values[fieldName]);
   const { getUserId } = useUser();
   const userId = getUserId();
+  const [userInfo, setUserInfo] = useState({
+    fullName: "",
+    nationalId: "",
+    phoneNumber: "",
+  });
   return (
     <View
       style={[
@@ -68,58 +75,33 @@ const DeliveryMethodChoice = ({
       )}
       {currMethod?.blockOnTimeSlotFull === false && (
         <>
-          <FormItemPicker
-            name="careGiver"
-            icon="account"
-            searchable
-            label="Care giver"
-            data={treatmentSurpoters}
-            valueExtractor={({ _id }) => _id}
-            labelExtractor={(careGiver) => {
-              const name = `${
-                careGiver.userCareGiver[0].firstName &&
-                careGiver.userCareGiver[0].lastName
-                  ? careGiver.userCareGiver[0].firstName +
-                    " " +
-                    careGiver.userCareGiver[0].lastName
-                  : careGiver.userCareGiver[0].username
-              }`;
-              return name;
-            }}
-            renderItem={({ item }) => {
-              const {
-                patientCareReceiver,
-                userCareGiver,
-                careGiver: careGiver_,
-                careReceiver: careReceiver_,
-                userCareReceiver,
-                _id,
-              } = item;
-              const careReceiver = patientCareReceiver[0];
-              const careGiver = userCareGiver[0];
-              const careReceiverUser = userCareReceiver[0];
-              const name =
-                careGiver.firstName && careGiver.lastName
-                  ? `${careGiver.firstName} ${careGiver.lastName}`
-                  : `${careGiver.username}`;
-              const description = `${careGiver.phoneNumber} | ${careGiver.email}`;
-              return (
-                <List.Item
-                  title={name}
-                  style={styles.listItem}
-                  left={(props) => <List.Icon {...props} icon="account" />}
-                  description={description}
-                  descriptionStyle={{ color: colors.disabled }}
-                />
-              );
-            }}
-            itemContainerStyle={[
-              styles.itemContainer,
-              { borderRadius: roundness },
-            ]}
-          />
-          {careGiverMessage && (
-            <Text style={{ color: colors.error }}>{careGiverMessage}</Text>
+          <Text>
+            Do you have someone specific in to do the delivery for you?
+          </Text>
+          <View style={{ width: "30%" }}>
+            <RadioButton.Group onValueChange={setChecked} value={checked}>
+              <RadioButton.Item
+                label="Yes"
+                value="yes"
+                labelVariant="bodySmall"
+              />
+              <RadioButton.Item
+                label="No"
+                value="no"
+                labelVariant="bodySmall"
+              />
+            </RadioButton.Group>
+          </View>
+          {checked === "yes" && (
+            <>
+              <Text>Please provide details</Text>
+              <DeliveryPersonDetails
+                value={values["careGiver"]}
+                onFormStateChange={(formState) => {
+                  setFieldValue("careGiver", formState);
+                }}
+              />
+            </>
           )}
         </>
       )}

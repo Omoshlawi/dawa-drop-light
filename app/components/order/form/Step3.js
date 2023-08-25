@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 import React from "react";
 import { Button, List, Text, useTheme } from "react-native-paper";
-import { screenWidth } from "../../../utils/contants";
+import { screenHeight, screenWidth } from "../../../utils/contants";
 import moment from "moment/moment";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
 import { useFormikContext } from "formik";
@@ -11,7 +11,7 @@ const Step3 = ({ onNext, onPrevious, modes, timeSlots, loading }) => {
   const { values, validateForm, setFieldTouched } = useFormikContext();
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.img}>
         <Image
           style={styles.img}
           source={require("../../../assets/dev.png")}
@@ -126,4 +126,5 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
   },
+
 });

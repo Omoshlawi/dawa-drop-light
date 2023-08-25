@@ -4,14 +4,16 @@ import { Button, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../../utils/contants";
 import DeliveryMethodChoice from "../DeliveryMethodChoice";
 import { useFormikContext } from "formik";
+import { ScrollView } from "react-native";
 
 const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
   const { colors, roundness } = useTheme();
   const { validateForm, values, setFieldError, setFieldTouched, setErrors } =
     useFormikContext();
   const [careGiverField, setCareGiverField] = useState("");
+  const [userInfo, setUserInfo] = useState({});
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View>
         <Image
           style={styles.img}
@@ -19,12 +21,13 @@ const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
           resizeMode="contain"
         />
       </View>
-      <Text variant="headlineLarge">Step 2: Delivery Preference</Text>
+      <Text variant="headlineLarge" style={{ textAlign: "center" }}>
+        Step 1: Delivery Preference
+      </Text>
       <View style={styles.form}>
         <DeliveryMethodChoice
           methods={methods}
           treatmentSurpoters={treatmentSurpoters}
-          careGiverMessage={careGiverField}
         />
         <Button
           mode="contained"
@@ -36,29 +39,23 @@ const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
         <Button
           mode="contained"
           onPress={async () => {
-            console.log("Checking condition...");
+            console.log(values["careGiver"]);
+            // console.log("Checking condition...");
             const isBlockOnTimeSlotFull =
               methods.find(({ _id }) => _id === values["deliveryMethod"])
                 ?.blockOnTimeSlotFull === false;
             const hasNoCareGiver = !values["careGiver"];
 
-            console.log("isBlockOnTimeSlotFull:", isBlockOnTimeSlotFull);
-            console.log("hasNoCareGiver:", hasNoCareGiver);
+            // console.log("isBlockOnTimeSlotFull:", isBlockOnTimeSlotFull);
+            // console.log("hasNoCareGiver:", hasNoCareGiver);
             let isValid = true;
             const errors = await validateForm(values);
             // if treatment surport and no caregiver specified set error for careGiver
-            if (errors["deliveryMethod"]) {
-              isValid = false;
-            } else if (isBlockOnTimeSlotFull && hasNoCareGiver) {
-              isValid = false;
-              setCareGiverField("Care giver is required");
-              // console.log("Setting field error and touched...");
-            }
-
+            if (errors["deliveryMethod"]) isValid = false;
             if (isValid) {
               setCareGiverField("");
-              console.log("Proceeding to next step...");
-              console.log(values["careGiver"]);
+              // console.log("Proceeding to next step...");
+              // console.log(values["careGiver"]);
               onNext();
             }
           }}
@@ -67,7 +64,7 @@ const Step2 = ({ onPrevious, onNext, methods, treatmentSurpoters }) => {
           Next
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -75,11 +72,10 @@ export default Step2;
 
 const styles = StyleSheet.create({
   img: {
-    height: screenWidth * 0.5,
+    height: screenWidth * 0.4,
   },
   container: {
     flex: 1,
-    alignItems: "center",
     width: "100%",
   },
   form: {

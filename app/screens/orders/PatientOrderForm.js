@@ -6,17 +6,10 @@ import {
   Dialog,
   OrderConfirmation,
 } from "../../components/dialog";
-import {
-  useTheme,
-  Button,
-  Text,
-  List,
-  ActivityIndicator,
-} from "react-native-paper";
-import { usePatient } from "../../api";
-import { Step1, Step2, Step3 } from "../../components/order";
+import { useTheme, Text, ActivityIndicator } from "react-native-paper";
+import { useOrder, usePatient, useUser } from "../../api";
+import { Step2, Step3 } from "../../components/order";
 import { Form } from "../../components/forms";
-import { pickX } from "../../utils/helpers";
 import routes from "../../navigation/routes";
 
 const validationSchema = Yup.object().shape({
@@ -28,47 +21,68 @@ const validationSchema = Yup.object().shape({
   deliveryTimeSlot: Yup.string().required().label("Time slot"),
   deliveryMode: Yup.string().required().label("Delivery mode"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
-  careGiver: Yup.string().label("Care giver"),
+  careGiver: Yup.object({
+    fullName: Yup.number().required().label("Full name"),
+    nationalId: Yup.number().required().label("National Id"),
+    phoneNumber: Yup.string().label("Phone number"),
+  }).label("Delivery person"),
   deliveryMethod: Yup.string()
     .required("You must specify how you want your drug delivered to you")
     .label("Delivery Method"),
 });
 
 const PatientOrderForm = ({ navigation, route }) => {
+  const order = route.params;
+  const { getTreatmentSurport, getUserId } = useUser();
+  const { getDeliveryModes, getDeliveryTimeSlots, getDeliveryMethods } =
+    useOrder();
+  const [modes, setModes] = useState([]);
+  const [methods, setMethods] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [treatmentSurpoters, seTtreatmentSurpoters] = useState([]);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message: "Order was Successfully!",
     mode: "success",
   });
+  const userId = getUserId();
   const { colors } = useTheme();
-
   const [loading, setLoading] = useState(false);
-  const [eligible, setEligible] = useState(null);
   const [loadEligibility, setLoadEligibility] = useState(false);
-  const [step, setStep] = useState(1);
-  const { addOrder, updateOrder, checkEligibility } = usePatient();
-  const { modes, order, timeSlots, methods, treatmentSurpoters } = route.params;
-  const handleCheckEligible = async () => {
+  const [step, setStep] = useState(2);
+  const { addOrder, updateOrder } = usePatient();
+  const handleFetch = async () => {
     setLoadEligibility(true);
-    const response = await checkEligibility();
+    const dResp = await getDeliveryModes();
+    const tResp = await getDeliveryTimeSlots();
+    const mResp = await getDeliveryMethods();
+    const sResp = await getTreatmentSurport({
+      canPickUpDrugs: true,
+      onlyCareGiver: true,
+    });
     setLoadEligibility(false);
-    if (response.ok) {
-      setEligible(response.data);
-    } else {
-      setDialogInfo({
-        ...dialogInfo,
-        show: true,
-        mode: "error",
-        message: response.data.detail
-          ? response.data.detail
-          : "Unknow Error Occured",
-      });
-      console.log(response.data);
+    if (dResp.ok) {
+      setModes(dResp.data.results);
+    }
+    if (tResp.ok) {
+      setTimeSlots(tResp.data.results);
+    }
+    if (mResp.ok) {
+      setMethods(mResp.data.results);
+    }
+    if (sResp.ok) {
+      seTtreatmentSurpoters(
+        sResp.data.results.filter((item) => {
+          const { careGiver: careGiver_, careReceiver: careReceiver_ } = item;
+          // asociation fully established and user is caregiver
+          return careReceiver_ && careGiver_ && careGiver_ !== userId;
+        })
+      );
     }
   };
 
   useEffect(() => {
-    handleCheckEligible();
+    handleFetch();
   }, []);
 
   const handleSubmit = async (values, { setErrors, errors }) => {
@@ -117,7 +131,7 @@ const PatientOrderForm = ({ navigation, route }) => {
     return (
       <View style={styles.screen}>
         <ActivityIndicator size={50} />
-        <Text>Checking Eligibility...</Text>
+        <Text>Loading...</Text>
       </View>
     );
   }
@@ -148,19 +162,12 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryMode: "",
                 phoneNumber: "",
                 deliveryMethod: "",
-                careGiver: "",
+                careGiver: null,
               }
         }
         onSubmit={handleSubmit}
       >
-        {step === 1 && eligible && (
-          <Step1
-            onNext={next}
-            appointment={eligible.appointment}
-            regimen={eligible.currentRegimen}
-          />
-        )}
-        {step === 2 && eligible && (
+        {step === 2 && (
           <Step2
             onNext={next}
             onPrevious={previous}
@@ -168,7 +175,7 @@ const PatientOrderForm = ({ navigation, route }) => {
             treatmentSurpoters={treatmentSurpoters}
           />
         )}
-        {step === 3 && eligible && (
+        {step === 3 && (
           <Step3
             onNext={next}
             onPrevious={previous}
