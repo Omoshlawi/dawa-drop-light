@@ -21,6 +21,14 @@ const useOrder = () => {
   const tripAction = (deliveryId, action, data) =>
     apiClient.post(`deliveries/${deliveryId}/${action}`, data);
   const getDelivery = (deliveryId) => apiClient.get(`deliveries/${deliveryId}`);
+  const getCourrierServices = (params) =>
+    apiClient.get("deliveries/courrier-services", params);
+  const addCourrierService = (data) =>
+    apiClient.post("deliveries/courrier-services", data);
+  const getCourrierServiceDetail = (serviceId) =>
+    apiClient.get(`deliveries/courrier-services/${serviceId}`);
+  const updateCourrierServiceDetail = (serviceId, data) =>
+    apiClient.get(`deliveries/courrier-services/${serviceId}`, data);
   return {
     getDeliveryModes,
     updateDeliveryMode,
@@ -32,7 +40,11 @@ const useOrder = () => {
     addDeliveryMethod,
     updateDeliveryMethod,
     tripAction,
-    getDelivery
+    getDelivery,
+    getCourrierServiceDetail,
+    getCourrierServices,
+    updateCourrierServiceDetail,
+    addCourrierService,
   };
 };
 

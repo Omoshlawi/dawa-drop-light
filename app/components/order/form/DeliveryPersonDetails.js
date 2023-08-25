@@ -1,31 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { Button, HelperText, TextInput } from "react-native-paper";
-import { usePatient } from "../../../api";
+import { StyleSheet, View } from "react-native";
+import { HelperText, TextInput } from "react-native-paper";
 import { useFormikContext } from "formik";
 
-const DeliveryPersonDetails = ({
-  onFormStateChange,
-  value,
-  name = "careGiver",
-}) => {
-  const formState = value || {
+const DeliveryPersonDetails = ({ name }) => {
+  const { setFieldValue, errors, values, touched } = useFormikContext();
+  const formState = values[name] || {
     fullName: "",
     nationalId: "",
     phoneNumber: "",
-  };
-
-  const [loading, setLoading] = useState(false);
-  const { setFieldValue, errors } = useFormikContext();
-  useEffect(() => {
-    if (onFormStateChange instanceof Function) {
-      onFormStateChange(formState);
-    }
-  }, [formState]);
-
-  const resetFormErrors = (field) => {
-    if (!field) setErrors({ fullName: "", nationalId: "", phoneNumber: "" });
-    else if (errors[field] !== undefined) setErrors({ ...errors, [field]: "" });
   };
   return (
     <View>
@@ -34,9 +16,9 @@ const DeliveryPersonDetails = ({
         label="Name"
         left={<TextInput.Icon icon="account" />}
         mode="outlined"
+        value={formState.fullName}
         onChangeText={(fullName) => {
           setFieldValue(name, { ...formState, fullName });
-          resetFormErrors("fullName");
         }}
       />
       <TextInput
@@ -44,9 +26,9 @@ const DeliveryPersonDetails = ({
         label="National id"
         left={<TextInput.Icon icon="identifier" />}
         mode="outlined"
+        value={formState.nationalId}
         onChangeText={(nationalId) => {
           setFieldValue(name, { ...formState, nationalId });
-          resetFormErrors("nationalId");
         }}
       />
       <TextInput
@@ -54,14 +36,14 @@ const DeliveryPersonDetails = ({
         label="Phone number"
         left={<TextInput.Icon icon="phone" />}
         mode="outlined"
+        value={formState.phoneNumber}
         onChangeText={(phoneNumber) => {
           setFieldValue(name, { ...formState, phoneNumber });
-          resetFormErrors("phoneNumber");
         }}
       />
-      {errors.phoneNumber && (
-        <HelperText type="error" visible={errors[name]}>
-          {errors[name]}
+      {errors[name] && (
+        <HelperText type="error" visible={errors[name] && touched[name]}>
+          {Object.values(errors[name]).join(", ")}
         </HelperText>
       )}
     </View>

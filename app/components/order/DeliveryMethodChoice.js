@@ -13,8 +13,7 @@ import DeliveryPersonDetails from "./form/DeliveryPersonDetails";
 const DeliveryMethodChoice = ({
   methods = [],
   fieldName = "deliveryMethod",
-  treatmentSurpoters,
-  careGiverMessage,
+  courrierService,
 }) => {
   const { values, setFieldValue, errors } = useFormikContext();
   const [checked, setChecked] = useState("no");
@@ -75,33 +74,56 @@ const DeliveryMethodChoice = ({
       )}
       {currMethod?.blockOnTimeSlotFull === false && (
         <>
-          <Text>
-            Do you have someone specific in to do the delivery for you?
-          </Text>
-          <View style={{ width: "30%" }}>
-            <RadioButton.Group onValueChange={setChecked} value={checked}>
-              <RadioButton.Item
-                label="Yes"
-                value="yes"
-                labelVariant="bodySmall"
+          <FormItemPicker
+            name="courrierService"
+            icon="truck"
+            searchable
+            label="Courrier Service"
+            data={courrierService}
+            valueExtractor={({ _id }) => _id}
+            labelExtractor={({ name }) => name}
+            renderItem={({ item }) => (
+              <List.Item
+                title={item.name}
+                style={styles.listItem}
+                left={(props) => <List.Icon {...props} icon="truck" />}
               />
-              <RadioButton.Item
-                label="No"
-                value="no"
-                labelVariant="bodySmall"
-              />
-            </RadioButton.Group>
-          </View>
-          {checked === "yes" && (
-            <>
-              <Text>Please provide details</Text>
-              <DeliveryPersonDetails
-                value={values["careGiver"]}
-                onFormStateChange={(formState) => {
-                  setFieldValue("careGiver", formState);
-                }}
-              />
-            </>
+            )}
+            itemContainerStyle={[
+              styles.itemContainer,
+              { borderRadius: roundness },
+            ]}
+          />
+          {values["courrierService"] && (
+            <View style={{ paddingTop: 10 }}>
+              <Text>
+                Do you have someone specific in to do the delivery for you?
+              </Text>
+              <View style={{}}>
+                <RadioButton.Group onValueChange={setChecked} value={checked}>
+                  <RadioButton.Item
+                    label="Yes (You are sending specific courrier service person)"
+                    value="yes"
+                    labelVariant="bodySmall"
+                  />
+                  <RadioButton.Item
+                    label="No"
+                    value="no"
+                    labelVariant="bodySmall"
+                  />
+                </RadioButton.Group>
+              </View>
+              {checked === "yes" && (
+                <>
+                  <Text>
+                    Please provide details for courrier service person
+                  </Text>
+                  <DeliveryPersonDetails
+                    name="deliveryPerson"
+                  />
+                </>
+              )}
+            </View>
           )}
         </>
       )}

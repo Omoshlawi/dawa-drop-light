@@ -14,29 +14,29 @@ import routes from "../../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   deliveryAddress: Yup.object({
-    latitude: Yup.number().required().label("Latitude"),
-    longitude: Yup.number().required().label("Longitude"),
+    latitude: Yup.number().label("Latitude"),
+    longitude: Yup.number().label("Longitude"),
     address: Yup.string().label("Address"),
   }).label("Delivery address"),
-  deliveryTimeSlot: Yup.string().required().label("Time slot"),
-  deliveryMode: Yup.string().required().label("Delivery mode"),
+  deliveryTime: Yup.date().required().label("Delivery time"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
-  careGiver: Yup.object({
-    fullName: Yup.number().required().label("Full name"),
+  deliveryPerson: Yup.object({
+    fullName: Yup.string().required().label("Full name"),
     nationalId: Yup.number().required().label("National Id"),
     phoneNumber: Yup.string().label("Phone number"),
-  }).label("Delivery person"),
+  }).label("Delivery person").nullable(),
   deliveryMethod: Yup.string()
     .required("You must specify how you want your drug delivered to you")
     .label("Delivery Method"),
+  courrierService: Yup.string().label("Courrier service"),
 });
 
 const PatientOrderForm = ({ navigation, route }) => {
   const order = route.params;
   const { getTreatmentSurport, getUserId } = useUser();
-  const { getDeliveryModes, getDeliveryTimeSlots, getDeliveryMethods } =
+  const { getCourrierServices, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
-  const [modes, setModes] = useState([]);
+  const [courrierServices, setCourrierServices] = useState([]);
   const [methods, setMethods] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
   const [treatmentSurpoters, seTtreatmentSurpoters] = useState([]);
@@ -53,7 +53,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const { addOrder, updateOrder } = usePatient();
   const handleFetch = async () => {
     setLoadEligibility(true);
-    const dResp = await getDeliveryModes();
+    const dResp = await getCourrierServices();
     const tResp = await getDeliveryTimeSlots();
     const mResp = await getDeliveryMethods();
     const sResp = await getTreatmentSurport({
@@ -62,7 +62,7 @@ const PatientOrderForm = ({ navigation, route }) => {
     });
     setLoadEligibility(false);
     if (dResp.ok) {
-      setModes(dResp.data.results);
+      setCourrierServices(dResp.data.results);
     }
     if (tResp.ok) {
       setTimeSlots(tResp.data.results);
@@ -143,26 +143,20 @@ const PatientOrderForm = ({ navigation, route }) => {
         initialValues={
           order
             ? {
-                deliveryAddress: order.deliveryAddress,
-                deliveryTimeSlot: order.deliveryTimeSlot._id,
-                deliveryMode: order.deliveryMode._id,
+                deliveryAddress: order.deliveryAddress.address,
+                deliveryTime: order.deliveryTime,
                 phoneNumber: order.phoneNumber,
                 deliveryMethod: order.deliveryMethod._id,
-                careGiver:
-                  order.careGiver.length > 0 && treatmentSurpoters
-                    ? treatmentSurpoters.find(
-                        (careGiver_) =>
-                          careGiver_.careGiver === order.careGiver[0]._id
-                      )
-                    : "",
+                deliveryPerson: order.deliveryPerson,
+                courrierService: order.courrierService._id,
               }
             : {
                 deliveryAddress: null,
-                deliveryTimeSlot: "",
-                deliveryMode: "",
+                deliveryTime: "",
                 phoneNumber: "",
                 deliveryMethod: "",
-                careGiver: null,
+                deliveryPerson: null,
+                courrierService: "",
               }
         }
         onSubmit={handleSubmit}
@@ -172,14 +166,14 @@ const PatientOrderForm = ({ navigation, route }) => {
             onNext={next}
             onPrevious={previous}
             methods={methods}
-            treatmentSurpoters={treatmentSurpoters}
+            courrierServices={courrierServices}
           />
         )}
         {step === 3 && (
           <Step3
             onNext={next}
             onPrevious={previous}
-            modes={modes}
+            modes={courrierServices}
             timeSlots={timeSlots}
             loading={loading}
           />
@@ -195,7 +189,7 @@ const PatientOrderForm = ({ navigation, route }) => {
         >
           {dialogInfo.mode === "confirm" ? (
             <OrderConfirmation
-              deliveryModes={modes}
+              deliveryModes={courrierServices}
               onSubmit={() => {
                 previous();
                 setDialogInfo({ ...dialogInfo, show: false });
