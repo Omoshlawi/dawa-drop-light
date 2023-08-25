@@ -11,7 +11,7 @@ import {
 } from "../../forms";
 import { useFormikContext } from "formik";
 
-const Step3 = ({ onNext, onPrevious, modes, timeSlots, loading }) => {
+const Step3 = ({ onNext, onPrevious, timeSlots, loading }) => {
   const { colors, roundness } = useTheme();
   const { values, validateForm, setFieldTouched } = useFormikContext();
   return (
@@ -31,14 +31,14 @@ const Step3 = ({ onNext, onPrevious, modes, timeSlots, loading }) => {
           label="Phone number"
           icon="phone"
         />
-        <FormDateTimePicker
+        {/* <FormDateTimePicker
           name="deliveryTime"
           icon="clock"
           defaultMode="time"
           formarter={(value) => moment(value).format("HH:mm")}
           label="Delivery Time"
-        />
-        
+        /> */}
+
         <FormLocationPicker name="deliveryAddress" />
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous

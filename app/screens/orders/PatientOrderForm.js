@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     longitude: Yup.number().label("Longitude"),
     address: Yup.string().label("Address"),
   }).label("Delivery address"),
-  deliveryTime: Yup.date().required().label("Delivery time"),
+  // deliveryTime: Yup.date().required().label("Delivery time"),
   phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
   deliveryPerson: Yup.object({
     fullName: Yup.string().required().label("Full name"),
@@ -36,7 +36,7 @@ const validationSchema = Yup.object().shape({
 
 const PatientOrderForm = ({ navigation, route }) => {
   const order = route.params;
-  const { getTreatmentSurport, getUserId } = useUser();
+  const { getTreatmentSurport, getUserId, getUser } = useUser();
   const { getCourrierServices, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
   const [courrierServices, setCourrierServices] = useState([]);
@@ -53,12 +53,14 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [loadEligibility, setLoadEligibility] = useState(false);
   const [step, setStep] = useState(2);
+  const [user, setUser] = useState(null);
   const { addOrder, updateOrder } = usePatient();
   const handleFetch = async () => {
     setLoadEligibility(true);
     const dResp = await getCourrierServices();
     const tResp = await getDeliveryTimeSlots();
     const mResp = await getDeliveryMethods();
+    const userResponse = await getUser();
     const sResp = await getTreatmentSurport({
       canPickUpDrugs: true,
       onlyCareGiver: true,
@@ -81,6 +83,9 @@ const PatientOrderForm = ({ navigation, route }) => {
           return careReceiver_ && careGiver_ && careGiver_ !== userId;
         })
       );
+    }
+    if (userResponse.ok) {
+      setUser(userResponse.data);
     }
   };
 
@@ -138,7 +143,6 @@ const PatientOrderForm = ({ navigation, route }) => {
       </View>
     );
   }
-
   return (
     <View style={styles.screen}>
       <Form
@@ -147,7 +151,7 @@ const PatientOrderForm = ({ navigation, route }) => {
           order
             ? {
                 deliveryAddress: order.deliveryAddress.address,
-                deliveryTime: order.deliveryTime,
+                // deliveryTime: order.deliveryTime,
                 phoneNumber: order.phoneNumber,
                 deliveryMethod: order.deliveryMethod._id,
                 deliveryPerson: order.deliveryPerson,
@@ -155,8 +159,8 @@ const PatientOrderForm = ({ navigation, route }) => {
               }
             : {
                 deliveryAddress: null,
-                deliveryTime: "",
-                phoneNumber: "",
+                // deliveryTime: "",
+                phoneNumber: user ? user.phoneNumber : "",
                 deliveryMethod: "",
                 deliveryPerson: null,
                 courrierService: "",
@@ -176,7 +180,6 @@ const PatientOrderForm = ({ navigation, route }) => {
           <Step3
             onNext={next}
             onPrevious={previous}
-            modes={courrierServices}
             timeSlots={timeSlots}
             loading={loading}
           />
