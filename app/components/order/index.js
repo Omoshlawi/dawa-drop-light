@@ -10,3 +10,4 @@ export { default as CareReceiverStep3 } from "./careReceiverForm/Step3";
 export { default as CareReceiverStep4 } from "./careReceiverForm/Step4";
 export { default as NewCareReceiver } from "./careReceiverForm/NewCareReceiver";
 export { default as DeliveryPersonDetails } from "./form/DeliveryPersonDetails";
+export { default as orderValidation } from "./form/validationSchema";

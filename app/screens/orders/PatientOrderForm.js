@@ -8,31 +8,11 @@ import {
 } from "../../components/dialog";
 import { useTheme, Text, ActivityIndicator } from "react-native-paper";
 import { useOrder, usePatient, useUser } from "../../api";
-import { Step2, Step3 } from "../../components/order";
+import { Step2, Step3, orderValidation } from "../../components/order";
 import { Form } from "../../components/forms";
 import routes from "../../navigation/routes";
 
-const validationSchema = Yup.object().shape({
-  deliveryAddress: Yup.object({
-    latitude: Yup.number().label("Latitude"),
-    longitude: Yup.number().label("Longitude"),
-    address: Yup.string().label("Address"),
-  }).label("Delivery address"),
-  // deliveryTime: Yup.date().required().label("Delivery time"),
-  phoneNumber: Yup.string().max(14).min(9).label("Phone number"),
-  deliveryPerson: Yup.object({
-    fullName: Yup.string().required().label("Full name"),
-    nationalId: Yup.number().required().label("National Id"),
-    phoneNumber: Yup.string().label("Phone number"),
-    pickUpTime: Yup.date().required().label("Pick up time"),
-  })
-    .label("Delivery person")
-    .nullable(),
-  deliveryMethod: Yup.string()
-    .required("You must specify how you want your drug delivered to you")
-    .label("Delivery Method"),
-  courrierService: Yup.string().label("Courrier service"),
-});
+const validationSchema = orderValidation();
 
 const PatientOrderForm = ({ navigation, route }) => {
   const order = route.params;
@@ -146,7 +126,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   return (
     <View style={styles.screen}>
       <Form
-        validationSchema={validationSchema}
+        validationSchema={orderValidation(methods)}
         initialValues={
           order
             ? {
