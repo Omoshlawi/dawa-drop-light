@@ -27,6 +27,7 @@ const DeliveryPersonDetails = ({ name }) => {
         placeholder="Enter National Id"
         label="National id"
         left={<TextInput.Icon icon="identifier" />}
+        inputMode="numeric"
         mode="outlined"
         value={formState.nationalId}
         onChangeText={(nationalId) => {
@@ -38,6 +39,7 @@ const DeliveryPersonDetails = ({ name }) => {
         label="Phone number"
         left={<TextInput.Icon icon="phone" />}
         mode="outlined"
+        inputMode="tel"
         value={formState.phoneNumber}
         onChangeText={(phoneNumber) => {
           setFieldValue(name, { ...formState, phoneNumber });
@@ -55,7 +57,9 @@ const DeliveryPersonDetails = ({ name }) => {
       />
       {errors[name] && (
         <HelperText type="error" visible={errors[name] && touched[name]}>
-          {Object.values(errors[name]).join(", ")}
+          {typeof errors[name] === "object"
+            ? Object.values(errors[name]).join(", ")
+            : `${errors[name]}`}
         </HelperText>
       )}
     </View>

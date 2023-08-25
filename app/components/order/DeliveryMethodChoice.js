@@ -14,6 +14,8 @@ const DeliveryMethodChoice = ({
   methods = [],
   fieldName = "deliveryMethod",
   courrierService,
+  onWizardInfoChange,
+  specific,
 }) => {
   const { values, setFieldValue, errors } = useFormikContext();
   const [checked, setChecked] = useState("no");
@@ -100,7 +102,17 @@ const DeliveryMethodChoice = ({
                 Do you have someone specific in to do the delivery for you?
               </Text>
               <View style={{}}>
-                <RadioButton.Group onValueChange={setChecked} value={checked}>
+                <RadioButton.Group
+                  onValueChange={(value) => {
+                    if (onWizardInfoChange instanceof Function) {
+                      onWizardInfoChange((wizardInfo) => ({
+                        ...wizardInfo,
+                        specific: value,
+                      }));
+                    }
+                  }}
+                  value={specific}
+                >
                   <RadioButton.Item
                     label="Yes (You are sending specific courrier service person)"
                     value="yes"
@@ -113,7 +125,7 @@ const DeliveryMethodChoice = ({
                   />
                 </RadioButton.Group>
               </View>
-              {checked === "yes" && (
+              {specific === "yes" && (
                 <>
                   <Text>
                     Please provide details for courrier service person

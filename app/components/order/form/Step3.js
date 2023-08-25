@@ -49,9 +49,9 @@ const Step3 = ({ onNext, onPrevious, timeSlots, loading }) => {
           onPress={async () => {
             const fields = [
               "deliveryAddress",
-              "deliveryMode",
+              // "deliveryMode",
               "phoneNumber",
-              "deliveryTimeSlot",
+              // "deliveryTimeSlot",
             ];
             const errors = await validateForm(values);
             const invalidFields = Object.keys(errors);

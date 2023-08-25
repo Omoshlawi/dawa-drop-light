@@ -6,7 +6,14 @@ import DeliveryMethodChoice from "../DeliveryMethodChoice";
 import { useFormikContext } from "formik";
 import { ScrollView } from "react-native";
 
-const Step2 = ({ onPrevious, onNext, methods, courrierServices }) => {
+const Step2 = ({
+  onPrevious,
+  onNext,
+  methods,
+  courrierServices,
+  onWizardInfoChange,
+  specific,
+}) => {
   const { colors, roundness } = useTheme();
   const { validateForm, values, setFieldError, setFieldTouched, setErrors } =
     useFormikContext();
@@ -26,30 +33,28 @@ const Step2 = ({ onPrevious, onNext, methods, courrierServices }) => {
         <DeliveryMethodChoice
           methods={methods}
           courrierService={courrierServices}
+          onWizardInfoChange={onWizardInfoChange}
+          specific={specific}
         />
         <Button
           mode="contained"
           onPress={async () => {
-            console.log("Delivery person", values["deliveryPerson"]);
-            console.log("Delivery method", values["deliveryMethod"]);
-            console.log("Courrier service", values["courrierService"]);
-            // console.log("Checking condition...");
-            const isBlockOnTimeSlotFull =
-              methods.find(({ _id }) => _id === values["deliveryMethod"])
-                ?.blockOnTimeSlotFull === false;
-            const hasNoDeliveryPerson = !values["deliveryPerson"];
-
-            // console.log("isBlockOnTimeSlotFull:", isBlockOnTimeSlotFull);
-            // console.log("hasNoCareGiver:", hasNoCareGiver);
-            let isValid = true;
+            const fields = [
+              "deliveryMethod",
+              "deliveryPerson",
+              "courrierService",
+            ];
             const errors = await validateForm(values);
-            // if treatment surport and no caregiver specified set error for careGiver
-            if (errors["deliveryMethod"]) isValid = false;
-            if (isBlockOnTimeSlotFull && values["curriourSercice"]) {
+            const invalidFields = Object.keys(errors);
+            let valid = true;
+            for (const field of fields) {
+              const inValid = invalidFields.includes(field);
+              if (inValid) {
+                valid = !inValid;
+                setFieldTouched(field, true);
+              }
             }
-            if (isValid) {
-              onNext();
-            }
+            if (valid) onNext();
           }}
           style={styles.btn}
         >

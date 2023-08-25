@@ -32,7 +32,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const { colors } = useTheme();
   const [loading, setLoading] = useState(false);
   const [loadEligibility, setLoadEligibility] = useState(false);
-  const [step, setStep] = useState(2);
+  const [wizardInfo, setWizardInfo] = useState({ step: 2, specific: "no" });
   const [user, setUser] = useState(null);
   const { addOrder, updateOrder } = usePatient();
   const handleFetch = async () => {
@@ -102,18 +102,18 @@ const PatientOrderForm = ({ navigation, route }) => {
   };
 
   const next = () => {
-    setStep(step + 1);
+    setWizardInfo({ ...wizardInfo, step: wizardInfo.step + 1 });
   };
 
   const previous = () => {
-    setStep(step - 1);
+    setWizardInfo({ ...wizardInfo, step: wizardInfo.step - 1 });
   };
 
   useEffect(() => {
-    if (step > 3) {
+    if (wizardInfo.step > 3) {
       setDialogInfo({ ...dialogInfo, mode: "confirm", show: true });
     }
-  }, [step]);
+  }, [wizardInfo]);
 
   if (loadEligibility) {
     return (
@@ -126,7 +126,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   return (
     <View style={styles.screen}>
       <Form
-        validationSchema={orderValidation(methods)}
+        validationSchema={orderValidation(methods, wizardInfo.specific)}
         initialValues={
           order
             ? {
@@ -148,15 +148,17 @@ const PatientOrderForm = ({ navigation, route }) => {
         }
         onSubmit={handleSubmit}
       >
-        {step === 2 && (
+        {wizardInfo.step === 2 && (
           <Step2
             onNext={next}
             onPrevious={previous}
             methods={methods}
             courrierServices={courrierServices}
+            specific={wizardInfo.specific}
+            onWizardInfoChange={setWizardInfo}
           />
         )}
-        {step === 3 && (
+        {wizardInfo.step === 3 && (
           <Step3
             onNext={next}
             onPrevious={previous}
