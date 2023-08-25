@@ -1,6 +1,8 @@
 import { StyleSheet, View } from "react-native";
 import { HelperText, TextInput } from "react-native-paper";
 import { useFormikContext } from "formik";
+import { DateTimePicker } from "../../input";
+import moment from "moment/moment";
 
 const DeliveryPersonDetails = ({ name }) => {
   const { setFieldValue, errors, values, touched } = useFormikContext();
@@ -40,6 +42,16 @@ const DeliveryPersonDetails = ({ name }) => {
         onChangeText={(phoneNumber) => {
           setFieldValue(name, { ...formState, phoneNumber });
         }}
+      />
+      <DateTimePicker
+        defaultMode="time"
+        icon="clock"
+        label="Pick up time"
+        value={formState.pickUpTime}
+        onChangeValue={(pickUpTime) => {
+          setFieldValue(name, { ...formState, pickUpTime });
+        }}
+        formarter={(date) => moment(date).format("HH:mm")}
       />
       {errors[name] && (
         <HelperText type="error" visible={errors[name] && touched[name]}>

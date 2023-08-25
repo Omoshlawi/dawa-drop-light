@@ -24,7 +24,10 @@ const validationSchema = Yup.object().shape({
     fullName: Yup.string().required().label("Full name"),
     nationalId: Yup.number().required().label("National Id"),
     phoneNumber: Yup.string().label("Phone number"),
-  }).label("Delivery person").nullable(),
+    pickUpTime: Yup.date().required().label("Pick up time"),
+  })
+    .label("Delivery person")
+    .nullable(),
   deliveryMethod: Yup.string()
     .required("You must specify how you want your drug delivered to you")
     .label("Delivery Method"),

@@ -3,7 +3,12 @@ import React from "react";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { screenHeight, screenWidth } from "../../../utils/contants";
 import moment from "moment/moment";
-import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
+import {
+  FormDateTimePicker,
+  FormField,
+  FormItemPicker,
+  FormLocationPicker,
+} from "../../forms";
 import { useFormikContext } from "formik";
 
 const Step3 = ({ onNext, onPrevious, modes, timeSlots, loading }) => {
@@ -26,46 +31,14 @@ const Step3 = ({ onNext, onPrevious, modes, timeSlots, loading }) => {
           label="Phone number"
           icon="phone"
         />
-        <FormItemPicker
-          name="deliveryMode"
-          icon="truck-delivery"
-          searchable
-          label="Delivery mode"
-          data={modes}
-          valueExtractor={({ _id }) => _id}
-          labelExtractor={({ name }) => name}
-          renderItem={({ item }) => (
-            <List.Item
-              title={item.name}
-              style={styles.listItem}
-              left={(props) => <List.Icon {...props} icon="truck-delivery" />}
-            />
-          )}
-          itemContainerStyle={[
-            styles.itemContainer,
-            { borderRadius: roundness },
-          ]}
+        <FormDateTimePicker
+          name="deliveryTime"
+          icon="clock"
+          defaultMode="time"
+          formarter={(value) => moment(value).format("HH:mm")}
+          label="Delivery Time"
         />
-        <FormItemPicker
-          name="deliveryTimeSlot"
-          icon="timelapse"
-          searchable
-          label="Delivery time slot"
-          data={timeSlots}
-          valueExtractor={({ _id }) => _id}
-          labelExtractor={({ label }) => label}
-          renderItem={({ item }) => (
-            <List.Item
-              title={item.label}
-              style={styles.listItem}
-              left={(props) => <List.Icon {...props} icon="timelapse" />}
-            />
-          )}
-          itemContainerStyle={[
-            styles.itemContainer,
-            { borderRadius: roundness },
-          ]}
-        />
+        
         <FormLocationPicker name="deliveryAddress" />
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous
@@ -126,5 +99,4 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
   },
-
 });

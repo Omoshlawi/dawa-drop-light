@@ -10,8 +10,6 @@ const Step2 = ({ onPrevious, onNext, methods, courrierServices }) => {
   const { colors, roundness } = useTheme();
   const { validateForm, values, setFieldError, setFieldTouched, setErrors } =
     useFormikContext();
-  const [careGiverField, setCareGiverField] = useState("");
-  const [userInfo, setUserInfo] = useState({});
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -50,7 +48,6 @@ const Step2 = ({ onPrevious, onNext, methods, courrierServices }) => {
             if (isBlockOnTimeSlotFull && values["curriourSercice"]) {
             }
             if (isValid) {
-              setCareGiverField("");
               onNext();
             }
           }}

@@ -107,7 +107,7 @@ const DeliveryMethodChoice = ({
                     labelVariant="bodySmall"
                   />
                   <RadioButton.Item
-                    label="No"
+                    label="No (The facility makes assigns to any available courrier of choice service person)"
                     value="no"
                     labelVariant="bodySmall"
                   />
@@ -118,9 +118,7 @@ const DeliveryMethodChoice = ({
                   <Text>
                     Please provide details for courrier service person
                   </Text>
-                  <DeliveryPersonDetails
-                    name="deliveryPerson"
-                  />
+                  <DeliveryPersonDetails name="deliveryPerson" />
                 </>
               )}
             </View>
