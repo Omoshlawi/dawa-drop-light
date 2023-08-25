@@ -9,9 +9,11 @@ const AppointmentCard = ({
   appointment_date,
   date_attended,
   appointment,
+  next_appointment_date,
 }) => {
   const { roundness, colors } = useTheme();
-  const date = moment(new Date(appointment.split("-").reverse().join("-")));
+  const date = moment(next_appointment_date);
+  // const date = moment(new Date(appointment.split("-").reverse().join("-")));
   return (
     <View
       style={[
@@ -29,6 +31,7 @@ const AppointmentCard = ({
           {date.format("Do")}
         </Text>
         <Text variant="headlineSmall">{date.format("MMM")}</Text>
+        <Text variant="bodyLarge">{date.format("yyyy")}</Text>
       </View>
       <View style={styles.content}>
         <Text variant="bodyLarge" style={{}}>
@@ -37,8 +40,8 @@ const AppointmentCard = ({
         <Text variant="headlineSmall" style={{}}>
           {appointment_type} Appointment
         </Text>
-        <Text variant="bodyLarge" style={{}}>
-          Mbagthi hospital
+        <Text variant="bodyLarge" style={{ color: colors.error }}>
+          {date.diff(moment(), "days") + " Days Remaining"}
         </Text>
       </View>
     </View>

@@ -3,7 +3,8 @@ import { addTokenInterceptor } from "../helpers";
 
 const usePatient = () => {
   addTokenInterceptor();
-  const getAppointments = () => apiClient.get("patients/appointments");
+  const getAppointments = (params) =>
+    apiClient.get("patients/appointments", params);
   const getAppointment = (id) => apiClient.get(`patients/appointments/${id}`);
   const getOrders = () => apiClient.get("patients/orders");
   const getOrder = (orderId) => apiClient.get(`patients/orders/${orderId}`);

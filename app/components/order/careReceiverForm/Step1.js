@@ -100,15 +100,23 @@ const Step1 = ({
                 label="Select CareReceiver"
                 data={careReceivers}
                 valueExtractor={({ _id }) => _id}
-                labelExtractor={(careReceiver) => {
-                  const name = `${
-                    careReceiver.userCareReceiver[0].firstName &&
-                    careReceiver.userCareReceiver[0].lastName
-                      ? careReceiver.userCareReceiver[0].firstName +
-                        " " +
-                        careReceiver.userCareReceiver[0].lastName
-                      : `${careReceiver.userCareReceiver[0].username}(${careReceiver.userCareReceiver[0].phoneNumber})`
-                  }`;
+                labelExtractor={(item) => {
+                  const {
+                    patientCareReceiver,
+                    userCareGiver,
+                    careGiver: careGiver_,
+                    careReceiver: careReceiver_,
+                    userCareReceiver,
+                    _id,
+                  } = item;
+                  const careReceiver = patientCareReceiver[0];
+                  const careGiver = userCareGiver[0];
+                  const careReceiverUser = userCareReceiver[0];
+                  const name = careReceiverUser
+                    ? careReceiverUser.firstName && careReceiverUser.lastName
+                      ? `${careReceiverUser.firstName} ${careReceiverUser.lastName}`
+                      : `${careReceiverUser.username}`
+                    : `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
                   return name;
                 }}
                 renderItem={({ item }) => {

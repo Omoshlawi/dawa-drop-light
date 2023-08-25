@@ -40,7 +40,7 @@ const Home = ({ navigation }) => {
     }
   };
   const handleFetchAppoitments = async () => {
-    const response = await getAppointments();
+    const response = await getAppointments({ upComing: true });
     if (response.ok) {
       setAppointments(response.data.results);
     } else {
@@ -116,16 +116,25 @@ const Home = ({ navigation }) => {
           ) : (
             <>
               {appointments.length > 0 && (
-                <Text variant="titleMedium">
-                  Recent and Upcoming Appointments
-                </Text>
+                <Text variant="titleMedium">Upcoming Appointments</Text>
               )}
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 data={appointments}
                 horizontal
                 keyExtractor={({ id }) => id}
-                renderItem={({ item, index }) => <AppointmentCard {...item} />}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate(routes.ORDERS_NAVIGATION, {
+                        screen: routes.ORDERS_APPOINMENT_DETAIL_SCREEN,
+                        params: { appointment: item, patient: user.patient[0] },
+                      });
+                    }}
+                  >
+                    <AppointmentCard {...item} />
+                  </TouchableOpacity>
+                )}
               />
             </>
           )}

@@ -16,3 +16,4 @@ export { default as ProviderTruckDelivery } from "./ProviderTruckDelivery";
 export { default as DispenseDrugs } from "./DispenseDrugs";
 export { default as CareReceiverOrders } from "./CareReceiverOrders";
 export { default as CareReceiverOrderForm } from "./CareReceiverOrderForm";
+export { default as AppointmentDetail } from "./AppointmentDetail";

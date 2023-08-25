@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import {
+  AppointmentDetail,
   Appointments,
   CareReceiverOrderForm,
   CareReceiverOrders,
@@ -35,6 +36,11 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_APPOINMENTS_SCREEN}
         component={Appointments}
+        options={{ title: "Appointments" }}
+      />
+      <Screen
+        name={routes.ORDERS_APPOINMENT_DETAIL_SCREEN}
+        component={AppointmentDetail}
         options={{ title: "Appointments" }}
       />
       <Screen

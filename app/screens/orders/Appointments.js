@@ -5,6 +5,7 @@ import { SearchHeader } from "../../components/input";
 import { usePatient } from "../../api";
 import { List, useTheme } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
+import moment from "moment";
 
 const Appointments = ({ navigation }) => {
   const [appointments, setAppointments] = useState([]);
@@ -46,7 +47,7 @@ const Appointments = ({ navigation }) => {
               style={[styles.listItem, { backgroundColor: colors.surface }]}
               title={`${appointment_type} appoinment`}
               titleStyle={styles.listTitle}
-              description={appointment_date}
+              description={moment(appointment_date).format("dddd Do MMMM yyyy")}
               left={(props) => <List.Icon {...props} icon="calendar" />}
             />
           );

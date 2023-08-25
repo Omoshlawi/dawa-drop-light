@@ -109,17 +109,21 @@ const MyTreatmentSurport = ({ navigation }) => {
                       : careGiver.username
                   }`
                 : `${
-                    careReceiverUser.firstName && careReceiverUser.lastName
-                      ? careReceiverUser.firstName +
-                        " " +
-                        careReceiverUser.lastName
-                      : careReceiverUser.username
+                    careReceiverUser
+                      ? careReceiverUser.firstName && careReceiverUser.lastName
+                        ? careReceiverUser.firstName +
+                          " " +
+                          careReceiverUser.lastName
+                        : careReceiverUser.username
+                      : `${careReceiver.firstName} ${careReceiver.lastName}`
                   } (${careReceiver.cccNumber})`
               : undefined;
             const description = isEstablished
               ? isCareGiver
                 ? `${careGiver.phoneNumber} | ${careGiver.email}`
-                : `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
+                : careReceiverUser
+                ? `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
+                : `${careReceiver.phoneNumber}`
               : undefined;
             return (
               <TouchableOpacity
