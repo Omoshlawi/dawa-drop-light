@@ -109,10 +109,10 @@ const DistributionEventForm = ({ navigation, route }) => {
               icon="calendar"
             />
             <FormDateTimePicker
-              defaultMode="date"
+              defaultMode="time"
               name="distributionTime"
               icon="clock"
-              formarter={(value) => moment(value).format("ddd Do mm yyy HH:mm")}
+              formarter={(value) => `${moment(value).format("HH:mm")} hrs`}
               label={"Distribution Time"}
             />
             <FormDatesListPicker

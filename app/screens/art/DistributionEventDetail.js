@@ -15,6 +15,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
     artModel: _artModel,
     subscribers,
     remarks,
+    remiderNortificationDates,
   } = event;
   const user = _leadUser[0];
   const artModel = _artModel[0];
@@ -59,6 +60,56 @@ const DistributionEventDetail = ({ navigation, route }) => {
         descriptionNumberOfLines={3}
         left={(props) => <List.Icon {...props} icon="information" />}
       />
+      <List.Accordion
+        title="Reminder nortification dates"
+        left={(props) => <List.Icon {...props} icon="bell" />}
+        style={[styles.listItem, { backgroundColor: colors.surface }]}
+        description={remiderNortificationDates.length}
+      >
+        {remiderNortificationDates.map((date, index) => {
+          return (
+            <List.Item
+              key={index}
+
+              title={moment(date).format("ddd Do MMMM yyyy HH:mm")}
+              style={[styles.listItem, { backgroundColor: colors.surface, marginHorizontal:10 }]}
+              // description={`${email} | ${phoneNumber}`}
+              left={(props) => <List.Icon {...props} icon="bell-circle" />}
+            />
+          );
+        })}
+      </List.Accordion>
+      <List.Accordion
+        title="Total Subscribers"
+        left={(props) => <List.Icon {...props} icon="account-group" />}
+        style={[styles.listItem, { backgroundColor: colors.surface }]}
+        description={subscribers.length}
+      >
+        {subscribers.map((user, index) => {
+          const { username, email, phoneNumber, image, lastName, firstName } =
+            user;
+          return (
+            <List.Item
+              key={index}
+              title={
+                firstName && lastName ? `${firstName} ${lastName}` : username
+              }
+              style={[styles.listItem, { backgroundColor: colors.surface }]}
+              description={`${email} | ${phoneNumber}`}
+              left={(props) =>
+                image ? (
+                  <Avatar.Image
+                    {...props}
+                    source={{ uri: getImageUrl(image) }}
+                  />
+                ) : (
+                  <Avatar.Icon {...props} icon="account" />
+                )
+              }
+            />
+          );
+        })}
+      </List.Accordion>
       {user && (
         <>
           <Text style={styles.title} variant="titleMedium">
@@ -110,45 +161,6 @@ const DistributionEventDetail = ({ navigation, route }) => {
               <List.Icon {...props} icon="account-supervisor-outline" />
             )}
           />
-          <List.Accordion
-            title="Total Subscribers"
-            left={(props) => <List.Icon {...props} icon="account-group" />}
-            style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={subscribers.length}
-          >
-            {subscribers.map((user, index) => {
-              const {
-                username,
-                email,
-                phoneNumber,
-                image,
-                lastName,
-                firstName,
-              } = user;
-              return (
-                <List.Item
-                  key={index}
-                  title={
-                    firstName && lastName
-                      ? `${firstName} ${lastName}`
-                      : username
-                  }
-                  style={[styles.listItem, { backgroundColor: colors.surface }]}
-                  description={`${email} | ${phoneNumber}`}
-                  left={(props) =>
-                    image ? (
-                      <Avatar.Image
-                        {...props}
-                        source={{ uri: getImageUrl(image) }}
-                      />
-                    ) : (
-                      <Avatar.Icon {...props} icon="account" />
-                    )
-                  }
-                />
-              );
-            })}
-          </List.Accordion>
         </>
       )}
     </ScrollView>
