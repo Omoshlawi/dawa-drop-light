@@ -30,6 +30,7 @@ const Step3 = ({ onNext, onPrevious, timeSlots, loading }) => {
           placeholder="Enter Phone number"
           label="Phone number"
           icon="phone"
+          inputMode="tel"
         />
         {/* <FormDateTimePicker
           name="deliveryTime"

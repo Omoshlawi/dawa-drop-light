@@ -5,80 +5,35 @@ import { screenWidth } from "../../utils/contants";
 import { useFormikContext } from "formik";
 
 const OrderConfirmation = ({
-  deliveryTimeSlots = [],
-  deliveryModes = [],
   onSubmit,
   deliveryMethods = [],
-  careGiverSurporters = [],
-  careReceiverSuppoters = [],
+  courrierServices = [],
+  specific,
 }) => {
   const { values, handleSubmit } = useFormikContext();
-  const slot = deliveryTimeSlots.find(({ url }) => url === values["time_slot"]);
-  const mode = deliveryModes.find(({ _id }) => _id === values["deliveryMode"]);
   const method = deliveryMethods.find(
     ({ _id }) => _id === values["deliveryMethod"]
   );
-  const careGiver = careGiverSurporters.find(
-    ({ _id }) => _id === values["careGiver"]
-  );
-  const careReceiver = careReceiverSuppoters.find(
-    ({ _id }) => _id === values["careReceiver"]
+  const service = courrierServices.find(
+    ({ _id }) => _id === values["courrierService"]
   );
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
       <Text variant="bodyLarge" style={styles.text}>
-        Please verify your order details
+        Please verify your delivery details
       </Text>
-      {careReceiver && (
-        <List.Item
-          style={[styles.listItem, { backgroundColor: colors.background }]}
-          title="CareReceiver"
-          description={`${
-            careReceiver.userCareReceiver[0].firstName &&
-            careReceiver.userCareReceiver[0].lastName
-              ? careReceiver.userCareReceiver[0].firstName +
-                " " +
-                careReceiver.userCareReceiver[0].lastName
-              : `${careReceiver.userCareReceiver[0].username}(${careReceiver.userCareReceiver[0].phoneNumber})`
-          }`}
-          left={(props) => <List.Icon icon="account" {...props} />}
-        />
-      )}
-      <List.Item
-        style={[styles.listItem, { backgroundColor: colors.background }]}
-        title="Delivery Mode"
-        description={mode ? mode.name : "None"}
-        left={(props) => <List.Icon icon="truck" {...props} />}
-      />
-      <List.Item
-        style={[styles.listItem, { backgroundColor: colors.background }]}
-        title="Time Slot"
-        description={slot ? slot.label : "None"}
-        left={(props) => <List.Icon icon="timelapse" {...props} />}
-      />
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.background }]}
         title="Delivered through?"
         description={method ? method.name : "None"}
         left={(props) => <List.Icon icon="truck-delivery" {...props} />}
       />
-      {method.blockOnTimeSlotFull === false && careGiver && (
+      {specific === "yes" && (
         <List.Item
           style={[styles.listItem, { backgroundColor: colors.background }]}
-          title="Care giver"
-          description={
-            careGiver
-              ? `${
-                  careGiver.userCareGiver[0].firstName &&
-                  careGiver.userCareGiver[0].lastName
-                    ? careGiver.userCareGiver[0].firstName +
-                      " " +
-                      careGiver.userCareGiver[0].lastName
-                    : careGiver.userCareGiver[0].username
-                }`
-              : "None"
-          }
+          title="Who will do the delivery?"
+          description={`${values["deliveryPerson"].fullName} | ${values["deliveryPerson"].nationalId}`}
           left={(props) => <List.Icon icon="account" {...props} />}
         />
       )}

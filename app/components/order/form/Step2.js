@@ -1,5 +1,5 @@
 import { StyleSheet, View, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../../utils/contants";
 import DeliveryMethodChoice from "../DeliveryMethodChoice";
@@ -15,8 +15,15 @@ const Step2 = ({
   specific,
 }) => {
   const { colors, roundness } = useTheme();
-  const { validateForm, values, setFieldError, setFieldTouched, setErrors } =
-    useFormikContext();
+  const {
+    validateForm,
+    values,
+    setFieldError,
+    setFieldTouched,
+    setErrors,
+    setFieldValue,
+  } = useFormikContext();
+
   return (
     <ScrollView style={styles.container}>
       <View>

@@ -73,7 +73,15 @@ const PatientOrderForm = ({ navigation, route }) => {
     handleFetch();
   }, []);
 
-  const handleSubmit = async (values, { setErrors, errors }) => {
+  const handleSubmit = async (values, { setErrors, errors, setFieldValue }) => {
+    const currMethod = methods.find(
+      ({ _id }) => _id === values["deliveryMethod"]
+    );
+    if (currMethod?.blockOnTimeSlotFull === true) {
+      setFieldValue("deliveryPerson", null);
+      setFieldValue("courrierService", "");
+    }
+    if (specific === "yes") setFieldValue("deliveryPerson", null);
     setLoading(true);
     let response;
     if (order) {
@@ -177,14 +185,13 @@ const PatientOrderForm = ({ navigation, route }) => {
         >
           {dialogInfo.mode === "confirm" ? (
             <OrderConfirmation
-              deliveryModes={courrierServices}
               onSubmit={() => {
                 previous();
                 setDialogInfo({ ...dialogInfo, show: false });
               }}
-              deliveryTimeSlots={timeSlots}
               deliveryMethods={methods}
-              careGiverSurporters={treatmentSurpoters}
+              courrierServices={courrierServices}
+              specific={wizardInfo.specific}
             />
           ) : (
             <AlertDialog
