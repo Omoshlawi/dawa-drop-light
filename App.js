@@ -1,16 +1,16 @@
-
 import { StatusBar } from "expo-status-bar";
-import { Modal, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View, Platform } from "react-native";
 import { UserContextProvider } from "./app/context/UserContext";
 import useSecureStore from "./app/hooks/useSecureStore";
 import MainStackNavigation from "./app/navigation/MainStackNavigation";
 import { MainTheme } from "./app/theme";
 import useAsyncStorage from "./app/hooks/useAsyncStorage";
 import { AppState } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SettingsContextProvider } from "./app/context/SettingsContext";
 import ThemedNavigationContainer from "./app/navigation/ThemedNavigationContainer";
 import { Authentication } from "./app/components/localauth";
+import { usePushNortification, setUpNotificationHandler } from "./no";
 
 export default function App() {
   const [token, setToken, clearToken] = useSecureStore("jwtToken", null);
@@ -23,6 +23,8 @@ export default function App() {
     },
     theme: "light",
   });
+  const { notification, subScribe, unsubScrible, sendPushNotification } =
+    usePushNortification();
 
   const handleAppStateChange = (nextAppState) => {
     if (nextAppState === "active") {
@@ -43,6 +45,10 @@ export default function App() {
   };
 
   useEffect(() => {
+    subScribe().then((toke) => console.log(toke));
+    return unsubScrible;
+  }, []);
+  useEffect(() => {
     const subscription = AppState.addEventListener(
       "change",
       handleAppStateChange
@@ -52,6 +58,7 @@ export default function App() {
       subscription.remove();
     };
   }, [appConf]);
+
   return (
     <UserContextProvider value={{ token, setToken, clearToken }}>
       <SettingsContextProvider
