@@ -6,6 +6,7 @@ import Logo from "../../components/Logo";
 import {
   Form,
   FormDateTimePicker,
+  FormDatesListPicker,
   FormField,
   FormItemPicker,
   FormLocationPicker,
@@ -16,6 +17,7 @@ import { AlertDialog, Dialog } from "../../components/dialog";
 import { List, useTheme } from "react-native-paper";
 import routes from "../../navigation/routes";
 import moment from "moment/moment";
+import { ScrollView } from "react-native";
 
 const validationSchemer = Yup.object().shape({
   title: Yup.string().label("Evennt title").required(),
@@ -27,6 +29,7 @@ const validationSchemer = Yup.object().shape({
   }).label("Event address"),
   group: Yup.string().label("Distribution Group").required(),
   remarks: Yup.string().label("Event remarks").required(),
+  remiderNortificationDates: Yup.array().label("Reminder dates"),
 });
 
 const DistributionEventForm = ({ navigation, route }) => {
@@ -71,85 +74,100 @@ const DistributionEventForm = ({ navigation, route }) => {
   };
   return (
     <View style={styles.screen}>
-      <Logo size={screenWidth * 0.4} />
-      <View style={styles.form}>
-        <Form
-          initialValues={
-            event
-              ? {
-                  title: event.title,
-                  distributionTime: event.distributionTime,
-                  distributionLocation: event.distributionLocation,
-                  group: event.group._id,
-                  remarks: event.remarks,
-                }
-              : {
-                  title: "",
-                  distributionTime: "",
-                  distributionLocation: null,
-                  group: "",
-                  remarks: "",
-                }
-          }
-          validationSchema={validationSchemer}
-          onSubmit={handleSubmit}
-        >
-          <FormField
-            name="title"
-            placeholder="Enter event title"
-            label="Event title"
-            icon="calendar"
-          />
-          <FormDateTimePicker
-            defaultMode="date"
-            name="distributionTime"
-            icon="clock"
-            formarter={(value) => moment(value).format("ddd Do mm yyy HH:mm")}
-            label={"Distribution Time"}
-          />
-          <FormLocationPicker name="distributionLocation" />
-          <FormItemPicker
-            name="group"
-            icon="account-group"
-            searchable
-            label="Distribution group"
-            data={groups}
-            valueExtractor={({ _id }) => _id}
-            labelExtractor={({ title }) => title}
-            renderItem={({ item }) => (
-              <List.Item
-                title={item.title}
-                style={styles.listItem}
-                left={(props) => <List.Icon {...props} icon="account-group" />}
-              />
-            )}
-            itemContainerStyle={[
-              styles.itemContainer,
-              { borderRadius: roundness },
-            ]}
-          />
-          <FormField
-            placeholder="Enter Remarks"
-            label="Event Remarks"
-            name="remarks"
-            icon="information-variant"
-            multiline
-            numberOfLines={10}
-          />
-          <FormSubmitButton
-            title={
+      <ScrollView>
+        <View style={{ alignItems: "center" }}>
+          <Logo size={screenWidth * 0.4} />
+        </View>
+        <View style={styles.form}>
+          <Form
+            initialValues={
               event
-                ? "Update ART Distribution event"
-                : "Add ART Distribution event"
+                ? {
+                    title: event.title,
+                    distributionTime: event.distributionTime,
+                    distributionLocation: event.distributionLocation,
+                    group: event.group._id,
+                    remarks: event.remarks,
+                    remiderNortificationDates: event.remiderNortificationDates,
+                  }
+                : {
+                    title: "",
+                    distributionTime: "",
+                    distributionLocation: null,
+                    group: "",
+                    remarks: "",
+                    remiderNortificationDates: [],
+                  }
             }
-            mode="contained"
-            style={styles.btn}
-            loading={loading}
-            disabled={loading}
-          />
-          <View style={{ flex: 1 }} />
-        </Form>
-      </View>
+            validationSchema={validationSchemer}
+            onSubmit={handleSubmit}
+          >
+            <FormField
+              name="title"
+              placeholder="Enter event title"
+              label="Event title"
+              icon="calendar"
+            />
+            <FormDateTimePicker
+              defaultMode="date"
+              name="distributionTime"
+              icon="clock"
+              formarter={(value) => moment(value).format("ddd Do mm yyy HH:mm")}
+              label={"Distribution Time"}
+            />
+            <FormDatesListPicker
+              defaultMode="date"
+              name="remiderNortificationDates"
+              icon="clock"
+              formarter={(value) => moment(value).format("ddd Do mm yyy HH:mm")}
+              label={"Reminder dates"}
+            />
+            <FormLocationPicker name="distributionLocation" />
+            <FormItemPicker
+              name="group"
+              icon="account-group"
+              searchable
+              label="Distribution group"
+              data={groups}
+              valueExtractor={({ _id }) => _id}
+              labelExtractor={({ title }) => title}
+              renderItem={({ item }) => (
+                <List.Item
+                  title={item.title}
+                  style={styles.listItem}
+                  left={(props) => (
+                    <List.Icon {...props} icon="account-group" />
+                  )}
+                />
+              )}
+              itemContainerStyle={[
+                styles.itemContainer,
+                { borderRadius: roundness },
+              ]}
+            />
+            <FormField
+              placeholder="Enter Remarks"
+              label="Event Remarks"
+              name="remarks"
+              icon="information-variant"
+              multiline
+              numberOfLines={10}
+            />
+            <FormSubmitButton
+              title={
+                event
+                  ? "Update ART Distribution event"
+                  : "Add ART Distribution event"
+              }
+              mode="contained"
+              style={styles.btn}
+              loading={loading}
+              disabled={loading}
+            />
+            <View style={{ flex: 1 }} />
+          </Form>
+        </View>
+      </ScrollView>
       <Dialog visible={dialogInfo.show}>
         <AlertDialog
           mode={dialogInfo.mode}
@@ -172,7 +190,6 @@ export default DistributionEventForm;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    alignItems: "center",
   },
   form: {
     width: "100%",

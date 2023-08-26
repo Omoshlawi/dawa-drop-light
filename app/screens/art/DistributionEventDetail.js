@@ -1,7 +1,8 @@
 import { StyleSheet, ScrollView } from "react-native";
 import React from "react";
-import { useTheme, List, Text } from "react-native-paper";
+import { useTheme, List, Text, Avatar } from "react-native-paper";
 import moment from "moment/moment";
+import { getImageUrl } from "../../utils/helpers";
 
 const DistributionEventDetail = ({ navigation, route }) => {
   const { event } = route.params;
@@ -71,7 +72,16 @@ const DistributionEventDetail = ({ navigation, route }) => {
                 ? `${user.firstName} ${user.lastName}`
                 : `${user.username}`
             }
-            left={(props) => <List.Icon {...props} icon="account" />}
+            left={(props) =>
+              user.image ? (
+                <Avatar.Image
+                  {...props}
+                  source={{ uri: getImageUrl(user.image) }}
+                />
+              ) : (
+                <List.Icon {...props} icon="account" />
+              )
+            }
           />
           <List.Item
             title="Email"
@@ -82,7 +92,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
           <List.Item
             title="Phone Number"
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={user.email}
+            description={user.phoneNumber}
             left={(props) => <List.Icon {...props} icon="phone" />}
           />
         </>
@@ -100,12 +110,45 @@ const DistributionEventDetail = ({ navigation, route }) => {
               <List.Icon {...props} icon="account-supervisor-outline" />
             )}
           />
-          <List.Item
+          <List.Accordion
             title="Total Subscribers"
+            left={(props) => <List.Icon {...props} icon="account-group" />}
             style={[styles.listItem, { backgroundColor: colors.surface }]}
             description={subscribers.length}
-            left={(props) => <List.Icon {...props} icon="account-group" />}
-          />
+          >
+            {subscribers.map((user, index) => {
+              const {
+                username,
+                email,
+                phoneNumber,
+                image,
+                lastName,
+                firstName,
+              } = user;
+              return (
+                <List.Item
+                  key={index}
+                  title={
+                    firstName && lastName
+                      ? `${firstName} ${lastName}`
+                      : username
+                  }
+                  style={[styles.listItem, { backgroundColor: colors.surface }]}
+                  description={`${email} | ${phoneNumber}`}
+                  left={(props) =>
+                    image ? (
+                      <Avatar.Image
+                        {...props}
+                        source={{ uri: getImageUrl(image) }}
+                      />
+                    ) : (
+                      <Avatar.Icon {...props} icon="account" />
+                    )
+                  }
+                />
+              );
+            })}
+          </List.Accordion>
         </>
       )}
     </ScrollView>

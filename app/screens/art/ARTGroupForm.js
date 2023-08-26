@@ -44,7 +44,7 @@ const ARTGroupForm = ({ navigation, route }) => {
         setDialogInfo({
           ...dialogInfo,
           show: true,
-          success: false,
+          mode: "error",
           message: response.data.detail
             ? response.data.detail
             : "Unknow Error Occured",

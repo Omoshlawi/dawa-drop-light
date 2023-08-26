@@ -2,9 +2,10 @@ import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { useART } from "../../api";
 import { NestedProvider } from "../../theme";
-import { FAB, Portal, useTheme, Text, List } from "react-native-paper";
+import { FAB, Portal, useTheme, Text, List, Avatar } from "react-native-paper";
 import routes from "../../navigation/routes";
 import { ScrollView } from "react-native";
+import { getImageUrl } from "../../utils/helpers";
 const ARTGroupDetail = ({ navigation, route }) => {
   const group = route.params;
   const [state, setState] = useState({ open: false });
@@ -16,7 +17,7 @@ const ARTGroupDetail = ({ navigation, route }) => {
     description,
     leadUser: _leadUser,
     artModel: _artModel,
-    enrollments
+    enrolledUsers,
   } = group;
   const artModel = _artModel[0];
   const user = _leadUser[0];
@@ -37,7 +38,16 @@ const ARTGroupDetail = ({ navigation, route }) => {
                     ? `${user.firstName} ${user.lastName}`
                     : `${user.username}`
                 }
-                left={(props) => <List.Icon {...props} icon="account" />}
+                left={(props) =>
+                  user.image ? (
+                    <Avatar.Image
+                      {...props}
+                      source={{ uri: getImageUrl(user.image) }}
+                    />
+                  ) : (
+                    <List.Icon {...props} icon="account" />
+                  )
+                }
               />
               <List.Item
                 title="Email"
@@ -83,13 +93,45 @@ const ARTGroupDetail = ({ navigation, route }) => {
               />
             </>
           )}
-
-          <List.Item
+          <List.Accordion
             title="Total Members"
-            style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={enrollments.length + 1}
             left={(props) => <List.Icon {...props} icon="account-group" />}
-          />
+            style={[styles.listItem, { backgroundColor: colors.surface }]}
+            description={enrolledUsers.length}
+          >
+            {enrolledUsers.map((user, index) => {
+              const {
+                username,
+                email,
+                phoneNumber,
+                image,
+                lastName,
+                firstName,
+              } = user;
+              return (
+                <List.Item
+                  key={index}
+                  title={
+                    firstName && lastName
+                      ? `${firstName} ${lastName}`
+                      : username
+                  }
+                  style={[styles.listItem, { backgroundColor: colors.surface }]}
+                  description={`${email} | ${phoneNumber}`}
+                  left={(props) =>
+                    image ? (
+                      <Avatar.Image
+                        {...props}
+                        source={{ uri: getImageUrl(image) }}
+                      />
+                    ) : (
+                      <Avatar.Icon {...props} icon="account" />
+                    )
+                  }
+                />
+              );
+            })}
+          </List.Accordion>
         </ScrollView>
         <Portal>
           <FAB.Group

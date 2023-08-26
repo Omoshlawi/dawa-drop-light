@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 import React from "react";
-import { List, Text, useTheme } from "react-native-paper";
+import { Avatar, List, Text, useTheme } from "react-native-paper";
+import { getImageUrl } from "../../utils/helpers";
 
 const GroupLeadDetail = ({ navigation, route }) => {
   const { artGroupLead, artModels, users } = route.params;
@@ -32,7 +33,16 @@ const GroupLeadDetail = ({ navigation, route }) => {
                 ? `${user.firstName} ${user.lastName}`
                 : `${user.username}`
             }
-            left={(props) => <List.Icon {...props} icon="account" />}
+            left={(props) =>
+              user.image ? (
+                <Avatar.Image
+                  {...props}
+                  source={{ uri: getImageUrl(user.image) }}
+                />
+              ) : (
+                <List.Icon {...props} icon="account" />
+              )
+            }
           />
           <List.Item
             title="Email"

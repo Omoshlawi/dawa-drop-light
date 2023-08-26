@@ -110,6 +110,7 @@ const ItemPicker = ({
                         onValueChange(values);
                       }
                     }}
+                    key={index}
                   >
                     <View
                       style={{

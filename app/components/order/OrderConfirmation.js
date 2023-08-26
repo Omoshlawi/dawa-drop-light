@@ -29,7 +29,7 @@ const OrderConfirmation = ({
         description={method ? method.name : "None"}
         left={(props) => <List.Icon icon="truck-delivery" {...props} />}
       />
-      {specific === "yes" && (
+      {specific === "yes" && values["deliveryPerson"] && (
         <List.Item
           style={[styles.listItem, { backgroundColor: colors.background }]}
           title="Who will do the delivery?"

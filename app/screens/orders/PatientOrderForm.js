@@ -81,7 +81,7 @@ const PatientOrderForm = ({ navigation, route }) => {
       setFieldValue("deliveryPerson", null);
       setFieldValue("courrierService", "");
     }
-    if (specific === "yes") setFieldValue("deliveryPerson", null);
+    if (wizardInfo.specific === "yes") setFieldValue("deliveryPerson", null);
     setLoading(true);
     let response;
     if (order) {
@@ -148,7 +148,7 @@ const PatientOrderForm = ({ navigation, route }) => {
             : {
                 deliveryAddress: null,
                 // deliveryTime: "",
-                phoneNumber: user ? user.phoneNumber : "",
+                phoneNumber: user?.phoneNumber || "",
                 deliveryMethod: "",
                 deliveryPerson: null,
                 courrierService: "",

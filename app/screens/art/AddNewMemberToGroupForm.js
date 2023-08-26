@@ -11,6 +11,7 @@ import {
   useTheme,
 } from "react-native-paper";
 import { AlertDialog, Dialog } from "../../components/dialog";
+import routes from "../../navigation/routes";
 
 const AddNewMemberToGroupForm = ({ navigation, route }) => {
   const group = route.params;
@@ -125,7 +126,11 @@ const AddNewMemberToGroupForm = ({ navigation, route }) => {
             message={dialogInfo.message}
             onButtonPress={() => {
               setDialogInfo({ ...dialogInfo, show: false });
-              navigation.goBack();
+              if (dialogInfo.mode === "success")
+                navigation.navigate(routes.ART_NAVIGATION, {
+                  screen: routes.ART_GROUP_SCREEN,
+                });
+              else navigation.goBack();
             }}
           />
         )}

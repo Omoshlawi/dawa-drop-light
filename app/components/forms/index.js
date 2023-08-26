@@ -12,3 +12,4 @@ export { default as FormRatingBar } from "./FormRatingBar";
 export { default as FormScanner } from "./FormScanner";
 export { default as FormCheckBox } from "./FormCheckBox";
 export { default as FormUrlField } from "./FormUrlField";
+export { default as FormDatesListPicker } from "./FormDatesListPicker";
