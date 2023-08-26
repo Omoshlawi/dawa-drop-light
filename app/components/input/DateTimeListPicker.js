@@ -16,18 +16,63 @@ const DateTimeListPicker = ({
   is24Hrs = true,
   formarter, //required
 }) => {
-  const [show, setShow] = useState(false);
   const { colors, roundness } = useTheme();
+  const [dateTime, setDateTime] = useState({
+    date: null,
+    time: null,
+    currMode: "date",
+    show: false,
+  });
   const handleDateChange = (event, selectedDate) => {
-    setShow(false);
+    if (defaultMode !== "datetime" || dateTime.currMode === "date")
+      setDateTime({ ...dateTime, show: false });
     if (selectedDate) {
-      if (onChangeValue instanceof Function)
-        onChangeValue([...value, selectedDate]);
+      if (defaultMode !== "datetime") {
+        if (onChangeValue instanceof Function)
+          return onChangeValue([...value, selectedDate]);
+      }
+      if (dateTime.currMode === "date") {
+        return setDateTime({
+          ...dateTime,
+          date: selectedDate,
+          currMode: "time",
+          show: true,
+        });
+      }
+      setDateTime({
+        ...dateTime,
+        time: selectedDate,
+        currMode: "date",
+        show: false,
+      });
+      if (onChangeValue instanceof Function) {
+        // Combine the 2 to form 1
+        const date = new Date(dateTime.date);
+        const time = new Date(dateTime.time);
+        onChangeValue([
+          ...value,
+          new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            time.getHours(),
+            time.getMinutes(),
+            time.getSeconds()
+          ),
+        ]);
+        setDateTime({
+          ...dateTime,
+          date: null,
+          time: null,
+          currMode: "date",
+          show: false,
+        });
+      }
     }
   };
 
-  const showDatePicker = () => {
-    setShow(true);
+  const showPicker = () => {
+    setDateTime({ ...dateTime, show: true });
   };
 
   return (
@@ -57,7 +102,7 @@ const DateTimeListPicker = ({
             <TouchableHighlight
               underlayColor={colors.disabled}
               style={{ borderRadius: 10 }}
-              onPress={showDatePicker}
+              onPress={showPicker}
             >
               <MaterialCommunityIcons
                 name={icon}
@@ -86,7 +131,7 @@ const DateTimeListPicker = ({
                   onPress={() => {
                     if (onChangeValue instanceof Function) {
                       const _values = [...value];
-                      _values.splice(index, 1)
+                      _values.splice(index, 1);
                       onChangeValue(_values);
                     }
                   }}
@@ -109,10 +154,7 @@ const DateTimeListPicker = ({
               {label}
             </Text>
           )}
-          <TouchableOpacity
-            onPress={showDatePicker}
-            style={{ borderRadius: 10 }}
-          >
+          <TouchableOpacity onPress={showPicker} style={{ borderRadius: 10 }}>
             <MaterialCommunityIcons
               name="plus"
               size={20}
@@ -120,12 +162,12 @@ const DateTimeListPicker = ({
             />
           </TouchableOpacity>
 
-          {show && (
+          {dateTime.show && (
             <CommunityDateTimePicker
               value={new Date()}
-              mode={defaultMode}
+              mode={dateTime.currMode}
               is24Hour={is24Hrs}
-              display="default"
+              display="spinner"
               onChange={handleDateChange}
             />
           )}

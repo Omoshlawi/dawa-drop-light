@@ -18,6 +18,7 @@ import { List, useTheme } from "react-native-paper";
 import routes from "../../navigation/routes";
 import moment from "moment/moment";
 import { ScrollView } from "react-native";
+import { MyTestComponent } from "../../components/input";
 
 const validationSchemer = Yup.object().shape({
   title: Yup.string().label("Evennt title").required(),
@@ -116,10 +117,10 @@ const DistributionEventForm = ({ navigation, route }) => {
               label={"Distribution Time"}
             />
             <FormDatesListPicker
-              defaultMode="date"
+              defaultMode="datetime"
               name="remiderNortificationDates"
               icon="clock"
-              formarter={(value) => moment(value).format("ddd Do mm yyy HH:mm")}
+              formarter={(value) => moment(value).format("ddd Do MMM yyy HH:mm")}
               label={"Reminder dates"}
             />
             <FormLocationPicker name="distributionLocation" />
