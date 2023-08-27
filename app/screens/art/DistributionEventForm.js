@@ -120,7 +120,9 @@ const DistributionEventForm = ({ navigation, route }) => {
               defaultMode="datetime"
               name="remiderNortificationDates"
               icon="clock"
-              formarter={(value) => moment(value).format("ddd Do MMM yyy HH:mm")}
+              formarter={(value) =>
+                moment(value).format("ddd Do MMM yyy HH:mm")
+              }
               label={"Reminder dates"}
             />
             <FormLocationPicker name="distributionLocation" />

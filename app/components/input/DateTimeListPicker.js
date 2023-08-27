@@ -20,46 +20,53 @@ const DateTimeListPicker = ({
   const [dateTime, setDateTime] = useState({
     date: null,
     time: null,
-    currMode: "date",
+    currMode:
+      defaultMode === "date" || defaultMode === "time" ? defaultMode : "date",
     show: false,
   });
   const handleDateChange = (event, selectedDate) => {
-    if (defaultMode !== "datetime" || dateTime.currMode === "date")
-      setDateTime({ ...dateTime, show: false });
     if (selectedDate) {
+      // if default mode is date or time
       if (defaultMode !== "datetime") {
+        setDateTime({ ...dateTime, show: false });
         if (onChangeValue instanceof Function)
           return onChangeValue([...value, selectedDate]);
       }
+      // if default mode is datetime
       if (dateTime.currMode === "date") {
+        // 1st capture date, set it and return
         return setDateTime({
           ...dateTime,
           date: selectedDate,
           currMode: "time",
           show: true,
         });
-      }
-      setDateTime({
-        ...dateTime,
-        time: selectedDate,
-        currMode: "date",
-        show: false,
-      });
-      if (onChangeValue instanceof Function) {
-        // Combine the 2 to form 1
-        const date = new Date(dateTime.date);
-        const time = new Date(dateTime.time);
-        onChangeValue([
-          ...value,
-          new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            time.getHours(),
-            time.getMinutes(),
-            time.getSeconds()
-          ),
-        ]);
+      } else {
+        // last Capture time set it
+        setDateTime({
+          ...dateTime,
+          time: selectedDate,
+          currMode: "date",
+          show: false,
+        });
+        if (onChangeValue instanceof Function) {
+          // Combine the 2 to form 1
+          const date = new Date(dateTime.date);
+          const time = new Date(selectedDate); // Use selectedDate here
+
+          onChangeValue([
+            ...value,
+            new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate(),
+              time.getHours(),
+              time.getMinutes(),
+              time.getSeconds()
+            ),
+          ]);
+        }
+        // reset state
         setDateTime({
           ...dateTime,
           date: null,
