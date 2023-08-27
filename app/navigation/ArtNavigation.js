@@ -91,7 +91,24 @@ const ArtNavigation = () => {
       <Screen
         name={routes.ART_DISTRIBUTION_EVENTS_DETAIL_SCREEN}
         component={DistributionEventDetail}
-        options={{ title: "" }}
+        options={({ navigation, route }) => {
+          const { event, groups } = route.params;
+          return {
+            headerRight: (props) => (
+              <IconButton
+                icon="square-edit-outline"
+                {...props}
+                onPress={() =>
+                  navigation.navigate(routes.ART_NAVIGATION, {
+                    screen: routes.ART_DISTRIBUTION_EVENTS_FORM_SCREEN,
+                    params: { event, groups },
+                  })
+                }
+              />
+            ),
+            title: "Event Information details",
+          };
+        }}
       />
       <Screen
         name={routes.ART_DISTRIBUTION_EVENTS_FORM_SCREEN}

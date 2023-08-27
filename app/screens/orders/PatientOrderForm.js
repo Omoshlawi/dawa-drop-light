@@ -104,8 +104,8 @@ const PatientOrderForm = ({ navigation, route }) => {
             ? response.data.detail
             : "Unknow Error Occured",
         });
-        console.log(response.data);
       }
+      console.log(response.data);
     }
   };
 
@@ -123,7 +123,7 @@ const PatientOrderForm = ({ navigation, route }) => {
     }
   }, [wizardInfo]);
 
-  if (loadEligibility) {
+  if (loadEligibility || !user) {
     return (
       <View style={styles.screen}>
         <ActivityIndicator size={50} />

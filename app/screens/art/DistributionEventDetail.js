@@ -16,6 +16,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
     subscribers,
     remarks,
     remiderNortificationDates,
+    extraSubscribers,
   } = event;
   const user = _leadUser[0];
   const artModel = _artModel[0];
@@ -77,6 +78,27 @@ const DistributionEventDetail = ({ navigation, route }) => {
               ]}
               // description={`${email} | ${phoneNumber}`}
               left={(props) => <List.Icon {...props} icon="bell-circle" />}
+            />
+          );
+        })}
+      </List.Accordion>
+      <List.Accordion
+        title="Extra subscribers"
+        left={(props) => <List.Icon {...props} icon="account-group-outline" />}
+        style={[styles.listItem, { backgroundColor: colors.surface }]}
+        description={`${extraSubscribers.length}`}
+      >
+        {extraSubscribers.map((user, index) => {
+          return (
+            <List.Item
+              key={index}
+              title={user.name}
+              style={[
+                styles.listItem,
+                { backgroundColor: colors.surface, marginHorizontal: 10 },
+              ]}
+              description={user.phoneNumber}
+              left={(props) => <List.Icon {...props} icon="account" />}
             />
           );
         })}
