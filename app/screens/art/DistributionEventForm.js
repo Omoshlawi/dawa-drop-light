@@ -110,10 +110,12 @@ const DistributionEventForm = ({ navigation, route }) => {
               icon="calendar"
             />
             <FormDateTimePicker
-              defaultMode="time"
+              defaultMode="datetime"
               name="distributionTime"
               icon="clock"
-              formarter={(value) => `${moment(value).format("HH:mm")} hrs`}
+              formarter={(value) =>
+                `${moment(value).format("ddd Do MMM yyy HH:mm")} hrs`
+              }
               label={"Distribution Time"}
             />
             <FormDatesListPicker
@@ -121,7 +123,7 @@ const DistributionEventForm = ({ navigation, route }) => {
               name="remiderNortificationDates"
               icon="clock"
               formarter={(value) =>
-                moment(value).format("ddd Do MMM yyy HH:mm")
+                `${moment(value).format("ddd Do MMM yyy HH:mm")} hrs`
               }
               label={"Reminder dates"}
             />

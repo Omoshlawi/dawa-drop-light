@@ -97,7 +97,7 @@ const ARTGroupDetail = ({ navigation, route }) => {
             title="Total Members"
             left={(props) => <List.Icon {...props} icon="account-group" />}
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={enrolledUsers.length}
+            description={`${enrolledUsers.length}`}
           >
             {enrolledUsers.map((user, index) => {
               const {

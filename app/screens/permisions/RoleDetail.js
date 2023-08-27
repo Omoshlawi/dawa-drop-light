@@ -19,6 +19,7 @@ const RoleDetail = ({ navigation, route }) => {
     menuOptions: roleMenuOptions,
     assignPickupCareGivers,
     assignAllPatients,
+    assignGroupLeads,
   } = role;
   const { colors } = useTheme();
   const { getUsers } = useAuthorize();
@@ -63,6 +64,14 @@ const RoleDetail = ({ navigation, route }) => {
               style={{ backgroundColor: colors.background, marginVertical: 2 }}
               title="Asigned to all pick up care givers?"
               description={assignPickupCareGivers ? "Yes" : "No"}
+              left={(props) => (
+                <List.Icon style={styles.img} {...props} icon={"shield"} />
+              )}
+            />
+            <List.Item
+              style={{ backgroundColor: colors.background, marginVertical: 2 }}
+              title="Asigned to all art group leads?"
+              description={assignGroupLeads ? "Yes" : "No"}
               left={(props) => (
                 <List.Icon style={styles.img} {...props} icon={"shield"} />
               )}

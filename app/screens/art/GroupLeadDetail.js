@@ -74,13 +74,13 @@ const GroupLeadDetail = ({ navigation, route }) => {
           <List.Item
             title="Total Members"
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={members.length}
+            description={`${members.length}`}
             left={(props) => <List.Icon {...props} icon="account-group" />}
           />
           <List.Item
             title="Total Groups"
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={groups.length}
+            description={`${groups.length}`}
             left={(props) => (
               <List.Icon {...props} icon="account-group-outline" />
             )}

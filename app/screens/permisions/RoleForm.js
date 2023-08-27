@@ -31,6 +31,10 @@ const validationSchemer = Yup.object().shape({
     .label("Assign to all pickup care Givers")
     .required()
     .default(false),
+  assignGroupLeads: Yup.boolean()
+    .label("Assign to all group leads")
+    .required()
+    .default(false),
 });
 const RoleForm = ({ navigation, route }) => {
   const { addRoles, updateRole } = useAuthorize();
@@ -96,6 +100,7 @@ const RoleForm = ({ navigation, route }) => {
                       "menuOptions",
                       "assignAllPatients",
                       "assignPickupCareGivers",
+                      "assignGroupLeads",
                     ]
                   )
                 : {
@@ -105,6 +110,7 @@ const RoleForm = ({ navigation, route }) => {
                     assignAllPatients: false,
                     menuOptions: [],
                     assignPickupCareGivers: false,
+                    assignGroupLeads: false,
                   }
             }
             validationSchema={validationSchemer}
@@ -131,6 +137,10 @@ const RoleForm = ({ navigation, route }) => {
             <FormCheckBox
               name="assignPickupCareGivers"
               label="Assign Role to pickup care givers"
+            />
+            <FormCheckBox
+              name="assignGroupLeads"
+              label="Assign Role to all group leads"
             />
             <FormItemPicker
               name="privileges"

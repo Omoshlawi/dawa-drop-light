@@ -64,15 +64,17 @@ const DistributionEventDetail = ({ navigation, route }) => {
         title="Reminder nortification dates"
         left={(props) => <List.Icon {...props} icon="bell" />}
         style={[styles.listItem, { backgroundColor: colors.surface }]}
-        description={remiderNortificationDates.length}
+        description={`${remiderNortificationDates.length}`}
       >
         {remiderNortificationDates.map((date, index) => {
           return (
             <List.Item
               key={index}
-
               title={moment(date).format("ddd Do MMMM yyyy HH:mm")}
-              style={[styles.listItem, { backgroundColor: colors.surface, marginHorizontal:10 }]}
+              style={[
+                styles.listItem,
+                { backgroundColor: colors.surface, marginHorizontal: 10 },
+              ]}
               // description={`${email} | ${phoneNumber}`}
               left={(props) => <List.Icon {...props} icon="bell-circle" />}
             />
@@ -83,7 +85,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
         title="Total Subscribers"
         left={(props) => <List.Icon {...props} icon="account-group" />}
         style={[styles.listItem, { backgroundColor: colors.surface }]}
-        description={subscribers.length}
+        description={`${subscribers.length}`}
       >
         {subscribers.map((user, index) => {
           const { username, email, phoneNumber, image, lastName, firstName } =

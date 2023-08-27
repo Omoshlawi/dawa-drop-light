@@ -80,7 +80,7 @@ const ARTGroupForm = ({ navigation, route }) => {
           />
           <FormField
             placeholder="Enter Group Description"
-            label="Model description"
+            label="Group description"
             name="description"
             icon="information-variant"
             multiline
