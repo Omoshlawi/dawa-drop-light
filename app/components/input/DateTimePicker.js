@@ -15,17 +15,69 @@ const DateTimePicker = ({
   is24Hrs = true,
   formarter, //required
 }) => {
-  const [show, setShow] = useState(false);
   const { colors, roundness } = useTheme();
+  const [dateTime, setDateTime] = useState({
+    date: null,
+    time: null,
+    currMode:
+      defaultMode === "date" || defaultMode === "time" ? defaultMode : "date",
+    show: false,
+  });
   const handleDateChange = (event, selectedDate) => {
-    setShow(false);
     if (selectedDate) {
-      if (onChangeValue instanceof Function) onChangeValue(selectedDate);
+      // if default mode is date or time
+      if (defaultMode !== "datetime") {
+        setDateTime({ ...dateTime, show: false });
+        if (onChangeValue instanceof Function)
+          return onChangeValue(selectedDate);
+      }
+      // if default mode is datetime
+      if (dateTime.currMode === "date") {
+        // 1st capture date, set it and return
+        return setDateTime({
+          ...dateTime,
+          date: selectedDate,
+          currMode: "time",
+          show: true,
+        });
+      } else {
+        // last Capture time set it
+        setDateTime({
+          ...dateTime,
+          time: selectedDate,
+          currMode: "date",
+          show: false,
+        });
+        if (onChangeValue instanceof Function) {
+          // Combine the 2 to form 1
+          const date = new Date(dateTime.date);
+          const time = new Date(selectedDate); // Use selectedDate here
+
+          onChangeValue(
+            new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate(),
+              time.getHours(),
+              time.getMinutes(),
+              time.getSeconds()
+            )
+          );
+        }
+        // reset state
+        setDateTime({
+          ...dateTime,
+          date: null,
+          time: null,
+          currMode: "date",
+          show: false,
+        });
+      }
     }
   };
 
-  const showDatePicker = () => {
-    setShow(true);
+  const showPicker = () => {
+    setDateTime({ ...dateTime, show: true });
   };
 
   return (
@@ -55,7 +107,7 @@ const DateTimePicker = ({
             <TouchableHighlight
               underlayColor={colors.disabled}
               style={{ borderRadius: 10 }}
-              onPress={showDatePicker}
+              onPress={showPicker}
             >
               <MaterialCommunityIcons
                 name={icon}
@@ -64,15 +116,15 @@ const DateTimePicker = ({
               />
             </TouchableHighlight>
           )}
-          <TouchableOpacity onPress={showDatePicker} style={{ flex: 1 }}>
+          <TouchableOpacity onPress={showPicker} style={{ flex: 1 }}>
             <Text variant="labelLarge" style={styles.textInput}>
               {value ? formarter(value) : label}
             </Text>
           </TouchableOpacity>
-          {show && (
+          {dateTime.show && (
             <CommunityDateTimePicker
               value={value || new Date()}
-              mode={defaultMode}
+              mode={dateTime.currMode}
               is24Hour={is24Hrs}
               display="default"
               onChange={handleDateChange}
