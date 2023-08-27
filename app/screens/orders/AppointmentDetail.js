@@ -86,6 +86,7 @@ const AppointmentDetail = ({ route, navigation }) => {
               onPress={() => {
                 navigation.navigate(routes.ORDERS_NAVIGATION, {
                   screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
+                  params: { appointment },
                 });
               }}
             >

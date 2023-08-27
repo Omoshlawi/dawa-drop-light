@@ -37,6 +37,18 @@ const validationSchema = (methods = [], specific) => {
         }
         return schema;
       }),
+    event: Yup.string().label("Event"),
+    appointment: Yup.string().label("Appointment"),
+    type: Yup.string().oneOf(["self", "other"]).default("self"),
+    careReceiver: Yup.string()
+      .label("Care receiver")
+      .when("type", ([value], schema) => {
+        const require = value === "other";
+        if (require) {
+          return schema.required();
+        }
+        return schema;
+      }),
   });
 
   return validationSchema2;

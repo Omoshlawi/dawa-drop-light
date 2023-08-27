@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View } from "react-native";
+import { StyleSheet, ScrollView, View, Alert } from "react-native";
 import React, { useState } from "react";
 import { useTheme, List, Text, Avatar, Portal, FAB } from "react-native-paper";
 import moment from "moment/moment";
@@ -29,6 +29,17 @@ const DistributionEventDetail = ({ navigation, route }) => {
   const [state, setState] = useState({ open: false });
   const onStateChange = ({ open }) => setState({ open });
   const { open } = state;
+  const myFeedBackIndex = feedBacks.findIndex(
+    ({ user: _userId }) => _userId === userId
+  );
+  const disableConfirmAttendance =
+    (user && user._id === userId) || // 1.disable if curr user on the leader
+    // myFeedBackIndex !== -1 || // 2.disable if feedback exist
+    feedBacks[myFeedBackIndex]?.confirmedAttendance === true; // 3.if already confirmed
+  const disablerequestDelivery =
+    (user && user._id === userId) || // 1.disable if curr user on the leader
+    feedBacks[myFeedBackIndex]?.confirmedAttendance === false; // 3.if already requested delivery
+  const handleConfirmAttendance = async () => {};
   return (
     <View style={styles.screen}>
       <NestedProvider>
@@ -249,17 +260,23 @@ const DistributionEventDetail = ({ navigation, route }) => {
               {
                 icon: "check-all",
                 label: "Confirm Attendance",
-                color:
-                  user && user._id === userId
-                    ? colors.disabled
-                    : colors.primary,
-                labelTextColor:
-                  user && user._id === userId
-                    ? colors.disabled
-                    : colors.primary,
+                color: disableConfirmAttendance
+                  ? colors.disabled
+                  : colors.secondary,
+                labelTextColor: disableConfirmAttendance
+                  ? colors.disabled
+                  : colors.secondary,
                 onPress: () => {
-                  if (!(user && user._id === userId)) {
+                  if (!disableConfirmAttendance) {
                     //sumbit form
+                    Alert.alert(
+                      "Confirmation",
+                      "Are you sure you want to confirm you attendance now for the event?",
+                      [
+                        { text: "Confirm", onPress: handleConfirmAttendance },
+                        { text: "Cancel" },
+                      ]
+                    );
                   }
                 },
               },
@@ -267,17 +284,19 @@ const DistributionEventDetail = ({ navigation, route }) => {
               {
                 icon: "truck-delivery",
                 label: "Request home Delivery",
-                color:
-                  user && user._id === userId
-                    ? colors.disabled
-                    : colors.primary,
-                labelTextColor:
-                  user && user._id === userId
-                    ? colors.disabled
-                    : colors.primary,
+                color: disablerequestDelivery
+                  ? colors.disabled
+                  : colors.secondary,
+                labelTextColor: disablerequestDelivery
+                  ? colors.disabled
+                  : colors.secondary,
                 onPress: () => {
-                  if (!(user && user._id === userId)) {
+                  if (!disablerequestDelivery) {
                     //sumbit form
+                    navigation.navigate(routes.ORDERS_NAVIGATION, {
+                      screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
+                      params: { event },
+                    });
                   }
                 },
               },
