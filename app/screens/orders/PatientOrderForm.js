@@ -8,14 +8,14 @@ import {
 } from "../../components/dialog";
 import { useTheme, Text, ActivityIndicator } from "react-native-paper";
 import { useOrder, usePatient, useUser } from "../../api";
-import { Step2, Step3, orderValidation } from "../../components/order";
+import { Step2, Step3, orderValidation, Step1 } from "../../components/order";
 import { Form } from "../../components/forms";
 import routes from "../../navigation/routes";
 
 const validationSchema = orderValidation();
 
 const PatientOrderForm = ({ navigation, route }) => {
-  const {order, event, appointment} = route.params;
+  const { order, event, appointment } = route.params;
   const { getTreatmentSurport, getUserId, getUser } = useUser();
   const { getCourrierServices, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
@@ -32,7 +32,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const { colors } = useTheme();
   const [loading, setLoading] = useState(false);
   const [loadEligibility, setLoadEligibility] = useState(false);
-  const [wizardInfo, setWizardInfo] = useState({ step: 2, specific: "no" });
+  const [wizardInfo, setWizardInfo] = useState({ step: 1, specific: "no" });
   const [user, setUser] = useState(null);
   const { addOrder, updateOrder } = usePatient();
   const handleFetch = async () => {
@@ -144,6 +144,10 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryMethod: order.deliveryMethod._id,
                 deliveryPerson: order.deliveryPerson,
                 courrierService: order.courrierService._id,
+                event: order.event ? order.event._id : "",
+                appointment: order.appointment ? order.appointment.id : "",
+                type: order.type,
+                careReceiver: order.careReceiver ? order.careReceiver : "",
               }
             : {
                 deliveryAddress: null,
@@ -152,10 +156,17 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryMethod: "",
                 deliveryPerson: null,
                 courrierService: "",
+                event: event ? event._id : "",
+                appointment: appointment ? appointment.id : "",
+                type: "self",
+                careReceiver: "",
               }
         }
         onSubmit={handleSubmit}
       >
+        {wizardInfo.step === 1 && (
+          <Step1 onNext={next} appointment={appointment} event={event} />
+        )}
         {wizardInfo.step === 2 && (
           <Step2
             onNext={next}

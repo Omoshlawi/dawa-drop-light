@@ -34,7 +34,7 @@ const Step2 = ({
         />
       </View>
       <Text variant="headlineLarge" style={{ textAlign: "center" }}>
-        Step 1: Delivery Preference
+        Step 2: Delivery Preference
       </Text>
       <View style={styles.form}>
         <DeliveryMethodChoice
@@ -43,6 +43,9 @@ const Step2 = ({
           onWizardInfoChange={onWizardInfoChange}
           specific={specific}
         />
+        <Button mode="contained" onPress={onPrevious}>
+          Previous
+        </Button>
         <Button
           mode="contained"
           onPress={async () => {
