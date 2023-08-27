@@ -17,6 +17,7 @@ import Dialog from "../../../components/dialog/Dialog";
 import routes from "../../../navigation/routes";
 import { CardTitle } from "../../../components/common";
 import { getImageUrl } from "../../../utils/helpers";
+import { CodeDisplayCopy } from "../../../components/scanner";
 
 const Account = ({ navigation }) => {
   const { getUser, logout } = useUser();
@@ -27,7 +28,11 @@ const Account = ({ navigation }) => {
       handleFetchUser();
     }, [])
   );
-  const [showAbout, setShowAbout] = useState(false);
+  const [dialogInfo, setDialogInfo] = useState({
+    show: false,
+    mode: "qr",
+    message: "",
+  });
   const handleFetchUser = async () => {
     const response = await getUser();
     if (response.ok) {
@@ -37,32 +42,47 @@ const Account = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       {user && (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(routes.USER_NAVIGATION, {
-              screen: routes.USER_CHANGE_PROFILE_UPDATE_SCREEN,
-              params: user,
-            })
-          }
-        >
-          <Card.Title
-            title={user.username}
-            titleVariant="titleLarge"
-            left={(props) =>
-              user.image ? (
-                <Avatar.Image
-                  {...props}
-                  source={{ uri: getImageUrl(user.image) }}
-                />
-              ) : (
-                <Avatar.Icon icon="account" {...props} />
-              )
+        <>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate(routes.USER_NAVIGATION, {
+                screen: routes.USER_CHANGE_PROFILE_UPDATE_SCREEN,
+                params: user,
+              })
             }
-            subtitle={user.email}
-            style={[styles.listItem, { backgroundColor: colors.surface }]}
-            right={(props) => <IconButton {...props} icon="chevron-right" />}
+          >
+            <Card.Title
+              title={user.username}
+              titleVariant="titleLarge"
+              left={(props) =>
+                user.image ? (
+                  <Avatar.Image
+                    {...props}
+                    source={{ uri: getImageUrl(user.image) }}
+                  />
+                ) : (
+                  <Avatar.Icon icon="account" {...props} />
+                )
+              }
+              subtitle={user.email}
+              style={[styles.listItem, { backgroundColor: colors.surface }]}
+              right={(props) => <IconButton {...props} icon="chevron-right" />}
+            />
+          </TouchableOpacity>
+          <CardTitle
+            text="My Code"
+            onPress={() => {
+              setDialogInfo({
+                ...dialogInfo,
+                show: true,
+                mode: "qr",
+                message: user._id,
+              });
+            }}
+            subText={"Use to easily connect to other users"}
+            icon="qrcode"
           />
-        </TouchableOpacity>
+        </>
       )}
       <CardTitle
         text="Change Password"
@@ -84,7 +104,9 @@ const Account = ({ navigation }) => {
       />
       <CardTitle
         text="About"
-        onPress={() => setShowAbout(true)}
+        onPress={() =>
+          setDialogInfo({ ...dialogInfo, show: true, mode: "about" })
+        }
         icon="information-variant"
       />
       <List.Item
@@ -100,29 +122,37 @@ const Account = ({ navigation }) => {
         }
       />
       <Dialog
-        visible={showAbout}
+        visible={dialogInfo.show}
         title="About DawaDrop"
-        onRequestClose={() => setShowAbout(false)}
+        onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
       >
-        <View style={styles.dialog}>
-          <List.Item
-            title="Version"
-            description="2.0"
-            left={(props) => <List.Icon {...props} icon="information" />}
-          />
-          <Text style={{ padding: 10 }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </Text>
-          <Button mode="outlined" onPress={() => setShowAbout(false)}>
-            Ok
-          </Button>
-        </View>
+        {dialogInfo.mode === "about" && (
+          <View style={styles.dialog}>
+            <List.Item
+              title="Version"
+              description="2.0"
+              left={(props) => <List.Icon {...props} icon="information" />}
+            />
+            <Text style={{ padding: 10 }}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </Text>
+            <Button
+              mode="outlined"
+              onPress={() => setDialogInfo({ ...dialogInfo, show: false })}
+            >
+              Ok
+            </Button>
+          </View>
+        )}
+        {dialogInfo.mode === "qr" && (
+          <CodeDisplayCopy message={dialogInfo.message} />
+        )}
       </Dialog>
     </View>
   );

@@ -22,7 +22,7 @@ const CodeDisplayCopy = ({ message }) => {
       />
       <Text variant="titleMedium">{message}</Text>
       <Button icon="content-copy" onPress={copyToClipBoard}>
-        Copy invite code
+        COPY CODE
       </Button>
     </View>
   );

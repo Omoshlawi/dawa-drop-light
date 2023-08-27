@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeArea } from "../../components/layout";
 import * as Yup from "yup";
@@ -76,7 +76,7 @@ const RoleForm = ({ navigation, route }) => {
   };
 
   return (
-    <SafeArea>
+    <ScrollView>
       <View style={styles.screen}>
         <Logo size={screenWidth * 0.4} />
         <View style={styles.form}>
@@ -101,6 +101,7 @@ const RoleForm = ({ navigation, route }) => {
                       "assignAllPatients",
                       "assignPickupCareGivers",
                       "assignGroupLeads",
+                      "assignGroupMembers",
                     ]
                   )
                 : {
@@ -111,6 +112,7 @@ const RoleForm = ({ navigation, route }) => {
                     menuOptions: [],
                     assignPickupCareGivers: false,
                     assignGroupLeads: false,
+                    assignGroupMembers: false,
                   }
             }
             validationSchema={validationSchemer}
@@ -141,6 +143,10 @@ const RoleForm = ({ navigation, route }) => {
             <FormCheckBox
               name="assignGroupLeads"
               label="Assign Role to all group leads"
+            />
+            <FormCheckBox
+              name="assignGroupMembers"
+              label="Assign Role to all patients in grouped model"
             />
             <FormItemPicker
               name="privileges"
@@ -222,7 +228,7 @@ const RoleForm = ({ navigation, route }) => {
           </Button>
         </View>
       </Dialog>
-    </SafeArea>
+    </ScrollView>
   );
 };
 

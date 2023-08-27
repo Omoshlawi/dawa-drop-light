@@ -20,6 +20,7 @@ const RoleDetail = ({ navigation, route }) => {
     assignPickupCareGivers,
     assignAllPatients,
     assignGroupLeads,
+    assignGroupMembers,
   } = role;
   const { colors } = useTheme();
   const { getUsers } = useAuthorize();
@@ -72,6 +73,14 @@ const RoleDetail = ({ navigation, route }) => {
               style={{ backgroundColor: colors.background, marginVertical: 2 }}
               title="Asigned to all art group leads?"
               description={assignGroupLeads ? "Yes" : "No"}
+              left={(props) => (
+                <List.Icon style={styles.img} {...props} icon={"shield"} />
+              )}
+            />
+            <List.Item
+              style={{ backgroundColor: colors.background, marginVertical: 2 }}
+              title="Asigned to all user enroled in distribution group?"
+              description={assignGroupMembers ? "Yes" : "No"}
               left={(props) => (
                 <List.Icon style={styles.img} {...props} icon={"shield"} />
               )}
