@@ -78,110 +78,65 @@ const MyTreatmentSurport = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <NestedProvider>
-        <SectionList
-          sections={asociationsToSectionListData(asociations)}
-          renderSectionHeader={({ section: { title, data } }) =>
-            data.length ? <Text style={styles.title}>{title}</Text> : null
-          }
-          refreshing={loading}
-          onRefresh={handleFetch}
-          keyExtractor={({ _id }) => _id}
-          renderItem={({ item }) => {
-            const {
-              patientCareReceiver,
-              userCareGiver,
-              careGiver: careGiver_,
-              careReceiver: careReceiver_,
-              userCareReceiver,
-              _id,
-            } = item;
-            const careReceiver = patientCareReceiver[0];
-            const careGiver = userCareGiver[0];
-            const careReceiverUser = userCareReceiver[0];
-            const isCareGiver = careGiver_ !== userId;
-            const name = "None";
-            const description = "None";
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
-                    screen: routes.TREATMENT_SURPORT_DETAIL_SCREEN,
-                    params: item,
-                  })
-                }
-              >
-                <Card.Title
-                  title={name ? name : "Invitation code"}
-                  style={[styles.listItem, { backgroundColor: colors.surface }]}
-                  left={(props) => <Avatar.Icon {...props} icon="connection" />}
-                  right={(props) => (
-                    <Avatar.Icon
-                      {...props}
-                      icon="chevron-right"
-                      color={colors.primary}
-                      style={{ backgroundColor: colors.surface }}
-                    />
-                  )}
-                  subtitle={description ? description : _id}
-                  subtitleStyle={{ color: colors.disabled }}
-                />
-              </TouchableOpacity>
-            );
-          }}
-        />
-        <Portal>
-          <FAB.Group
-            open={open}
-            fabStyle={[styles.fab, { backgroundColor: colors.secondary }]}
-            color={colors.surface}
-            label={open ? "Close" : "Actions"}
-            backdropColor={colors.backdrop}
-            visible
-            icon={open ? "close" : "dots-vertical"}
-            actions={[
-              {
-                icon: "link-variant-plus",
-                label: "Accept invite",
-                color: true ? colors.secondary : colors.disabled,
-                labelTextColor: true ? colors.secondary : colors.disabled,
-                onPress: () => {
-                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
-                    screen: routes.TREATMENT_SURPORT_ACCEPT_INVITE_SCREEN,
-                  });
-                },
-              },
-              {
-                icon: "account-plus-outline",
-                label: "Add care giver",
-                onPress: () => {
-                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
-                    screen: routes.TREATMENT_SURPORT_CAREGIVER_FORM_SCREEN,
-                  });
-                },
-                color: colors.secondary,
-              },
-              {
-                icon: "account-plus",
-                label: "Add care receiver",
-                color: true ? colors.secondary : colors.disabled,
-                labelTextColor: true ? colors.secondary : colors.disabled,
-                onPress: () => {
-                  navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
-                    screen: routes.TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN,
-                  });
-                },
-              },
-            ]}
-            onStateChange={onStateChange}
-            onPress={() => {
-              if (open) {
-                // do something if the speed dial is open
+      <SectionList
+        sections={asociationsToSectionListData(asociations)}
+        renderSectionHeader={({ section: { title, data } }) =>
+          data.length ? <Text style={styles.title}>{title}</Text> : null
+        }
+        refreshing={loading}
+        onRefresh={handleFetch}
+        keyExtractor={({ _id }) => _id}
+        renderItem={({ item }) => {
+          const {
+            patientCareReceiver,
+            userCareGiver,
+            careGiver: careGiver_,
+            careReceiver: careReceiver_,
+            userCareReceiver,
+            _id,
+          } = item;
+          const careReceiver = patientCareReceiver[0];
+          const careGiver = userCareGiver[0];
+          const careReceiverUser = userCareReceiver[0];
+          const isCareGiver = careGiver_ !== userId;
+          const name = isCareGiver
+            ? `${
+                careGiver.firstName && careGiver.lastName
+                  ? `${careGiver.firstName} ${careGiver.lastName}`
+                  : `${careGiver.username}`
+              }`
+            : `${careReceiver.firstName} ${careReceiver.lastName}`;
+          const description = isCareGiver
+            ? `${careGiver.phoneNumber} | ${careGiver.email}`
+            : `${careReceiver.cccNumber}`;
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(routes.TREATMENT_SURPORT_NAVIGATION, {
+                  screen: routes.TREATMENT_SURPORT_DETAIL_SCREEN,
+                  params: item,
+                })
               }
-            }}
-          />
-        </Portal>
-      </NestedProvider>
+            >
+              <Card.Title
+                title={name ? name : "Invitation code"}
+                style={[styles.listItem, { backgroundColor: colors.surface }]}
+                left={(props) => <Avatar.Icon {...props} icon="connection" />}
+                right={(props) => (
+                  <Avatar.Icon
+                    {...props}
+                    icon="chevron-right"
+                    color={colors.primary}
+                    style={{ backgroundColor: colors.surface }}
+                  />
+                )}
+                subtitle={description ? description : _id}
+                subtitleStyle={{ color: colors.disabled }}
+              />
+            </TouchableOpacity>
+          );
+        }}
+      />
     </View>
   );
 };

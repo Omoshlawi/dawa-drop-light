@@ -37,7 +37,9 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
 
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Treatment surporter added successfully",
+    message: `Treatment surporter ${
+      treatmentSurport ? "Updated" : "Added"
+    } successfully`,
     mode: "success",
   });
   const { getPatients, addTreatmentSurporter, updateTreatmentSurporter } =
