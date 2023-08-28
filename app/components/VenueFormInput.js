@@ -5,7 +5,7 @@ import { Text, TextInput, useTheme } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
 
-const DistributionVenueInput = ({
+const VenueFormInput = ({
   name,
   placeholder,
   label,
@@ -63,6 +63,6 @@ const DistributionVenueInput = ({
   );
 };
 
-export default DistributionVenueInput;
+export default VenueFormInput;
 
 const styles = StyleSheet.create({});

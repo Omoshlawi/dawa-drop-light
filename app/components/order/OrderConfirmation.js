@@ -88,7 +88,7 @@ const OrderConfirmation = ({
         title="Delivery Location"
         description={
           values["deliveryAddress"]
-            ? `${values["deliveryAddress"]["address"]}(${values["deliveryAddress"]["latitude"]}, ${values["deliveryAddress"]["longitude"]})`
+            ? `${values["deliveryAddress"]["address"]}`
             : "None"
         }
         left={(props) => <List.Icon icon="hospital-marker" {...props} />}

@@ -20,7 +20,7 @@ import moment from "moment/moment";
 import { ScrollView } from "react-native";
 import { MyTestComponent } from "../../components/input";
 import ExtraSubscribersForm from "../../components/ExtraSubscribersForm";
-import DistributionVenueInput from "../../components/DistributionVenueInput";
+import VenueFormInput from "../../components/VenueFormInput";
 
 const validationSchemer = Yup.object().shape({
   title: Yup.string().label("Evennt title").required(),
@@ -139,7 +139,7 @@ const DistributionEventForm = ({ navigation, route }) => {
               }
               label={"Reminder dates"}
             />
-            <DistributionVenueInput
+            <VenueFormInput
               name="distributionLocation"
               icon="google-maps"
               placeholder="Enter event venue"

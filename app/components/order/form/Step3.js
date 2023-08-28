@@ -10,6 +10,7 @@ import {
   FormLocationPicker,
 } from "../../forms";
 import { useFormikContext } from "formik";
+import VenueFormInput from "../../VenueFormInput";
 
 const Step3 = ({ onNext, onPrevious, timeSlots, loading }) => {
   const { colors, roundness } = useTheme();
@@ -40,7 +41,13 @@ const Step3 = ({ onNext, onPrevious, timeSlots, loading }) => {
           label="Delivery Time"
         /> */}
 
-        <FormLocationPicker name="deliveryAddress" />
+        {/* <FormLocationPicker name="deliveryAddress" /> */}
+        <VenueFormInput
+          name="deliveryAddress"
+          icon="google-maps"
+          placeholder="Enter delivery address"
+          label="Delivery address"
+        />
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous
         </Button>

@@ -95,9 +95,9 @@ const AppointmentDetail = ({ route, navigation }) => {
           )}
         </>
       )}
-      <Button style={styles.btn} mode="contained">
+      {/* <Button style={styles.btn} mode="contained">
         Reschedule appointment
-      </Button>
+      </Button> */}
     </ScrollView>
   );
 };

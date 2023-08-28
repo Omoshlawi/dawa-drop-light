@@ -138,7 +138,7 @@ const PatientOrderForm = ({ navigation, route }) => {
         initialValues={
           order
             ? {
-                deliveryAddress: order.deliveryAddress.address,
+                deliveryAddress: order.deliveryAddress,
                 // deliveryTime: order.deliveryTime,
                 phoneNumber: order.phoneNumber,
                 deliveryMethod: order.deliveryMethod._id,
