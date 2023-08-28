@@ -96,35 +96,12 @@ const MyTreatmentSurport = ({ navigation }) => {
               userCareReceiver,
               _id,
             } = item;
-            const isEstablished = careReceiver_ && careGiver_;
             const careReceiver = patientCareReceiver[0];
             const careGiver = userCareGiver[0];
             const careReceiverUser = userCareReceiver[0];
             const isCareGiver = careGiver_ !== userId;
-            const name = isEstablished
-              ? isCareGiver
-                ? `${
-                    careGiver.firstName && careGiver.lastName
-                      ? careGiver.firstName + " " + careGiver.lastName
-                      : careGiver.username
-                  }`
-                : `${
-                    careReceiverUser
-                      ? careReceiverUser.firstName && careReceiverUser.lastName
-                        ? careReceiverUser.firstName +
-                          " " +
-                          careReceiverUser.lastName
-                        : careReceiverUser.username
-                      : `${careReceiver.firstName} ${careReceiver.lastName}`
-                  } (${careReceiver.cccNumber})`
-              : undefined;
-            const description = isEstablished
-              ? isCareGiver
-                ? `${careGiver.phoneNumber} | ${careGiver.email}`
-                : careReceiverUser
-                ? `${careReceiverUser.phoneNumber} | ${careReceiverUser.email}`
-                : `${careReceiver.phoneNumber}`
-              : undefined;
+            const name = "None";
+            const description = "None";
             return (
               <TouchableOpacity
                 onPress={() =>

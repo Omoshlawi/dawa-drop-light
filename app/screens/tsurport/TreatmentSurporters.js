@@ -79,7 +79,7 @@ const TreatmentSurporters = ({ navigation }) => {
                 }}
                 style={{ backgroundColor: colors.surface, marginVertical: 2 }}
                 title={`${careGiver.phoneNumber} (${careGiver.email})`}
-                description={`${careReceiver.firstName} ${careReceiver.lastName} (${careReceiver.cccNumber})`}
+                description={`${careReceiver?.firstName} ${careReceiver?.lastName} (${careReceiver?.cccNumber})`}
                 left={(props) => <List.Icon {...props} icon="account" />}
                 right={(props) => <List.Icon {...props} icon="chevron-right" />}
               />

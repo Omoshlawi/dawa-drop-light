@@ -23,17 +23,12 @@ const validationSchemer = Yup.object().shape({
   description: Yup.string().label("Role Description").required(),
   menuOptions: Yup.array().label("Role Menu Options").required(),
   privileges: Yup.array().label("Role Privileges").required(),
-  assignAllPatients: Yup.boolean()
-    .label("Assign All Patients")
-    .required()
-    .default(false),
+  assignAllPatients: Yup.boolean().label("Assign All Patients").default(false),
   assignPickupCareGivers: Yup.boolean()
     .label("Assign to all pickup care Givers")
-    .required()
     .default(false),
   assignGroupLeads: Yup.boolean()
     .label("Assign to all group leads")
-    .required()
     .default(false),
 });
 const RoleForm = ({ navigation, route }) => {
@@ -83,27 +78,19 @@ const RoleForm = ({ navigation, route }) => {
           <Form
             initialValues={
               defaultValues
-                ? pickX(
-                    {
-                      ...defaultValues,
-                      privileges: defaultValues.privileges.map(
-                        ({ _id }) => _id
-                      ),
-                      menuOptions: defaultValues.menuOptions.map(
-                        ({ _id }) => _id
-                      ),
-                    },
-                    [
-                      "name",
-                      "description",
-                      "privileges",
-                      "menuOptions",
-                      "assignAllPatients",
-                      "assignPickupCareGivers",
-                      "assignGroupLeads",
-                      "assignGroupMembers",
-                    ]
-                  )
+                ? {
+                    name: defaultValues.name,
+                    description: defaultValues.description,
+                    privileges: defaultValues.privileges.map(({ _id }) => _id),
+                    menuOptions: defaultValues.menuOptions.map(
+                      ({ _id }) => _id
+                    ),
+                    assignAllPatients: defaultValues.assignAllPatients,
+                    assignPickupCareGivers:
+                      defaultValues.assignPickupCareGivers,
+                    assignGroupLeads: defaultValues.assignGroupLeads,
+                    assignGroupMembers: defaultValues.assignGroupMembers,
+                  }
                 : {
                     name: "",
                     description: "",

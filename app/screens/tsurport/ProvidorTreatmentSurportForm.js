@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import Logo from "../../components/Logo";
-import { Text, useTheme, List } from "react-native-paper";
+import { Text, useTheme, List, ActivityIndicator } from "react-native-paper";
 import {
   Form,
   FormCheckBox,
@@ -31,6 +31,7 @@ const validationSchemer = Yup.object().shape({
 const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
   const { treatmentSurport } = route.params;
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
   const [careReceivers, setCareReceivers] = useState([]);
   const [careGivers, setCareGivers] = useState([]);
 
@@ -74,11 +75,13 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
     }
   };
   const handleFetch = async () => {
-    let response = await getPatients();
-    if (response.ok) {
-      setCareReceivers(response.data.results);
+    setFetching(true);
+    const patResponse = await getPatients();
+    const response = await getUsers();
+    setFetching(false);
+    if (patResponse.ok) {
+      setCareReceivers(patResponse.data.results);
     }
-    response = await getUsers();
     if (response.ok) {
       setCareGivers(response.data.results);
     }
@@ -89,6 +92,10 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
       handleFetch();
     }, [])
   );
+
+  if (fetching && careGivers.length <= 0) {
+    return <ActivityIndicator />;
+  }
   return (
     <View style={styles.screen}>
       <Logo />
@@ -113,7 +120,9 @@ const ProvidorTreatmentSurportForm = ({ navigation, route }) => {
             searchable
             data={careGivers}
             labelExtractor={(item) =>
-              `${item.firstName} ${item.lastName} (${item.email})`
+              (item.firstName
+                ? `${item.firstName} ${item.lastName}`
+                : item.username) + ` (${item.email})`
             }
             placeholder="Select Care giver"
             valueExtractor={(item) => item._id}
