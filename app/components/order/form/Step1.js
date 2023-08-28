@@ -115,15 +115,11 @@ const Step1 = ({ onNext, appointment, event, careReceivers }) => {
               data={careReceivers}
               valueExtractor={({ _id }) => _id}
               labelExtractor={(item) => {
-                const { patientCareReceiver } = item;
-                const careReceiver = patientCareReceiver[0];
-                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
+                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
                 return name;
               }}
               renderItem={({ item }) => {
-                const { patientCareReceiver } = item;
-                const careReceiver = patientCareReceiver[0];
-                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
+                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
                 return (
                   <List.Item
                     title={name}
@@ -149,15 +145,11 @@ const Step1 = ({ onNext, appointment, event, careReceivers }) => {
               data={careReceivers}
               valueExtractor={({ _id }) => _id}
               labelExtractor={(item) => {
-                const { patientCareReceiver } = item;
-                const careReceiver = patientCareReceiver[0];
-                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
+                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
                 return name;
               }}
               renderItem={({ item }) => {
-                const { patientCareReceiver } = item;
-                const careReceiver = patientCareReceiver[0];
-                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
+                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
                 return (
                   <List.Item
                     title={name}

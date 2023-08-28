@@ -15,7 +15,7 @@ import routes from "../../navigation/routes";
 const validationSchema = orderValidation();
 
 const PatientOrderForm = ({ navigation, route }) => {
-  const { order, event, appointment, myAppointments, careReceiverAppointments } = route.params;
+  const { order, event, appointment, careReceivers, type } = route.params;
   const { getTreatmentSurport, getUserId, getUser } = useUser();
   const { getCourrierServices, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
@@ -23,7 +23,6 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [methods, setMethods] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
   const [supportCareGivers, seSetSurpportCareGivers] = useState([]);
-  const [supportCareReceivers, seSetSurpportCareReceivers] = useState([]);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message: "Order was Successfully!",
@@ -46,20 +45,8 @@ const PatientOrderForm = ({ navigation, route }) => {
       canPickUpDrugs: true,
       onlyCareGiver: true,
     });
-    const dependantsResponse = await getTreatmentSurport({
-      canOrderDrug: true,
-      careGiver: userId,
-    });
     setLoadEligibility(false);
-    if (dependantsResponse.ok) {
-      seSetSurpportCareReceivers(
-        sResp.data.results.filter((item) => {
-          const { careGiver: careGiver_, careReceiver: careReceiver_ } = item;
-          // asociation fully established and user is caregiver
-          return careReceiver_ && careGiver_ && careGiver_ === userId;
-        })
-      );
-    }
+
     if (dResp.ok) {
       setCourrierServices(dResp.data.results);
     }
@@ -173,7 +160,7 @@ const PatientOrderForm = ({ navigation, route }) => {
                 courrierService: "",
                 event: event ? event._id : "",
                 appointment: appointment ? `${appointment.id}` : "",
-                type: "self",
+                type: type || "self",
                 careReceiver: "",
               }
         }
@@ -184,7 +171,7 @@ const PatientOrderForm = ({ navigation, route }) => {
             onNext={next}
             appointment={appointment}
             event={event}
-            careReceivers={supportCareReceivers}
+            careReceivers={careReceivers}
           />
         )}
         {wizardInfo.step === 2 && (
