@@ -23,8 +23,12 @@ const useART = () => {
   const getARTGroupDetail = (modelId) =>
     apiClient.get(`art/distribution-groups/${modelId}`);
 
-  const getDistrubutionEvents = (params) => apiClient.get("art/distribution-events", params);
-  const addDistributionEvent = (data) => apiClient.post("art/distribution-events", data);
+  const getDistrubutionEvents = (params) =>
+    apiClient.get("art/distribution-events", params);
+  const confirmDistributionEventAttendance = (eventId) =>
+    apiClient.get(`art/distribution-events/${eventId}/confirm-attendance`);
+  const addDistributionEvent = (data) =>
+    apiClient.post("art/distribution-events", data);
   const updateDistributionEvent = (modelId, data) =>
     apiClient.put(`art/distribution-events/${modelId}`, data);
   const getDistributionDetail = (modelId) =>
@@ -47,6 +51,7 @@ const useART = () => {
     getDistributionDetail,
     addDistributionEvent,
     updateDistributionEvent,
+    confirmDistributionEventAttendance,
   };
 };
 

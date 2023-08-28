@@ -5,9 +5,11 @@ import moment from "moment/moment";
 import { getImageUrl } from "../../utils/helpers";
 import { NestedProvider } from "../../theme";
 import routes from "../../navigation/routes";
-import { useUser } from "../../api";
+import { useART, useUser } from "../../api";
+import { AlertDialog, Dialog } from "../../components/dialog";
 const DistributionEventDetail = ({ navigation, route }) => {
   const { event, groups } = route.params;
+  const { confirmDistributionEventAttendance } = useART();
   const {
     title,
     distributionTime,
@@ -32,6 +34,11 @@ const DistributionEventDetail = ({ navigation, route }) => {
   const myFeedBackIndex = feedBacks.findIndex(
     ({ user: _userId }) => _userId === userId
   );
+  const [dialogInfo, setDialogInfo] = useState({
+    show: false,
+    mode: "form",
+    message: "",
+  });
   const disableConfirmAttendance =
     (user && user._id === userId) || // 1.disable if curr user on the leader
     // myFeedBackIndex !== -1 || // 2.disable if feedback exist
@@ -39,7 +46,27 @@ const DistributionEventDetail = ({ navigation, route }) => {
   const disablerequestDelivery =
     (user && user._id === userId) || // 1.disable if curr user on the leader
     feedBacks[myFeedBackIndex]?.confirmedAttendance === false; // 3.if already requested delivery
-  const handleConfirmAttendance = async () => {};
+  const handleConfirmAttendance = async () => {
+    const response = await confirmDistributionEventAttendance(event._id);
+    if (response.ok) {
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "success",
+        message: response.data.detail,
+      });
+    } else {
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "error",
+        message: response.data.detail
+          ? response.data.detail
+          : "Unkown error occured",
+      });
+    }
+    console.log(response.data);
+  };
   return (
     <View style={styles.screen}>
       <NestedProvider>
@@ -315,6 +342,18 @@ const DistributionEventDetail = ({ navigation, route }) => {
           />
         </Portal>
       </NestedProvider>
+      <Dialog visible={dialogInfo.show}>
+        {(dialogInfo.mode === "success" || dialogInfo.mode === "error") && (
+          <AlertDialog
+            mode={dialogInfo.mode}
+            message={dialogInfo.message}
+            onButtonPress={() => {
+              setDialogInfo({ ...dialogInfo, show: false });
+              navigation.goBack();
+            }}
+          />
+        )}
+      </Dialog>
     </View>
   );
 };
