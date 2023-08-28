@@ -7,7 +7,16 @@ import { screenWidth } from "../../utils/contants";
 import routes from "../../navigation/routes";
 
 const AppointmentDetail = ({ route, navigation }) => {
-  const { appointment, patient, type, careReceivers } = route.params;
+  const {
+    appointment: index,
+    patient,
+    careReceivers,
+    type,
+    myAppointments,
+    careReceiverAppointments,
+  } = route.params;
+  const appointment =
+    type === "self" ? myAppointments[index] : careReceiverAppointments[index];
   const {
     appointment_type,
     appointment_date,
@@ -86,7 +95,7 @@ const AppointmentDetail = ({ route, navigation }) => {
               onPress={() => {
                 navigation.navigate(routes.ORDERS_NAVIGATION, {
                   screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-                  params: { appointment, type, careReceivers },
+                  params: { appointment, type, careReceivers, careReceiverAppointments, myAppointments },
                 });
               }}
             >

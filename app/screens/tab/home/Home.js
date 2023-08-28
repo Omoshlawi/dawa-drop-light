@@ -129,10 +129,12 @@ const Home = ({ navigation }) => {
                       navigation.navigate(routes.ORDERS_NAVIGATION, {
                         screen: routes.ORDERS_APPOINMENT_DETAIL_SCREEN,
                         params: {
-                          appointment: item,
+                          appointment: index,
                           patient: user.patient[0],
                           careReceivers: user.careReceivers,
                           type: "self",
+                          myAppointments: appointments,
+                          careReceiverAppointments,
                         },
                       });
                     }}

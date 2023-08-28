@@ -13,7 +13,14 @@ import moment from "moment/moment";
 import { useFormikContext } from "formik";
 import { FormItemPicker } from "../../forms";
 
-const Step1 = ({ onNext, appointment, event, careReceivers }) => {
+const Step1 = ({
+  onNext,
+  appointment,
+  event,
+  careReceivers,
+  careReceiverAppointments,
+  myAppointments,
+}) => {
   const { colors, roundness } = useTheme();
   const {
     values,
@@ -23,6 +30,8 @@ const Step1 = ({ onNext, appointment, event, careReceivers }) => {
     errors,
     touched,
   } = useFormikContext();
+  console.log(careReceiverAppointments);
+  console.log(myAppointments);
   return (
     <View style={styles.container}>
       <View>

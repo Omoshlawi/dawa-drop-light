@@ -21,7 +21,12 @@ const AppointmentsSummary = ({
       onPress: () => {
         navigate(routes.ORDERS_NAVIGATION, {
           screen: routes.ORDERS_UPCOMING_APPOINMENTS_SCREEN,
-          params: { appointments: myAppointments, type: "self", user },
+          params: {
+            myAppointments,
+            careReceiverAppointments,
+            type: "self",
+            user,
+          },
         });
       },
     },
@@ -33,7 +38,8 @@ const AppointmentsSummary = ({
         navigate(routes.ORDERS_NAVIGATION, {
           screen: routes.ORDERS_UPCOMING_APPOINMENTS_SCREEN,
           params: {
-            appointments: careReceiverAppointments,
+            myAppointments,
+            careReceiverAppointments,
             type: "other",
             user,
           },

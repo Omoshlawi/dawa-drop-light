@@ -7,14 +7,16 @@ import routes from "../../navigation/routes";
 import { useUser } from "../../api";
 
 const UpcomingAppointments = ({ navigation, route }) => {
-  const { appointments, type, user } = route.params;
+  const { myAppointments, careReceiverAppointments, type, user } = route.params;
+  const appointments =
+    type === "self" ? myAppointments : careReceiverAppointments;
   const { colors } = useTheme();
   return (
     <View>
       <FlatList
         data={appointments}
         keyExtractor={({ id }) => id}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           const {
             appointment_type,
             appointment_date,
@@ -28,7 +30,9 @@ const UpcomingAppointments = ({ navigation, route }) => {
                 navigation.navigate(routes.ORDERS_NAVIGATION, {
                   screen: routes.ORDERS_APPOINMENT_DETAIL_SCREEN,
                   params: {
-                    appointment: item,
+                    appointment: index,
+                    myAppointments,
+                    careReceiverAppointments,
                     patient:
                       type === "self"
                         ? user.patient[0]

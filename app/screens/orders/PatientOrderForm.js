@@ -15,7 +15,15 @@ import routes from "../../navigation/routes";
 const validationSchema = orderValidation();
 
 const PatientOrderForm = ({ navigation, route }) => {
-  const { order, event, appointment, careReceivers, type } = route.params;
+  const {
+    order,
+    event,
+    appointment,
+    careReceivers,
+    type,
+    careReceiverAppointments,
+    myAppointments,
+  } = route.params;
   const { getTreatmentSurport, getUserId, getUser } = useUser();
   const { getCourrierServices, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
@@ -172,6 +180,8 @@ const PatientOrderForm = ({ navigation, route }) => {
             appointment={appointment}
             event={event}
             careReceivers={careReceivers}
+            careReceiverAppointments={careReceiverAppointments}
+            myAppointments={myAppointments}
           />
         )}
         {wizardInfo.step === 2 && (
