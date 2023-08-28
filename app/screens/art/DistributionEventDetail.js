@@ -295,7 +295,12 @@ const DistributionEventDetail = ({ navigation, route }) => {
                     //sumbit form
                     navigation.navigate(routes.ORDERS_NAVIGATION, {
                       screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-                      params: { event, type: "self" },
+                      params: {
+                        event,
+                        type: "self",
+                        careReceiverAppointments: [],
+                        myAppointments: [],
+                      },
                     });
                   }
                 },

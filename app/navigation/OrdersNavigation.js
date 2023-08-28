@@ -99,31 +99,6 @@ const OrdersNavigation = () => {
         component={OrderDetail}
         options={({ navigation, route }) => ({
           title: "",
-          headerRight: ({}) => {
-            const { order, userId } = route.params;
-            return (
-              <TouchableOpacity
-                style={{ paddingRight: 10 }}
-                onPress={() => {
-                  if (true)
-                    navigation.navigate(routes.ORDERS_NAVIGATION, {
-                      screen:
-                        order.patient.length > 0 &&
-                        order.patient[0].user !== userId
-                          ? routes.ORDERS_ORDER_FOR_ANOTHER_FORM_SCREEN
-                          : routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-                      params: route.params,
-                    });
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="square-edit-outline"
-                  size={30}
-                  color={colors.primary}
-                />
-              </TouchableOpacity>
-            );
-          },
         })}
       />
       <Screen

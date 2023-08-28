@@ -64,49 +64,50 @@ const Orders = ({ navigation, route }) => {
   );
 
   const ordersToSectionListData = (orders = []) => {
-    const onTransit = orders.filter(
-      ({ deliveries }) => getOrderStatus(deliveries) === "On Transit"
-    );
-    const cancelled = orders.filter(
-      ({ deliveries }) => getOrderStatus(deliveries) === "Canceled"
-    );
-    const delivered = orders.filter(
-      ({ deliveries }) => getOrderStatus(deliveries) === "Delivered"
-    );
-    const pending = orders.filter(
-      ({ deliveries }) => getOrderStatus(deliveries) === "Pending"
-    );
+    // const onTransit = orders.filter(
+    //   ({ deliveries }) => getOrderStatus(deliveries) === "On Transit"
+    // );
+    // const cancelled = orders.filter(
+    //   ({ deliveries }) => getOrderStatus(deliveries) === "Canceled"
+    // );
+    // const delivered = orders.filter(
+    //   ({ deliveries }) => getOrderStatus(deliveries) === "Delivered"
+    // );
+    // const pending = orders.filter(
+    //   ({ deliveries }) => getOrderStatus(deliveries) === "Pending"
+    // );
     return [
-      {
-        title: "Pending Orders",
-        data: pending,
-      },
-      {
-        title: "On Transit Orders",
-        data: onTransit,
-      },
-      {
-        title: "Cancelled Orders",
-        data: cancelled,
-      },
-      {
-        title: "Delivered Orders",
-        data: delivered,
-      },
+      // {
+      //   title: "Pending Orders",
+      //   data: pending,
+      // },
+      // {
+      //   title: "On Transit Orders",
+      //   data: onTransit,
+      // },
+      // {
+      //   title: "Cancelled Orders",
+      //   data: cancelled,
+      // },
+      // {
+      //   title: "Delivered Orders",
+      //   data: delivered,
+      // },
+      { title: "All Orders", data: orders },
     ];
   };
   return (
     <View style={styles.screen}>
       <SectionList
         sections={ordersToSectionListData(orders)}
-        renderSectionHeader={({ section: { title, data } }) =>
-          data.length ? <Text style={styles.title}>{title}</Text> : null
-        }
+        // renderSectionHeader={({ section: { title, data } }) =>
+        //   data.length ? <Text style={styles.title}>{title}</Text> : null
+        // }
         refreshing={loading}
         onRefresh={handleFetch}
         keyExtractor={({ _id }) => _id}
         renderItem={({ item }) => {
-          const { _id, created, drug } = item;
+          const { _id, created, deliveryAddress } = item;
           return (
             <TouchableOpacity
               onPress={() =>
@@ -117,7 +118,7 @@ const Orders = ({ navigation, route }) => {
               }
             >
               <Card.Title
-                title={drug}
+                title={`${deliveryAddress?.address}`}
                 style={[styles.listItem, { backgroundColor: colors.surface }]}
                 left={(props) => <Avatar.Icon {...props} icon="cart" />}
                 right={(props) => (
@@ -135,18 +136,6 @@ const Orders = ({ navigation, route }) => {
               />
             </TouchableOpacity>
           );
-        }}
-      />
-      <FAB
-        icon="plus"
-        style={[styles.fab, { backgroundColor: colors.secondary }]}
-        color={colors.surface}
-        label="Order Now"
-        onPress={() => {
-          navigation.navigate(routes.ORDERS_NAVIGATION, {
-            screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-            params: { modes, timeSlots, methods, treatmentSurpoters },
-          });
         }}
       />
     </View>

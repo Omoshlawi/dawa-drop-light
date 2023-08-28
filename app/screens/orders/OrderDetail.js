@@ -33,7 +33,7 @@ const OrderDetail = ({ navigation, route }) => {
   const { open } = state;
 
   return (
-    <NestedProvider>
+    <>
       <ScrollView style={styles.screen}>
         <View style={[styles.order, { bordderRadius: roundness }]}>
           <Logo size={screenWidth * 0.5} />
@@ -52,113 +52,65 @@ const OrderDetail = ({ navigation, route }) => {
           subText={moment(order.created).format("dddd Do MMMM yyy hh:mm")}
           icon="clock"
         />
-        <CardTitle
-          text={"Status"}
-          subText={getOrderStatus(order.deliveries)}
-          icon="progress-clock"
-        />
-        <CardTitle text={"Drug ordered"} subText={order.drug} icon="pill" />
 
         <CardTitle
           text={"Phone number"}
           subText={order.phoneNumber}
           icon="phone"
         />
-        <CardTitle
-          text={`${order.appointment.appointment_type} Appointment`}
-          subText={`${order.appointment.appointment_date}`}
-          icon="calendar"
-        />
+        {order.appointment && (
+          <CardTitle
+            text={`${order.appointment.appointment_type} Appointment`}
+            subText={`${moment(order.appointment.appointment_date).format(
+              "Do ddd MMM yyyy"
+            )}`}
+            icon="calendar"
+          />
+        )}
+        {order.event && (
+          <CardTitle
+            text={order.event.title}
+            subText={`${moment(order.event.distributionDate).format(
+              "Do ddd MMM yyyy"
+            )}`}
+            icon="calendar"
+          />
+        )}
         <CardTitle
           text={"Delivery Preference"}
           subText={order.deliveryMethod.name}
           icon="truck"
         />
-        {order.deliveryMethod.blockOnTimeSlotFull === false &&
-          order.careGiver.length > 0 && (
+        {order.deliveryPerson && (
+          <>
             <CardTitle
               text={"Who will deliver the drugs?"}
-              subText={
-                order.careGiver[0].firstName && order.careGiver[0].lastName
-                  ? `${order.careGiver[0].firstName} ${order.careGiver[0].lastName}`
-                  : `${order.careGiver[0].username} (${order.careGiver[0].phoneNumber})`
-              }
+              subText={`${order.deliveryPerson.fullName} (${order.deliveryPerson.phoneNumber})`}
               icon="account"
             />
-          )}
+            <CardTitle
+              text={"Pick up time?"}
+              subText={`${moment(order.deliveryPerson.pickUpTime).format(
+                "HH:mm"
+              )} hrs`}
+              icon="account"
+            />
+          </>
+        )}
         <CardTitle
           text={"Adress"}
-          subText={`${order.deliveryAddress.address}(${order.deliveryAddress.latitude},${order.deliveryAddress.longitude})`}
+          subText={`${order.deliveryAddress.address}`}
           icon="google-maps"
         />
 
-        <CardTitle
-          text={"Delivere Through"}
-          subText={order.deliveryMode.name}
-          icon="bicycle"
-        />
-        <CardTitle
-          text={"Delivery time"}
-          subText={order.deliveryTimeSlot.label}
-          icon="timelapse"
-        />
+        {order.courrierService && (
+          <CardTitle
+            text={"Courrier service"}
+            subText={order.courrierService.name}
+            icon="bicycle"
+          />
+        )}
       </ScrollView>
-      <Portal>
-        <FAB.Group
-          open={open}
-          fabStyle={[styles.fab, { backgroundColor: colors.secondary }]}
-          color={colors.surface}
-          label={open ? "Close" : "Actions"}
-          backdropColor={colors.backdrop}
-          visible
-          icon={open ? "close" : "dots-vertical"}
-          actions={[
-            {
-              icon: "cart",
-              onPress: () =>
-                setDialogInfo({
-                  ...dialogInfo,
-                  show: true,
-                  message: order._id,
-                }),
-              color: colors.secondary,
-            },
-            {
-              icon: "account",
-              onPress: () =>
-                setDialogInfo({
-                  ...dialogInfo,
-                  show: true,
-                  message: order.patient._id,
-                }),
-              color: colors.secondary,
-            },
-            {
-              icon: "google-maps",
-              label: "Open in Google maps",
-              labelTextColor:
-                getOrderStatus(order.deliveries) === "On Transit"
-                  ? colors.secondary
-                  : colors.disabled,
-              onPress: () => {
-                if (getOrderStatus(order.deliveries) === "On Transit") {
-                  Linking.openURL(getStreamUrl(order.deliveries));
-                }
-              },
-              color:
-                getOrderStatus(order.deliveries) === "On Transit"
-                  ? colors.secondary
-                  : colors.disabled,
-            },
-          ]}
-          onStateChange={onStateChange}
-          onPress={() => {
-            if (open) {
-              // do something if the speed dial is open
-            }
-          }}
-        />
-      </Portal>
       <Dialog
         visible={dialogInfo.show}
         swipable
@@ -168,7 +120,7 @@ const OrderDetail = ({ navigation, route }) => {
           <CodeDisplayCopy message={dialogInfo.message} />
         )}
       </Dialog>
-    </NestedProvider>
+    </>
   );
 };
 
