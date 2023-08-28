@@ -29,6 +29,9 @@ const useOrder = () => {
     apiClient.get(`deliveries/courrier-services/${serviceId}`);
   const updateCourrierServiceDetail = (serviceId, data) =>
     apiClient.get(`deliveries/courrier-services/${serviceId}`, data);
+  const addOrder = (data) => apiClient.post("orders", data);
+  const updateOrder = (orderId, data) =>
+    apiClient.put(`orders/${orderId}`, data);
   return {
     getDeliveryModes,
     updateDeliveryMode,
@@ -45,6 +48,8 @@ const useOrder = () => {
     getCourrierServices,
     updateCourrierServiceDetail,
     addCourrierService,
+    addOrder,
+    updateOrder,
   };
 };
 

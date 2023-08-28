@@ -37,8 +37,31 @@ const validationSchema = (methods = [], specific) => {
         }
         return schema;
       }),
-    event: Yup.string().label("Event"),
-    appointment: Yup.string().label("Appointment"),
+    event: Yup.string()
+      .label("Event")
+      .when("appointment", ([value], schema) => {
+        if (!value) {
+          return schema.required();
+        }
+        return schema;
+      }),
+    appointment: Yup.string()
+      .label("Appointment")
+      .test(
+        "appointmentRequired",
+        "Appointment is required when Event is not provided",
+        function (value) {
+          const eventValue = this.resolve(Yup.ref("event")); // Get the value of the "event" field
+
+          // If "event" is not provided, require "appointment"
+          if (!eventValue) {
+            return !!value;
+          }
+
+          // If "event" is provided, "appointment" is optional
+          return true;
+        }
+      ),
     type: Yup.string().oneOf(["self", "other"]).default("self"),
     careReceiver: Yup.string()
       .label("Care receiver")

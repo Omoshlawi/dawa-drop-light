@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image } from "react-native";
 import React from "react";
-import { Button, List, RadioButton, Text, useTheme } from "react-native-paper";
+import { Button, HelperText, List, RadioButton, Text, useTheme } from "react-native-paper";
 import { screenWidth } from "../../../utils/contants";
 import moment from "moment/moment";
 import { useFormikContext } from "formik";
@@ -8,7 +8,7 @@ import { FormItemPicker } from "../../forms";
 
 const Step1 = ({ onNext, appointment, event }) => {
   const { colors, roundness } = useTheme();
-  const { values, setFieldValue, validateForm, setFieldTouched } =
+  const { values, setFieldValue, validateForm, setFieldTouched, errors, touched } =
     useFormikContext();
   return (
     <View style={styles.container}>
@@ -19,8 +19,30 @@ const Step1 = ({ onNext, appointment, event }) => {
           resizeMode="contain"
         />
       </View>
-      <Text variant="headlineLarge">STEP 1: Patient Information</Text>
+      <Text variant="headlineLarge">STEP 1: Get started</Text>
       <View style={styles.dataContainer}>
+        <RadioButton.Group
+          onValueChange={(value) => {
+            setFieldValue("type", value);
+          }}
+          value={values["type"]}
+        >
+          <RadioButton.Item
+            label="Order for self"
+            value="self"
+            labelVariant="bodySmall"
+          />
+          <RadioButton.Item
+            label="Order for another"
+            value="other"
+            labelVariant="bodySmall"
+          />
+        </RadioButton.Group>
+        {errors["type"] && (
+          <HelperText type="error" visible={errors["type"] && touched["type"]}>
+            {errors["type"]}
+          </HelperText>
+        )}
         {appointment && (
           <List.Item
             style={[
@@ -49,23 +71,23 @@ const Step1 = ({ onNext, appointment, event }) => {
             left={(props) => <List.Icon {...props} icon="calendar-clock" />}
           />
         )}
-        <RadioButton.Group
-          onValueChange={(value) => {
-            setFieldValue("type", value);
-          }}
-          value={values["type"]}
-        >
-          <RadioButton.Item
-            label="Order for self"
-            value="self"
-            labelVariant="bodySmall"
-          />
-          <RadioButton.Item
-            label="Order for another"
-            value="other"
-            labelVariant="bodySmall"
-          />
-        </RadioButton.Group>
+        {errors["event"] && (
+          <HelperText
+            type="error"
+            visible={errors["event"] && touched["event"]}
+          >
+            {errors["event"]}
+          </HelperText>
+        )}
+        {errors["appointment"] && (
+          <HelperText
+            type="error"
+            visible={errors["appointment"] && touched["appointment"]}
+          >
+            {errors["appointment"]}
+          </HelperText>
+        )}
+
         {values["type"] === "other" && (
           <>
             <FormItemPicker
@@ -94,7 +116,7 @@ const Step1 = ({ onNext, appointment, event }) => {
           mode="contained"
           style={{ marginTop: 10 }}
           onPress={async () => {
-            const fields = ["type", "careReceiver"];
+            const fields = ["type", "careReceiver", "appointment", "event"];
             const errors = await validateForm(values);
             const invalidFields = Object.keys(errors);
             let valid = true;

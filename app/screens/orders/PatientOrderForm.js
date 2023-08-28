@@ -34,7 +34,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [loadEligibility, setLoadEligibility] = useState(false);
   const [wizardInfo, setWizardInfo] = useState({ step: 1, specific: "no" });
   const [user, setUser] = useState(null);
-  const { addOrder, updateOrder } = usePatient();
+  const { addOrder, updateOrder } = useOrder();
   const handleFetch = async () => {
     setLoadEligibility(true);
     const dResp = await getCourrierServices();
@@ -145,7 +145,7 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryPerson: order.deliveryPerson,
                 courrierService: order.courrierService._id,
                 event: order.event ? order.event._id : "",
-                appointment: order.appointment ? order.appointment.id : "",
+                appointment: order.appointment ? `${order.appointment.id}` : "",
                 type: order.type,
                 careReceiver: order.careReceiver ? order.careReceiver : "",
               }
@@ -157,7 +157,7 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryPerson: null,
                 courrierService: "",
                 event: event ? event._id : "",
-                appointment: appointment ? appointment.id : "",
+                appointment: appointment ? `${appointment.id}` : "",
                 type: "self",
                 careReceiver: "",
               }
@@ -203,6 +203,8 @@ const PatientOrderForm = ({ navigation, route }) => {
               deliveryMethods={methods}
               courrierServices={courrierServices}
               specific={wizardInfo.specific}
+              appointment={appointment}
+              event={event}
             />
           ) : (
             <AlertDialog
