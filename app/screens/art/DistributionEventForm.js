@@ -20,13 +20,14 @@ import moment from "moment/moment";
 import { ScrollView } from "react-native";
 import { MyTestComponent } from "../../components/input";
 import ExtraSubscribersForm from "../../components/ExtraSubscribersForm";
+import DistributionVenueInput from "../../components/DistributionVenueInput";
 
 const validationSchemer = Yup.object().shape({
   title: Yup.string().label("Evennt title").required(),
   distributionTime: Yup.date().label("Event Date"),
   distributionLocation: Yup.object({
-    latitude: Yup.number().required().label("Latitude"),
-    longitude: Yup.number().required().label("Longitude"),
+    latitude: Yup.number().label("Latitude"),
+    longitude: Yup.number().label("Longitude"),
     address: Yup.string().label("Address"),
   }).label("Event address"),
   group: Yup.string().label("Distribution Group").required(),
@@ -138,7 +139,13 @@ const DistributionEventForm = ({ navigation, route }) => {
               }
               label={"Reminder dates"}
             />
-            <FormLocationPicker name="distributionLocation" />
+            <DistributionVenueInput
+              name="distributionLocation"
+              icon="google-maps"
+              placeholder="Enter event venue"
+              label="Event venue"
+            />
+            {/* <FormLocationPicker name="distributionLocation" /> */}
             <FormItemPicker
               name="group"
               icon="account-group"
