@@ -33,7 +33,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   const [supportCareGivers, seSetSurpportCareGivers] = useState([]);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Order was Successfully!",
+    message: "Order was Successfull!",
     mode: "success",
   });
   const userId = getUserId();
@@ -169,7 +169,12 @@ const PatientOrderForm = ({ navigation, route }) => {
                 event: event ? event._id : "",
                 appointment: appointment ? `${appointment.id}` : "",
                 type: type || "self",
-                careReceiver: "",
+                careReceiver:
+                  type === "other"
+                    ? careReceivers.find(
+                        (pat) => pat.cccNumber === appointment.cccNumber
+                      )?._id
+                    : "",
               }
         }
         onSubmit={handleSubmit}
@@ -182,6 +187,7 @@ const PatientOrderForm = ({ navigation, route }) => {
             careReceivers={careReceivers}
             careReceiverAppointments={careReceiverAppointments}
             myAppointments={myAppointments}
+            user={user}
           />
         )}
         {wizardInfo.step === 2 && (
@@ -230,8 +236,8 @@ const PatientOrderForm = ({ navigation, route }) => {
               onButtonPress={() => {
                 setDialogInfo({ ...dialogInfo, show: false });
                 if (dialogInfo.mode === "success")
-                  navigation.navigate(routes.ORDERS_NAVIGATION, {
-                    screen: routes.ORDERS_ORDERS_SCREEN,
+                  navigation.navigate(routes.BTAB_NAVIGATION, {
+                    screen: routes.BTAB_HOME_SCREEN,
                   });
                 else if (dialogInfo.mode === "error") navigation.goBack();
               }}

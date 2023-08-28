@@ -20,6 +20,7 @@ const Step1 = ({
   careReceivers,
   careReceiverAppointments,
   myAppointments,
+  user,
 }) => {
   const { colors, roundness } = useTheme();
   const {
@@ -30,8 +31,6 @@ const Step1 = ({
     errors,
     touched,
   } = useFormikContext();
-  console.log(careReceiverAppointments);
-  console.log(myAppointments);
   return (
     <View style={styles.container}>
       <View>
@@ -43,31 +42,22 @@ const Step1 = ({
       </View>
       <Text variant="headlineLarge">STEP 1: Get started</Text>
       <View style={styles.dataContainer}>
-        <RadioButton.Group
-          onValueChange={(value) => {
-            setFieldValue("type", value);
-          }}
-          value={values["type"]}
-        >
-          <RadioButton.Item
-            label="Order for self"
-            value="self"
-            labelVariant="bodySmall"
-          />
-          <RadioButton.Item
-            label="Order for another"
-            value="other"
-            labelVariant="bodySmall"
-          />
-        </RadioButton.Group>
         {errors["type"] && (
           <HelperText type="error" visible={errors["type"] && touched["type"]}>
             {errors["type"]}
           </HelperText>
         )}
-        {values["type"] === "self" && (
-          <>
-            {appointment && (
+        {errors["careReceiver"] && (
+          <HelperText
+            type="error"
+            visible={errors["careReceiver"] && touched["careReceiver"]}
+          >
+            {errors["careReceiver"]}
+          </HelperText>
+        )}
+        <>
+          {appointment && (
+            <>
               <List.Item
                 style={[
                   styles.listItem,
@@ -80,23 +70,60 @@ const Step1 = ({
                 descriptionStyle={{ color: colors.disabled }}
                 left={(props) => <List.Icon {...props} icon="calendar-clock" />}
               />
-            )}
-            {event && (
-              <List.Item
-                style={[
-                  styles.listItem,
-                  { backgroundColor: colors.surface, borderRadius: roundness },
-                ]}
-                title={event.title}
-                description={moment(event.distributionTime).format(
-                  "Do dddd MMMM yyy"
-                )}
-                descriptionStyle={{ color: colors.disabled }}
-                left={(props) => <List.Icon {...props} icon="calendar-clock" />}
-              />
-            )}
-          </>
-        )}
+              {values["type"] === "other" ? (
+                <List.Item
+                  style={[
+                    styles.listItem,
+                    {
+                      backgroundColor: colors.surface,
+                      borderRadius: roundness,
+                    },
+                  ]}
+                  title={"Care receiver"}
+                  description={`${
+                    careReceivers.find(
+                      (pat) => pat.cccNumber === appointment.cccNumber
+                    )?.firstName
+                  } ${
+                    careReceivers.find(
+                      (pat) => pat.cccNumber === appointment.cccNumber
+                    )?.lastName
+                  } (${appointment.cccNumber})`}
+                  descriptionStyle={{ color: colors.disabled }}
+                  left={(props) => <List.Icon {...props} icon="account" />}
+                />
+              ) : (
+                <List.Item
+                  style={[
+                    styles.listItem,
+                    {
+                      backgroundColor: colors.surface,
+                      borderRadius: roundness,
+                    },
+                  ]}
+                  title={"Patient "}
+                  description={`${user.patient[0].firstName} ${user.patient[0].lastName}(${appointment.cccNumber})`}
+                  descriptionStyle={{ color: colors.disabled }}
+                  left={(props) => <List.Icon {...props} icon="account" />}
+                />
+              )}
+            </>
+          )}
+          {event && (
+            <List.Item
+              style={[
+                styles.listItem,
+                { backgroundColor: colors.surface, borderRadius: roundness },
+              ]}
+              title={event.title}
+              description={moment(event.distributionTime).format(
+                "Do dddd MMMM yyy"
+              )}
+              descriptionStyle={{ color: colors.disabled }}
+              left={(props) => <List.Icon {...props} icon="calendar-clock" />}
+            />
+          )}
+        </>
         {errors["event"] && (
           <HelperText
             type="error"
@@ -114,66 +141,6 @@ const Step1 = ({
           </HelperText>
         )}
 
-        {values["type"] === "other" && (
-          <>
-            <FormItemPicker
-              name="careReceiver"
-              icon="account"
-              searchable
-              label="Care receiver"
-              data={careReceivers}
-              valueExtractor={({ _id }) => _id}
-              labelExtractor={(item) => {
-                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
-                return name;
-              }}
-              renderItem={({ item }) => {
-                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
-                return (
-                  <List.Item
-                    title={name}
-                    style={styles.listItem}
-                    left={(props) => <List.Icon {...props} icon="account" />}
-                  />
-                );
-              }}
-              itemContainerStyle={[
-                styles.itemContainer,
-                { borderRadius: roundness },
-              ]}
-            />
-          </>
-        )}
-        {values["type"] === "other" && values["careReceiver"] && (
-          <>
-            <FormItemPicker
-              name="careReceiver"
-              icon="account"
-              searchable
-              label="Care receiver"
-              data={careReceivers}
-              valueExtractor={({ _id }) => _id}
-              labelExtractor={(item) => {
-                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
-                return name;
-              }}
-              renderItem={({ item }) => {
-                const name = `${item.firstName} ${item.lastName}(${item.cccNumber})`;
-                return (
-                  <List.Item
-                    title={name}
-                    style={styles.listItem}
-                    left={(props) => <List.Icon {...props} icon="account" />}
-                  />
-                );
-              }}
-              itemContainerStyle={[
-                styles.itemContainer,
-                { borderRadius: roundness },
-              ]}
-            />
-          </>
-        )}
         <Button
           mode="contained"
           style={{ marginTop: 10 }}
