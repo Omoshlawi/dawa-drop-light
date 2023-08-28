@@ -21,6 +21,7 @@ import {
   ProviderTruckDelivery,
   ProvidorDeliveryRequests,
   ProvidorDeliveryTasks,
+  UpcomingAppointments,
 } from "../screens/orders";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
@@ -37,6 +38,11 @@ const OrdersNavigation = () => {
         name={routes.ORDERS_APPOINMENTS_SCREEN}
         component={Appointments}
         options={{ title: "Appointments" }}
+      />
+      <Screen
+        name={routes.ORDERS_UPCOMING_APPOINMENTS_SCREEN}
+        component={UpcomingAppointments}
+        options={{ title: "Forth coming appointments" }}
       />
       <Screen
         name={routes.ORDERS_APPOINMENT_DETAIL_SCREEN}

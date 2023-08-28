@@ -115,44 +115,15 @@ const Step1 = ({ onNext, appointment, event, careReceivers }) => {
               data={careReceivers}
               valueExtractor={({ _id }) => _id}
               labelExtractor={(item) => {
-                const {
-                  patientCareReceiver,
-                  userCareGiver,
-                  careGiver: careGiver_,
-                  careReceiver: careReceiver_,
-                  userCareReceiver,
-                  _id,
-                } = item;
+                const { patientCareReceiver } = item;
                 const careReceiver = patientCareReceiver[0];
-                const careReceiverUser = userCareReceiver[0];
-                const name = careReceiverUser
-                  ? careReceiverUser.firstName && careReceiverUser.lastName
-                    ? careReceiverUser.firstName +
-                      " " +
-                      careReceiverUser.lastName
-                    : careReceiverUser.username
-                  : `${careReceiver.firstName} ${careReceiver.lastName}`;
+                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
                 return name;
               }}
               renderItem={({ item }) => {
-                const {
-                  patientCareReceiver,
-                  userCareGiver,
-                  careGiver: careGiver_,
-                  careReceiver: careReceiver_,
-                  userCareReceiver,
-                  _id,
-                } = item;
+                const { patientCareReceiver } = item;
                 const careReceiver = patientCareReceiver[0];
-                const careReceiverUser = userCareReceiver[0];
-                const name = careReceiverUser
-                  ? careReceiverUser.firstName && careReceiverUser.lastName
-                    ? careReceiverUser.firstName +
-                      " " +
-                      careReceiverUser.lastName
-                    : careReceiverUser.username
-                  : `${careReceiver.firstName} ${careReceiver.lastName}`;
-
+                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
                 return (
                   <List.Item
                     title={name}
@@ -168,7 +139,7 @@ const Step1 = ({ onNext, appointment, event, careReceivers }) => {
             />
           </>
         )}
-        {values["careReceiver"] && (
+        {values["type"] === "other" && values["careReceiver"] && (
           <>
             <FormItemPicker
               name="careReceiver"
@@ -178,44 +149,15 @@ const Step1 = ({ onNext, appointment, event, careReceivers }) => {
               data={careReceivers}
               valueExtractor={({ _id }) => _id}
               labelExtractor={(item) => {
-                const {
-                  patientCareReceiver,
-                  userCareGiver,
-                  careGiver: careGiver_,
-                  careReceiver: careReceiver_,
-                  userCareReceiver,
-                  _id,
-                } = item;
+                const { patientCareReceiver } = item;
                 const careReceiver = patientCareReceiver[0];
-                const careReceiverUser = userCareReceiver[0];
-                const name = careReceiverUser
-                  ? careReceiverUser.firstName && careReceiverUser.lastName
-                    ? careReceiverUser.firstName +
-                      " " +
-                      careReceiverUser.lastName
-                    : careReceiverUser.username
-                  : `${careReceiver.firstName} ${careReceiver.lastName}`;
+                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
                 return name;
               }}
               renderItem={({ item }) => {
-                const {
-                  patientCareReceiver,
-                  userCareGiver,
-                  careGiver: careGiver_,
-                  careReceiver: careReceiver_,
-                  userCareReceiver,
-                  _id,
-                } = item;
+                const { patientCareReceiver } = item;
                 const careReceiver = patientCareReceiver[0];
-                const careReceiverUser = userCareReceiver[0];
-                const name = careReceiverUser
-                  ? careReceiverUser.firstName && careReceiverUser.lastName
-                    ? careReceiverUser.firstName +
-                      " " +
-                      careReceiverUser.lastName
-                    : careReceiverUser.username
-                  : `${careReceiver.firstName} ${careReceiver.lastName}`;
-
+                const name = `${careReceiver.firstName} ${careReceiver.lastName}(${careReceiver.cccNumber})`;
                 return (
                   <List.Item
                     title={name}

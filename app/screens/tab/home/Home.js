@@ -9,23 +9,25 @@ import {
   Text,
   useTheme,
 } from "react-native-paper";
-import { useAuthorize, usePatient, useUser } from "../../../api";
+import { useAuthorize, usePatient, useProvidor, useUser } from "../../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { ServiceCard } from "../../../components/common";
 import HomeAdvert from "../../../components/HomeAdvert";
 import AppointmentCard from "../../../components/AppointmentCard";
 import { TouchableOpacity } from "react-native";
 import routes from "../../../navigation/routes";
+import AppointmentsSummary from "../../../components/AppointmentsSummary";
 
 const Home = ({ navigation }) => {
   const { getUser, getUserId } = useUser();
   const { getUserAuthInfo } = useAuthorize();
   const { getAppointments } = usePatient();
+  const { getAllCareReceiversUpcomingAppointments } = useProvidor();
   const { colors, roundness } = useTheme();
-  const [suggestProfile, setSuggestProfile] = useState(true);
   const [roles, setRoles] = useState([]);
   const [user, setUser] = useState(null);
   const [appointments, setAppointments] = useState([]);
+  const [careReceiverAppointments, setCareReceiverAppointments] = useState([]);
   useFocusEffect(
     useCallback(() => {
       handleFetchUser();
@@ -41,10 +43,14 @@ const Home = ({ navigation }) => {
   };
   const handleFetchAppoitments = async () => {
     const response = await getAppointments({ upComing: true });
+    const res1 = await getAllCareReceiversUpcomingAppointments();
     if (response.ok) {
       setAppointments(response.data.results);
     } else {
       // if(response.stat)
+    }
+    if (res1.ok) {
+      setCareReceiverAppointments(res1.data.results);
     }
   };
 
@@ -54,11 +60,6 @@ const Home = ({ navigation }) => {
       setRoles(response.data.roles);
     }
   };
-
-  useEffect(() => {
-    // if user is normal user with no roles then set suggest to true
-    setSuggestProfile(user && user.domantUser);
-  }, [roles, user]);
 
   if (!user) {
     return null;
@@ -85,16 +86,16 @@ const Home = ({ navigation }) => {
           <Text variant="titleMedium">Services</Text>
           <ServiceCard
             image={require("../../../assets/pills.png")}
-            title="Medication Orders"
-            subTitle="Order, dispension and delivery of medication to the patient"
+            title="Medication home delivery"
+            subTitle="Request drug delivery and have them delivered at your door step"
           />
           <ServiceCard
             image={require("../../../assets/conversation.png")}
-            title="Consult your doctor"
-            subTitle="Talk to a clinician and get help fast and easy, just by button press"
+            title="Appointment"
+            subTitle="Track your appointments with ease a get reminder notifications"
           />
           <HomeAdvert />
-          {suggestProfile ? (
+          {user?.patient?.length === 0 && (
             <TouchableOpacity
               style={{
                 backgroundColor: colors.waningLight,
@@ -113,11 +114,10 @@ const Home = ({ navigation }) => {
                 titleNumberOfLines={3}
               />
             </TouchableOpacity>
-          ) : (
+          )}
+          {careReceiverAppointments.length === 0 && appointments.length > 0 && (
             <>
-              {appointments.length > 0 && (
-                <Text variant="titleMedium">Upcoming Appointments</Text>
-              )}
+              <Text variant="titleMedium">Upcoming Appointments</Text>
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 data={appointments}
@@ -128,13 +128,28 @@ const Home = ({ navigation }) => {
                     onPress={() => {
                       navigation.navigate(routes.ORDERS_NAVIGATION, {
                         screen: routes.ORDERS_APPOINMENT_DETAIL_SCREEN,
-                        params: { appointment: item, patient: user.patient[0] },
+                        params: {
+                          appointment: item,
+                          patient: user.patient[0],
+                          careReceivers: user.careReceivers,
+                          type: "self",
+                        },
                       });
                     }}
                   >
                     <AppointmentCard {...item} />
                   </TouchableOpacity>
                 )}
+              />
+            </>
+          )}
+          {careReceiverAppointments.length > 0 && appointments.length > 0 && (
+            <>
+              <Text variant="titleMedium">Upcoming Appointments</Text>
+              <AppointmentsSummary
+                careReceiverAppointments={careReceiverAppointments}
+                myAppointments={appointments}
+                user={user}
               />
             </>
           )}

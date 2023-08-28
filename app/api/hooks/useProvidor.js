@@ -25,6 +25,10 @@ const useProvidor = () => {
       `auth/user/relations/${relation_id}/update-care-receiver`,
       data
     );
+  const getCareReceiverUpcomingAppointments = (cccNumber) =>
+    apiClient.get(`appointments/care-receiver/${cccNumber}`);
+  const getAllCareReceiversUpcomingAppointments = () =>
+    apiClient.get(`appointments/care-receiver`);
 
   return {
     getPendingOrderRequests,
@@ -39,6 +43,8 @@ const useProvidor = () => {
     updateTreatmentSurporter,
     addCareReceiver,
     updateCareReceiver,
+    getAllCareReceiversUpcomingAppointments,
+    getCareReceiverUpcomingAppointments,
   };
 };
 

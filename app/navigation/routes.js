@@ -54,6 +54,7 @@ export default Object.freeze({
   ORDERS_NAVIGATION: "Orders Nav",
   ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",
   ORDERS_APPOINMENT_DETAIL_SCREEN: "AppointmentDetailScreen",
+  ORDERS_UPCOMING_APPOINMENTS_SCREEN: "UpcomingAppointmentScreen",
   ORDERS_DELIVERY_MODES_SCREEN: "DeliveryModes Screen",
   ORDERS_DELIVERY_MODES_FORM_SCREEN: "DeliveryModesfORM Screen",
 

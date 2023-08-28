@@ -15,7 +15,7 @@ import routes from "../../navigation/routes";
 const validationSchema = orderValidation();
 
 const PatientOrderForm = ({ navigation, route }) => {
-  const { order, event, appointment } = route.params;
+  const { order, event, appointment, myAppointments, careReceiverAppointments } = route.params;
   const { getTreatmentSurport, getUserId, getUser } = useUser();
   const { getCourrierServices, getDeliveryTimeSlots, getDeliveryMethods } =
     useOrder();
