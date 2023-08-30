@@ -90,6 +90,7 @@ const RoleForm = ({ navigation, route }) => {
                       defaultValues.assignPickupCareGivers,
                     assignGroupLeads: defaultValues.assignGroupLeads,
                     assignGroupMembers: defaultValues.assignGroupMembers,
+                    assignAllUsers: defaultValues.assignAllUsers,
                   }
                 : {
                     name: "",
@@ -100,6 +101,7 @@ const RoleForm = ({ navigation, route }) => {
                     assignPickupCareGivers: false,
                     assignGroupLeads: false,
                     assignGroupMembers: false,
+                    assignAllUsers: false,
                   }
             }
             validationSchema={validationSchemer}
@@ -134,6 +136,10 @@ const RoleForm = ({ navigation, route }) => {
             <FormCheckBox
               name="assignGroupMembers"
               label="Assign Role to all patients in grouped model"
+            />
+            <FormCheckBox
+              name="assignAllUsers"
+              label="Assign Role to all users"
             />
             <FormItemPicker
               name="privileges"

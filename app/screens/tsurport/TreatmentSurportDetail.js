@@ -74,30 +74,20 @@ const TreatmentSurportDetail = ({ navigation, route }) => {
             <List.Item
               style={[styles.listItem, { backgroundColor: colors.surface }]}
               title="Name"
-              description={`${
-                careReceiverUser.firstName && careReceiverUser.lastName
-                  ? careReceiverUser.firstName + " " + careReceiverUser.lastName
-                  : careReceiverUser.username
-              }`}
+              description={`${careReceiver.firstName} ${careReceiver.lastName}`}
               left={(props) => <List.Icon {...props} icon="account" />}
             />
             <List.Item
               style={[styles.listItem, { backgroundColor: colors.surface }]}
-              title="Email"
-              description={careReceiverUser.email}
-              left={(props) => <List.Icon {...props} icon="email" />}
+              title="CCC Number"
+              description={careReceiver.cccNumber}
+              left={(props) => <List.Icon {...props} icon="identifier" />}
             />
             <List.Item
               style={[styles.listItem, { backgroundColor: colors.surface }]}
               title="Phone number"
-              description={careReceiverUser.phoneNumber}
+              description={careReceiver.phoneNumber}
               left={(props) => <List.Icon {...props} icon="phone" />}
-            />
-            <List.Item
-              style={[styles.listItem, { backgroundColor: colors.surface }]}
-              title="Patient cccNumber"
-              description={careReceiver.cccNumber}
-              left={(props) => <List.Icon {...props} icon="identifier" />}
             />
           </>
         ) : (
