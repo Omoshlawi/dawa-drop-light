@@ -9,12 +9,16 @@ import { useFocusEffect } from "@react-navigation/native";
 const ARTGroups = ({ navigation }) => {
   const { getARTGroups } = useART();
   const [groups, setGroups] = useState([]);
+  const [screenState, setScreenState] = useState({ showFab: false });
   const [loading, setLoading] = useState(false);
   const handleFetch = async () => {
     setLoading(true);
     const response = await getARTGroups();
     setLoading(false);
-    if (response.ok) setGroups(response.data.results);
+    if (response.ok) {
+      setGroups(response.data.results);
+      setScreenState({ ...screenState, showFab: response.data.viewer.isLead });
+    }
   };
 
   useFocusEffect(
@@ -53,16 +57,18 @@ const ARTGroups = ({ navigation }) => {
           );
         }}
       />
-      <FAB
-        icon="plus"
-        style={[styles.fab, { backgroundColor: colors.secondary }]}
-        color={colors.onPrimary}
-        onPress={() =>
-          navigation.navigate(routes.ART_NAVIGATION, {
-            screen: routes.ART_GROUPS_FORM_SCREEN,
-          })
-        }
-      />
+      {screenState.showFab && (
+        <FAB
+          icon="plus"
+          style={[styles.fab, { backgroundColor: colors.secondary }]}
+          color={colors.onPrimary}
+          onPress={() =>
+            navigation.navigate(routes.ART_NAVIGATION, {
+              screen: routes.ART_GROUPS_FORM_SCREEN,
+            })
+          }
+        />
+      )}
     </View>
   );
 };

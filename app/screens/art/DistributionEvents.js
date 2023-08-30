@@ -11,14 +11,17 @@ const DistributionEvents = ({ navigation }) => {
   const [groups, setGroups] = useState([]);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [screenState, setScreenState] = useState({ showFab: false });
   const handleFetch = async () => {
-    setGroups;
     setLoading(true);
     const response = await getDistrubutionEvents();
     const groupResponse = await getARTGroups({});
     setLoading(false);
     if (response.ok) setEvents(response.data.results);
-    if (groupResponse.ok) setGroups(groupResponse.data.results);
+    if (groupResponse.ok) {
+      setGroups(groupResponse.data.results);
+      setScreenState({ ...screenState, showFab: response.data.viewer.isLead });
+    }
   };
 
   useFocusEffect(
@@ -57,17 +60,19 @@ const DistributionEvents = ({ navigation }) => {
           );
         }}
       />
-      <FAB
-        icon="plus"
-        style={[styles.fab, { backgroundColor: colors.secondary }]}
-        color={colors.onPrimary}
-        onPress={() =>
-          navigation.navigate(routes.ART_NAVIGATION, {
-            screen: routes.ART_DISTRIBUTION_EVENTS_FORM_SCREEN,
-            params: { groups },
-          })
-        }
-      />
+      {screenState.showFab && (
+        <FAB
+          icon="plus"
+          style={[styles.fab, { backgroundColor: colors.secondary }]}
+          color={colors.onPrimary}
+          onPress={() =>
+            navigation.navigate(routes.ART_NAVIGATION, {
+              screen: routes.ART_DISTRIBUTION_EVENTS_FORM_SCREEN,
+              params: { groups },
+            })
+          }
+        />
+      )}
     </View>
   );
 };

@@ -39,12 +39,11 @@ const DistributionEventDetail = ({ navigation, route }) => {
     mode: "form",
     message: "",
   });
-  const disableConfirmAttendance =
-    (user && user._id === userId) || // 1.disable if curr user on the leader
-    // myFeedBackIndex !== -1 || // 2.disable if feedback exist
+  const hideConfirmAttendance =
+    user?._id === userId || // 1.hide if curr user is the leader
     feedBacks[myFeedBackIndex]?.confirmedAttendance === true; // 3.if already confirmed
-  const disablerequestDelivery =
-    (user && user._id === userId) || // 1.disable if curr user on the leader
+  const hideRequestHomeDelivery =
+    user?._id === userId || // 1.hide if curr user is the leader
     feedBacks[myFeedBackIndex]?.confirmedAttendance === false; // 3.if already requested delivery
   const handleConfirmAttendance = async () => {
     const response = await confirmDistributionEventAttendance(event._id);
@@ -282,9 +281,9 @@ const DistributionEventDetail = ({ navigation, route }) => {
             icon={open ? "close" : "dots-vertical"}
             actions={[
               {
+                visible: user?._id === userId,
                 icon: "square-edit-outline",
                 label: "Edit",
-
                 onPress: () => {
                   // Check if group lead
                   if (user && user._id === userId)
@@ -303,59 +302,52 @@ const DistributionEventDetail = ({ navigation, route }) => {
                     : colors.disabled,
               },
               {
+                visible: true,
                 icon: "wechat",
                 label: "group chats",
                 onPress: () => {},
               },
               {
+                visible: !(
+                  user?._id === userId || // 1.hide if curr user is the leader
+                  feedBacks[myFeedBackIndex]?.confirmedAttendance === true
+                ), // 3.if already confirmed,
                 icon: "check-all",
                 label: "Confirm Attendance",
-                color: disableConfirmAttendance
-                  ? colors.disabled
-                  : colors.secondary,
-                labelTextColor: disableConfirmAttendance
-                  ? colors.disabled
-                  : colors.secondary,
                 onPress: () => {
-                  if (!disableConfirmAttendance) {
-                    //sumbit form
-                    Alert.alert(
-                      "Confirmation",
-                      "Are you sure you want to confirm you attendance now for the event?",
-                      [
-                        { text: "Confirm", onPress: handleConfirmAttendance },
-                        { text: "Cancel" },
-                      ]
-                    );
-                  }
+                  //sumbit form
+                  Alert.alert(
+                    "Confirmation",
+                    "Are you sure you want to confirm you attendance now for the event?",
+                    [
+                      { text: "Confirm", onPress: handleConfirmAttendance },
+                      { text: "Cancel" },
+                    ]
+                  );
                 },
               },
 
               {
+                visible: !(
+                  user?._id === userId || // 1.hide if curr user is the leader
+                  feedBacks[myFeedBackIndex]?.confirmedAttendance === false
+                ), // 3.if already requested delivery,
                 icon: "truck-delivery",
                 label: "Request home Delivery",
-                color: disablerequestDelivery
-                  ? colors.disabled
-                  : colors.secondary,
-                labelTextColor: disablerequestDelivery
-                  ? colors.disabled
-                  : colors.secondary,
                 onPress: () => {
-                  if (!disablerequestDelivery) {
-                    //sumbit form
-                    navigation.navigate(routes.ORDERS_NAVIGATION, {
-                      screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
-                      params: {
-                        event,
-                        type: "self",
-                        careReceiverAppointments: [],
-                        myAppointments: [],
-                      },
-                    });
-                  }
+                  //sumbit form
+                  navigation.navigate(routes.ORDERS_NAVIGATION, {
+                    screen: routes.ORDERS_PATIENT_ORDER_FORM_SCREEN,
+                    params: {
+                      event,
+                      type: "self",
+                      careReceiverAppointments: [],
+                      myAppointments: [],
+                    },
+                  });
                 },
               },
-            ]}
+            ].filter((action) => action.visible)}
             onStateChange={onStateChange}
             onPress={() => {
               if (open) {
