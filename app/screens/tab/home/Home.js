@@ -115,12 +115,20 @@ const Home = ({ navigation }) => {
               />
             </TouchableOpacity>
           )}
-          {careReceiverAppointments.length === 0 && appointments.length > 0 && (
+          {((careReceiverAppointments.length === 0 &&
+            appointments.length > 0) ||
+            (careReceiverAppointments.length > 0 &&
+              appointments.length === 0)) && (
             <>
               <Text variant="titleMedium">Upcoming Appointments</Text>
               <FlatList
                 showsHorizontalScrollIndicator={false}
-                data={appointments}
+                data={
+                  careReceiverAppointments.length === 0 &&
+                  appointments.length > 0
+                    ? appointments
+                    : careReceiverAppointments
+                }
                 horizontal
                 keyExtractor={({ id }) => id}
                 renderItem={({ item, index }) => (
@@ -130,9 +138,20 @@ const Home = ({ navigation }) => {
                         screen: routes.ORDERS_APPOINMENT_DETAIL_SCREEN,
                         params: {
                           appointment: index,
-                          patient: user.patient[0],
+                          patient:
+                            careReceiverAppointments.length === 0 &&
+                            appointments.length > 0
+                              ? user.patient[0]
+                              : user.careReceivers.find(
+                                  (receiver) =>
+                                    receiver.cccNumber === item.cccNumber
+                                ),
                           careReceivers: user.careReceivers,
-                          type: "self",
+                          type:
+                            careReceiverAppointments.length === 0 &&
+                            appointments.length > 0
+                              ? "self"
+                              : "other",
                           myAppointments: appointments,
                           careReceiverAppointments,
                         },
@@ -181,3 +200,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+
+/**
+                
+*/

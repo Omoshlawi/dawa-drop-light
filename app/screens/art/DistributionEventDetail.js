@@ -22,6 +22,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
     remiderNortificationDates,
     extraSubscribers,
     feedBacks, //fields =>event,user,confirmedAttendance, deliveryRequest, note
+    subscriptions,
   } = event;
   const user = _leadUser[0];
   const artModel = _artModel[0];
@@ -39,12 +40,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
     mode: "form",
     message: "",
   });
-  const hideConfirmAttendance =
-    user?._id === userId || // 1.hide if curr user is the leader
-    feedBacks[myFeedBackIndex]?.confirmedAttendance === true; // 3.if already confirmed
-  const hideRequestHomeDelivery =
-    user?._id === userId || // 1.hide if curr user is the leader
-    feedBacks[myFeedBackIndex]?.confirmedAttendance === false; // 3.if already requested delivery
+
   const handleConfirmAttendance = async () => {
     const response = await confirmDistributionEventAttendance(event._id);
     if (response.ok) {
