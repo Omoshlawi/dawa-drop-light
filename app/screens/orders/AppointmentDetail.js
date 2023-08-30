@@ -88,7 +88,7 @@ const AppointmentDetail = ({ route, navigation }) => {
               left={(props) => <List.Icon {...props} icon="calendar" />}
             />
           )}
-          {patient && patient.artModel.name && (
+          {patient && patient.artModel.modelCode === "fast_track" && (
             <Button
               style={styles.btn}
               mode="contained"

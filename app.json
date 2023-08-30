@@ -34,7 +34,8 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.CAMERA"
-      ]
+      ],
+      "package": "com.omosh.dawadroplight"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"

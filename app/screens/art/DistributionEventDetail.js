@@ -194,6 +194,29 @@ const DistributionEventDetail = ({ navigation, route }) => {
               );
             })}
           </List.Accordion>
+          <List.Accordion
+            title="FeedBacks"
+            left={(props) => <List.Icon {...props} icon="account-group" />}
+            style={[styles.listItem, { backgroundColor: colors.surface }]}
+            description={`${feedBacks.length}`}
+          >
+            <List.Item
+              title={"Confirmed Attendance"}
+              style={[styles.listItem, { backgroundColor: colors.surface }]}
+              description={`${
+                feedBacks.filter((fb) => fb.confirmedAttendance).length
+              }`}
+              left={(props) => <List.Icon {...props} icon="account" />}
+            />
+            <List.Item
+              title={"Requested Home deliveries"}
+              style={[styles.listItem, { backgroundColor: colors.surface }]}
+              description={`${
+                feedBacks.filter((fb) => !fb.confirmedAttendance).length
+              }`}
+              left={(props) => <List.Icon {...props} icon="account" />}
+            />
+          </List.Accordion>
           {user && (
             <>
               <Text style={styles.title} variant="titleMedium">

@@ -33,6 +33,8 @@ const useART = () => {
     apiClient.put(`art/distribution-events/${modelId}`, data);
   const getDistributionDetail = (modelId) =>
     apiClient.get(`art/distribution-events/${modelId}`);
+  const changeIdentityInGroup = (enrolmentId, data) =>
+    apiClient.post(`art/group-enrollment/${enrolmentId}/change-name`, data);
   return {
     addARTModels,
     updateARTModels,
@@ -52,6 +54,7 @@ const useART = () => {
     addDistributionEvent,
     updateDistributionEvent,
     confirmDistributionEventAttendance,
+    changeIdentityInGroup,
   };
 };
 

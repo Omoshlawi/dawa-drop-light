@@ -1,14 +1,27 @@
 import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import { useART } from "../../api";
+import { useART, useUser } from "../../api";
 import { NestedProvider } from "../../theme";
-import { FAB, Portal, useTheme, Text, List, Avatar } from "react-native-paper";
+import {
+  FAB,
+  Portal,
+  useTheme,
+  Text,
+  List,
+  Avatar,
+  TextInput,
+  Button,
+  HelperText,
+} from "react-native-paper";
 import routes from "../../navigation/routes";
 import { ScrollView } from "react-native";
 import { getImageUrl } from "../../utils/helpers";
+import { AlertDialog, Dialog } from "../../components/dialog";
 const ARTGroupDetail = ({ navigation, route }) => {
   const group = route.params;
   const [state, setState] = useState({ open: false });
+  const { getUserId } = useUser();
+  const { changeIdentityInGroup } = useART();
   const onStateChange = ({ open }) => setState({ open });
   const { open } = state;
   const { colors, roundness } = useTheme();
@@ -18,9 +31,49 @@ const ARTGroupDetail = ({ navigation, route }) => {
     leadUser: _leadUser,
     artModel: _artModel,
     enrolledUsers,
+    enrollments,
   } = group;
   const artModel = _artModel[0];
   const user = _leadUser[0];
+  const [dialogInfo, setDialogInfo] = useState({
+    mode: "form",
+    show: false,
+    message: "",
+  });
+
+  const userId = getUserId();
+  const myEnrolment = enrollments.find((en) => en.user === userId);
+  const [formState, setFormState] = useState({
+    name: myEnrolment?.publicName || "",
+    loading: false,
+    error: "",
+  });
+  const handleEnrolmentName = async () => {
+    setFormState({ ...formState, error: "" });
+    const response = await changeIdentityInGroup(myEnrolment?._id, {
+      name: formState.name,
+    });
+    if (response.ok) {
+      setDialogInfo({
+        ...dialogInfo,
+        show: true,
+        mode: "success",
+        message: "Name change successfully!",
+      });
+    } else {
+      if (response.status === 400) {
+        setFormState({ ...formState, error: response.data.errors.name });
+      } else
+        setDialogInfo({
+          ...dialogInfo,
+          show: true,
+          mode: "error",
+          message: response.data.detail
+            ? response.data.detail
+            : "Unknown error occured",
+        });
+    }
+  };
   return (
     <View style={styles.screen}>
       <NestedProvider>
@@ -144,10 +197,9 @@ const ARTGroupDetail = ({ navigation, route }) => {
             icon={open ? "close" : "dots-vertical"}
             actions={[
               {
+                visible: user?._id === userId,
                 icon: "square-edit-outline",
                 label: "Edit Group",
-                // color: true ? colors.secondary : colors.disabled,
-                // labelTextColor: true ? colors.secondary : colors.disabled,
                 onPress: () => {
                   navigation.navigate(routes.ART_NAVIGATION, {
                     screen: routes.ART_GROUPS_FORM_SCREEN,
@@ -156,10 +208,9 @@ const ARTGroupDetail = ({ navigation, route }) => {
                 },
               },
               {
+                visible: user?._id === userId,
                 icon: "account-plus",
                 label: "Add new member",
-                // color: true ? colors.secondary : colors.disabled,
-                // labelTextColor: true ? colors.secondary : colors.disabled,
                 onPress: () => {
                   navigation.navigate(routes.ART_NAVIGATION, {
                     screen: routes.ART_GROUP_ADD_NEW_MEMBER_FORM_SCREEN,
@@ -167,7 +218,14 @@ const ARTGroupDetail = ({ navigation, route }) => {
                   });
                 },
               },
-            ]}
+              {
+                visible: Boolean(myEnrolment) === true,
+                icon: "account-edit",
+                label: "Edit my identity in group",
+                onPress: () =>
+                  setDialogInfo({ ...dialogInfo, show: true, mode: "form" }),
+              },
+            ].filter((action) => action.visible)}
             onStateChange={onStateChange}
             onPress={() => {
               if (open) {
@@ -177,6 +235,51 @@ const ARTGroupDetail = ({ navigation, route }) => {
           />
         </Portal>
       </NestedProvider>
+      <Dialog
+        onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
+        visible={dialogInfo.show}
+      >
+        {dialogInfo.mode === "form" && (
+          <View>
+            <Text>
+              Edit your identity name in group.What other members will see
+            </Text>
+            <TextInput
+              mode="outlined"
+              label="Name"
+              placeholder="Please enter name"
+              value={formState.name}
+              onChangeText={(name) => setFormState({ ...formState, name })}
+            />
+            {formState.error && (
+              <HelperText type="error" visible={formState.error}>
+                {formState.error}
+              </HelperText>
+            )}
+            <Button
+              style={{ marginTop: 10 }}
+              mode="contained"
+              onPress={handleEnrolmentName}
+            >
+              Submit
+            </Button>
+          </View>
+        )}
+        {(dialogInfo.mode === "success" || dialogInfo.mode === "error") && (
+          <AlertDialog
+            mode={dialogInfo.mode}
+            message={dialogInfo.message}
+            onButtonPress={() => {
+              setDialogInfo({ ...dialogInfo, show: false });
+              if (dialogInfo.mode === "success") {
+                navigation.navigate(routes.ART_NAVIGATION, {
+                  screen: routes.ART_GROUP_SCREEN,
+                });
+              }
+            }}
+          />
+        )}
+      </Dialog>
     </View>
   );
 };
