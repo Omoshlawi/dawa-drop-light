@@ -8,10 +8,13 @@ import { screenWidth } from "../../utils/contants";
 import { AlertDialog, Dialog } from "../../components/dialog";
 import { useTheme } from "react-native-paper";
 import routes from "../../navigation/routes";
+import ExtraSubscribersForm from "../../components/ExtraSubscribersForm";
+import { ScrollView } from "react-native";
 
 const validationSchemer = Yup.object().shape({
   title: Yup.string().label("Group Title").required(),
   description: Yup.string().label("Group Description"),
+  extraSubscribers: Yup.array().label("Extra subscribers"),
 });
 const ARTGroupForm = ({ navigation, route }) => {
   const { addARTGroup, updateARTGroup } = useART();
@@ -55,48 +58,61 @@ const ARTGroupForm = ({ navigation, route }) => {
   };
   return (
     <View style={styles.screen}>
-      <Logo size={screenWidth * 0.4} />
-      <View style={styles.form}>
-        <Form
-          initialValues={
-            artGroup
-              ? {
-                  title: artGroup.title,
-                  description: artGroup.description,
-                }
-              : {
-                  title: "",
-                  description: "",
-                }
-          }
-          validationSchema={validationSchemer}
-          onSubmit={handleSubmit}
-        >
-          <FormField
-            placeholder="Enter Group name"
-            label="Group title"
-            name="title"
-            icon="account-group"
-          />
-          <FormField
-            placeholder="Enter Group Description"
-            label="Group description"
-            name="description"
-            icon="information-variant"
-            multiline
-            numberOfLines={10}
-          />
+      <ScrollView>
+        <View style={{ alignItems: "center" }}>
+          <Logo size={screenWidth * 0.4} />
+        </View>
+        <View style={styles.form}>
+          <Form
+            initialValues={
+              artGroup
+                ? {
+                    title: artGroup.title,
+                    description: artGroup.description,
+                    extraSubscribers: artGroup.extraSubscribers.map((user) => ({
+                      name: user.name,
+                      phoneNumber: user.phoneNumber,
+                    })),
+                  }
+                : {
+                    title: "",
+                    description: "",
+                    extraSubscribers: [],
+                  }
+            }
+            validationSchema={validationSchemer}
+            onSubmit={handleSubmit}
+          >
+            <FormField
+              placeholder="Enter Group name"
+              label="Group title"
+              name="title"
+              icon="account-group"
+            />
+            <ExtraSubscribersForm
+              name="extraSubscribers"
+              icon="account-group"
+            />
+            <FormField
+              placeholder="Enter Group Description"
+              label="Group description"
+              name="description"
+              icon="information-variant"
+              multiline
+              numberOfLines={10}
+            />
 
-          <FormSubmitButton
-            title={artGroup ? "Update ART Group" : "Add ART Group"}
-            mode="contained"
-            style={styles.btn}
-            loading={loading}
-            disabled={loading}
-          />
-          <View style={{ flex: 1 }} />
-        </Form>
-      </View>
+            <FormSubmitButton
+              title={artGroup ? "Update ART Group" : "Add ART Group"}
+              mode="contained"
+              style={styles.btn}
+              loading={loading}
+              disabled={loading}
+            />
+            <View style={{ flex: 1 }} />
+          </Form>
+        </View>
+      </ScrollView>
       <Dialog visible={dialogInfo.show}>
         <AlertDialog
           mode={dialogInfo.mode}
@@ -119,7 +135,6 @@ export default ARTGroupForm;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    alignItems: "center",
   },
   form: {
     width: "100%",
@@ -128,5 +143,11 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginVertical: 20,
+  },
+  itemContainer: {
+    margin: 5,
+  },
+  listItem: {
+    padding: 10,
   },
 });

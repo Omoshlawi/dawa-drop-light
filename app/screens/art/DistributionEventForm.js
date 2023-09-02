@@ -33,7 +33,6 @@ const validationSchemer = Yup.object().shape({
   group: Yup.string().label("Distribution Group").required(),
   remarks: Yup.string().label("Event remarks").required(),
   remiderNortificationDates: Yup.array().label("Reminder dates"),
-  extraSubscribers: Yup.array().label("Extra subscribers"),
 });
 
 const DistributionEventForm = ({ navigation, route }) => {
@@ -97,10 +96,6 @@ const DistributionEventForm = ({ navigation, route }) => {
                     group: event.group._id,
                     remarks: event.remarks,
                     remiderNortificationDates: event.remiderNortificationDates,
-                    extraSubscribers: event.extraSubscribers.map((user) => ({
-                      name: user.name,
-                      phoneNumber: user.phoneNumber,
-                    })),
                   }
                 : {
                     title: "",
@@ -109,7 +104,6 @@ const DistributionEventForm = ({ navigation, route }) => {
                     group: "",
                     remarks: "",
                     remiderNortificationDates: [],
-                    extraSubscribers: [],
                   }
             }
             validationSchema={validationSchemer}
@@ -168,10 +162,7 @@ const DistributionEventForm = ({ navigation, route }) => {
                 { borderRadius: roundness },
               ]}
             />
-            <ExtraSubscribersForm
-              name="extraSubscribers"
-              icon="account-group"
-            />
+           
             <FormField
               placeholder="Enter Remarks"
               label="Event Remarks"

@@ -32,6 +32,7 @@ const ARTGroupDetail = ({ navigation, route }) => {
     artModel: _artModel,
     enrolledUsers,
     enrollments,
+    extraSubscribers,
   } = group;
   const artModel = _artModel[0];
   const user = _leadUser[0];
@@ -181,6 +182,25 @@ const ARTGroupDetail = ({ navigation, route }) => {
                       <Avatar.Icon {...props} icon="account" />
                     )
                   }
+                />
+              );
+            })}
+          </List.Accordion>
+          <List.Accordion
+            title="Extra subscribers"
+            left={(props) => <List.Icon {...props} icon="account-group" />}
+            style={[styles.listItem, { backgroundColor: colors.surface }]}
+            description={`${extraSubscribers.length}`}
+          >
+            {extraSubscribers.map((user, index) => {
+              const { phoneNumber, name } = user;
+              return (
+                <List.Item
+                  key={index}
+                  title={name}
+                  style={[styles.listItem, { backgroundColor: colors.surface }]}
+                  description={phoneNumber}
+                  left={(props) => <List.Icon {...props} icon="account" />}
                 />
               );
             })}

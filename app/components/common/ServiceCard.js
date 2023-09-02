@@ -44,6 +44,8 @@ const styles = StyleSheet.create({
   },
   imgContainer: {
     padding: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   cardContent: {
     paddingLeft: 10,
