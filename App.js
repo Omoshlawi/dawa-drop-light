@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { Modal, StyleSheet, Text, View, Platform } from "react-native";
 import { UserContextProvider } from "./app/context/UserContext";
 import useSecureStore from "./app/hooks/useSecureStore";
@@ -68,7 +67,7 @@ export default function App() {
           clearAppConfiguration: clearAppConf,
         }}
       >
-        <StatusBar style={appConf.theme} />
+        
         <MainTheme theme={appConf.theme}>
           <ThemedNavigationContainer>
             <MainStackNavigation />

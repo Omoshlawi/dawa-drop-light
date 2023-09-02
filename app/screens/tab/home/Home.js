@@ -110,6 +110,7 @@ const Home = ({ navigation }) => {
               <Card.Title
                 style={{ padding: 20 }}
                 left={(props) => <Avatar.Icon {...props} icon="refresh" />}
+                titleStyle={{ color: colors.primary }}
                 title="Are you a patient user ? Sync you account with you medical account"
                 titleNumberOfLines={3}
               />

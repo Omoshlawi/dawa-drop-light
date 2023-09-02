@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import React from "react";
-import { Button, List, useTheme } from "react-native-paper";
+import { Button, List, useTheme, Text } from "react-native-paper";
 import moment from "moment/moment";
 import Logo from "../../components/Logo";
 import { screenWidth } from "../../utils/contants";

@@ -288,14 +288,6 @@ const DistributionEventDetail = ({ navigation, route }) => {
                       params: { event, groups },
                     });
                 },
-                color:
-                  user && user._id === userId
-                    ? colors.secondary
-                    : colors.disabled,
-                labelTextColor:
-                  user && user._id === userId
-                    ? colors.secondary
-                    : colors.disabled,
               },
               {
                 visible: true,

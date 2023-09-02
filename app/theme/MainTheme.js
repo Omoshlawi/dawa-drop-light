@@ -31,7 +31,7 @@ const darkTheme = {
   ...DefaultTheme, // Use DefaultTheme as the base
   colors: {
     ...DefaultTheme.colors, // Keep the existing DarkTheme colors
-    primary: "#AAC8C8", // Light gray for primary
+    primary: "#00ACA9", // Light gray for primary
     accent: "#E1EDED", // Light gray for accent
     background: "#121212", // Dark background color
     medium: "#E1EDED", // Light gray for text on dark background
@@ -45,7 +45,7 @@ const darkTheme = {
     onSurface: "#E1EDED", // Light text on dark surface
     waningLight: "#FBF0DC",
     surfaceVariant: "red",
-    backdrop: "#FFFFFFBF",
+    backdrop: "#00000096",
   },
   roundness: 10,
 };

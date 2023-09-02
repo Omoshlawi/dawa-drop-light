@@ -20,7 +20,7 @@ const CodeDisplayCopy = ({ message }) => {
         padding={10}
         pieceSize={8}
       />
-      <Text variant="titleMedium">{message}</Text>
+      <Text variant="titleMedium" style={{color: colors.primary}}>{message}</Text>
       <Button icon="content-copy" onPress={copyToClipBoard}>
         COPY CODE
       </Button>
