@@ -50,6 +50,7 @@ export default Object.freeze({
   ART_DISTRIBUTION_EVENTS_FORM_SCREEN: "ARTDistributionEventForm Screen",
   ART_DISTRIBUTION_EVENTS_SCREEN: "ARTDistributionEvent Screen",
   ART_DISTRIBUTION_EVENTS_DETAIL_SCREEN: "ARTDistributonDetail Screen",
+  ART_DISTRIBUTION_EVENTS_SERVICE_FORM_SCREEN: "DistributionEventServiceForm Screen",
 
   ORDERS_NAVIGATION: "Orders Nav",
   ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",

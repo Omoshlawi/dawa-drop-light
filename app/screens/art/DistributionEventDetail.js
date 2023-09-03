@@ -285,15 +285,29 @@ const DistributionEventDetail = ({ navigation, route }) => {
                   if (user && user._id === userId)
                     navigation.navigate(routes.ART_NAVIGATION, {
                       screen: routes.ART_DISTRIBUTION_EVENTS_FORM_SCREEN,
-                      params: { event, groups },
+                      params: { event },
                     });
                 },
               },
+
               {
                 visible: true,
                 icon: "wechat",
                 label: "group chats",
                 onPress: () => {},
+              },
+              {
+                visible: user?._id === userId,
+                icon: "gift",
+                label: "Initiate Delivery",
+                onPress: () => {
+                  // Check if group lead
+                  if (user && user._id === userId)
+                    navigation.navigate(routes.ART_NAVIGATION, {
+                      screen: routes.ART_DISTRIBUTION_EVENTS_SERVICE_FORM_SCREEN,
+                      params: { event, groups },
+                    });
+                },
               },
               {
                 visible: !(

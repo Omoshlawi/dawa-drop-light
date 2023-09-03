@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { List, useTheme } from "react-native-paper";
+import { List, useTheme, Text } from "react-native-paper";
 import moment from "moment/moment";
 import routes from "../../navigation/routes";
 import { useUser } from "../../api";

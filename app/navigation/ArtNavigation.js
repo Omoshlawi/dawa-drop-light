@@ -9,6 +9,7 @@ import {
   AddNewMemberToGroupForm,
   DistributionEventDetail,
   DistributionEventForm,
+  DistributionEventServiceForm,
   DistributionEvents,
   GroupLeadDetail,
   GroupLeadForm,
@@ -100,6 +101,11 @@ const ArtNavigation = () => {
       <Screen
         name={routes.ART_DISTRIBUTION_EVENTS_FORM_SCREEN}
         component={DistributionEventForm}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ART_DISTRIBUTION_EVENTS_SERVICE_FORM_SCREEN}
+        component={DistributionEventServiceForm}
         options={{ title: "" }}
       />
     </Navigator>

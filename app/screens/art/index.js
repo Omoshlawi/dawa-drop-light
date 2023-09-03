@@ -10,3 +10,4 @@ export { default as AddNewMemberToGroupForm } from "./AddNewMemberToGroupForm";
 export { default as DistributionEventDetail } from "./DistributionEventDetail";
 export { default as DistributionEventForm } from "./DistributionEventForm";
 export { default as DistributionEvents } from "./DistributionEvents";
+export { default as DistributionEventServiceForm } from "./DistributionEventServiceForm";
