@@ -21,6 +21,7 @@ import { ScrollView } from "react-native";
 import { MyTestComponent } from "../../components/input";
 import ExtraSubscribersForm from "../../components/ExtraSubscribersForm";
 import VenueFormInput from "../../components/VenueFormInput";
+import { MemberFeedBack } from "../../components/order";
 
 const validationSchemer = Yup.object().shape({
   member: Yup.string().label("Member").required(),
@@ -107,63 +108,33 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
             validationSchema={validationSchemer}
             onSubmit={handleSubmit}
           >
-            <Text>Does patient have smartphone with installed dawa drop?</Text>
-            <View style={{}}>
-              <RadioButton.Group
-                onValueChange={setIsSmartphoneUser}
-                value={isSmartPhoneUser}
-              >
-                <RadioButton.Item
-                  label="Yes (Will choose from list of subscribers)"
-                  value="yes"
-                  labelVariant="bodySmall"
+            <FormItemPicker
+              name="member"
+              icon="account-group"
+              searchable
+              label="Subscriber"
+              data={event.patientSubscribers}
+              valueExtractor={({ _id }) => _id}
+              labelExtractor={({ firstName, lastName, cccNumber }) =>
+                `${firstName} ${lastName} (${cccNumber})`
+              }
+              renderItem={({ item: { firstName, lastName, cccNumber } }) => (
+                <List.Item
+                  title={`${firstName} ${lastName} (${cccNumber})`}
+                  style={styles.listItem}
+                  left={(props) => (
+                    <List.Icon {...props} icon="account-group" />
+                  )}
                 />
-                <RadioButton.Item
-                  label="No (Will provide ccc number of patient)"
-                  value="no"
-                  labelVariant="bodySmall"
-                />
-              </RadioButton.Group>
-            </View>
-            {isSmartPhoneUser === "yes" ? (
-              <FormItemPicker
-                name="member"
-                icon="account-group"
-                searchable
-                label="Subscriber"
-                data={event.subscribers}
-                valueExtractor={({ _id }) => _id}
-                labelExtractor={({ username, firstName, lastName }) =>
-                  firstName && lastName ? `${firstName} ${lastName}` : username
-                }
-                renderItem={({
-                  item: { username, firstName, lastName, email, phoneNumber },
-                }) => (
-                  <List.Item
-                    title={
-                      firstName && lastName
-                        ? `${firstName} ${lastName}`
-                        : username
-                    }
-                    style={styles.listItem}
-                    left={(props) => (
-                      <List.Icon {...props} icon="account-group" />
-                    )}
-                  />
-                )}
-                itemContainerStyle={[
-                  styles.itemContainer,
-                  { borderRadius: roundness },
-                ]}
-              />
-            ) : (
-              <FormField
-                label="Patient ccc Number"
-                icon="identifier"
-                name="cccNumber"
-                placeholder="Enter Patient ccc Number"
-              />
-            )}
+              )}
+              itemContainerStyle={[
+                styles.itemContainer,
+                { borderRadius: roundness },
+              ]}
+            />
+
+            <MemberFeedBack event={event} />
+
             <FormItemPicker
               name="services"
               icon="medical-bag"
