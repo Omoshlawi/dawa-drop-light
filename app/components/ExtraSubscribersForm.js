@@ -27,6 +27,7 @@ const ExtraSubscribersForm = ({
     show: false,
     name: "",
     phoneNumber: "",
+    cccNumber: "",
     error: "",
   });
   const { setFieldValue, errors, touched, values } = useFormikContext();
@@ -99,7 +100,7 @@ const ExtraSubscribersForm = ({
                         marginHorizontal: 3,
                       }}
                     />
-                    <Text>{`${item.name} (${item.phoneNumber})`}</Text>
+                    <Text>{`${item.name} (${item.phoneNumber} | ${item.cccNumber})`}</Text>
                   </TouchableOpacity>
                 )}
               />
@@ -142,6 +143,16 @@ const ExtraSubscribersForm = ({
                 />
                 <TextInput
                   mode="outlined"
+                  label="Patient CCC Number"
+                  placeholder="Enter ccc number"
+                  left={<TextInput.Icon icon="identifier" />}
+                  value={dialogInfo.cccNumber}
+                  onChangeText={(cccNumber) =>
+                    setDialogInfo({ ...dialogInfo, cccNumber })
+                  }
+                />
+                <TextInput
+                  mode="outlined"
                   label="Phone number"
                   placeholder="Enter phone number"
                   left={<TextInput.Icon icon="phone" />}
@@ -161,25 +172,32 @@ const ExtraSubscribersForm = ({
                   mode="contained"
                   style={{ marginVertical: 5 }}
                   onPress={() => {
-                    const { name: userName, phoneNumber } = dialogInfo;
-                    if (name && phoneNumber) {
+                    const {
+                      name: userName,
+                      phoneNumber,
+                      cccNumber,
+                    } = dialogInfo;
+                    if (userName && phoneNumber && cccNumber) {
                       setFieldValue(name, [
                         ...values[name],
                         {
                           name: userName,
                           phoneNumber,
+                          cccNumber,
                         },
                       ]);
                       setDialogInfo({
                         ...dialogInfo,
                         name: "",
                         phoneNumber: "",
+                        cccNumber: "",
                         show: false,
                       });
                     } else {
                       setDialogInfo({
                         ...dialogInfo,
-                        error: "Please provide both name and phone number",
+                        error:
+                          "Please provide name, ccc number and phone number",
                       });
                     }
                   }}

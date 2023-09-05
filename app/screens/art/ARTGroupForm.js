@@ -72,6 +72,7 @@ const ARTGroupForm = ({ navigation, route }) => {
                     extraSubscribers: artGroup.extraSubscribers.map((user) => ({
                       name: user.name,
                       phoneNumber: user.phoneNumber,
+                      cccNumber: user.cccNumber,
                     })),
                   }
                 : {
