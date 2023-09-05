@@ -67,14 +67,15 @@ export default function App() {
           clearAppConfiguration: clearAppConf,
         }}
       >
-        
         <MainTheme theme={appConf.theme}>
           <ThemedNavigationContainer>
             <MainStackNavigation />
           </ThemedNavigationContainer>
           <Modal
             visible={
-              !appConf.privacy.isAuthenticated && appConf.privacy.enabled
+              !appConf.privacy.isAuthenticated && // Checks if user is not authenticated
+              appConf.privacy.enabled && // makes use privacy is enabled
+              Boolean(token) // make sure user is logged in
             }
           >
             <Authentication />

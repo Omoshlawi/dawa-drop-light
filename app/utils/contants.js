@@ -1,10 +1,10 @@
 import { Dimensions } from "react-native";
 import routes from "../navigation/routes";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-// export const BASE_URL = "http://10.10.9.14:5000/"; //lukenya
+export const BASE_URL = "http://10.10.8.15:5000/"; //lukenya
 // export const BASE_URL = "http://192.168.2.148:5000/"; ///office
 // export const BASE_URL = "http://dawadrop.kenyahmis.org/"; //home
-export const BASE_URL = "http://192.168.100.5:5000/"; //home
+// export const BASE_URL = "http://192.168.100.5:5000/"; //home
 export const screenWidth = Dimensions.get("screen").width;
 export const screenHeight = Dimensions.get("screen").height;
 

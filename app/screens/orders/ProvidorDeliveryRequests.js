@@ -237,8 +237,8 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                 const {
                   _id,
                   deliveryAddress,
-                  deliveryTimeSlot: { label },
-                  deliveryMode: { name },
+                  // deliveryTimeSlot: { label },
+                  // deliveryMode: { name },
                 } = item;
                 const active = index === currIndex;
                 return (
@@ -264,7 +264,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                           marginBottom: 5,
                         }}
                         title="Time of Delivery"
-                        description={label}
+                        // description={label}
                         left={(props) => (
                           <List.Icon {...props} icon="timelapse" />
                         )}
@@ -275,7 +275,7 @@ const ProvidorDeliveryRequests = ({ navigation }) => {
                           marginBottom: 5,
                         }}
                         title="Delivered Through"
-                        description={name}
+                        // description={name}
                         left={(props) => (
                           <List.Icon {...props} icon="bicycle" />
                         )}

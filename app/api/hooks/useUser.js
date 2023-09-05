@@ -1,13 +1,17 @@
-import { useUserContext } from "../../context/hooks";
+import { useSettinsContext, useUserContext } from "../../context/hooks";
 import apiClient from "../client";
 import { addTokenInterceptor } from "../helpers";
 import jwtDecode from "jwt-decode";
 
 const useUser = () => {
   const { clearToken, token } = useUserContext();
+  const { pin, disablePin } = useSettinsContext();
   addTokenInterceptor();
   const getUser = () => apiClient.get("auth/profile");
-  const logout = () => clearToken(true);
+  const logout = () => {
+    clearToken(true);
+    disablePin(pin);
+  };
   const changePassword = (data) => apiClient.post("auth/change-password", data);
   const updateProfile = (data) =>
     apiClient.post("auth/profile", data, {

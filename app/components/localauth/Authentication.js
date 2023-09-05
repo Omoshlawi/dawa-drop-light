@@ -29,7 +29,7 @@ const Authentication = () => {
       onPinChanged={setPin}
       error={formState.error}
       message={formState.message}
-      scanFingerPrint={() => {}}
+      // scanFingerPrint={() => {}}
     />
   );
 };
