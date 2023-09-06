@@ -23,6 +23,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
     extraSubscribers,
     feedBacks, //fields =>event,user,confirmedAttendance, deliveryRequest, note
     subscriptions,
+    patientSubscribers,
   } = event;
   const user = _leadUser[0];
   const artModel = _artModel[0];
@@ -40,6 +41,9 @@ const DistributionEventDetail = ({ navigation, route }) => {
     mode: "form",
     message: "",
   });
+  const offlineSubscribers = patientSubscribers.filter(
+    ({ user }) => subscribers.findIndex(({ _id }) => _id === user) === -1
+  );
 
   const handleConfirmAttendance = async () => {
     const response = await confirmDistributionEventAttendance(event._id);
@@ -154,7 +158,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
             title="Total Subscribers"
             left={(props) => <List.Icon {...props} icon="account-group" />}
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={`${subscribers.length}`}
+            description={`${patientSubscribers.length}`}
           >
             {subscribers.map((user, index) => {
               const {
@@ -188,6 +192,17 @@ const DistributionEventDetail = ({ navigation, route }) => {
                 />
               );
             })}
+            {offlineSubscribers.map(
+              ({ firstName, lastName, phoneNumber }, index) => (
+                <List.Item
+                  key={index}
+                  title={`${firstName} ${lastName}`}
+                  style={[styles.listItem, { backgroundColor: colors.surface }]}
+                  description={phoneNumber}
+                  left={(props) => <Avatar.Icon {...props} icon="account" />}
+                />
+              )
+            )}
           </List.Accordion>
           <List.Accordion
             title="FeedBacks"
@@ -304,7 +319,8 @@ const DistributionEventDetail = ({ navigation, route }) => {
                   // Check if group lead
                   if (user && user._id === userId)
                     navigation.navigate(routes.ART_NAVIGATION, {
-                      screen: routes.ART_DISTRIBUTION_EVENTS_SERVICE_FORM_SCREEN,
+                      screen:
+                        routes.ART_DISTRIBUTION_EVENTS_SERVICE_FORM_SCREEN,
                       params: { event, groups },
                     });
                 },

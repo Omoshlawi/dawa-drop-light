@@ -21,17 +21,21 @@ import { ScrollView } from "react-native";
 import { MyTestComponent } from "../../components/input";
 import ExtraSubscribersForm from "../../components/ExtraSubscribersForm";
 import VenueFormInput from "../../components/VenueFormInput";
-import { MemberFeedBack } from "../../components/order";
+import { DeliveryServiceStep1, MemberFeedBack } from "../../components/order";
 
 const validationSchemer = Yup.object().shape({
   member: Yup.string().label("Member").required(),
   services: Yup.array().default([]).label("Ëxtra services"),
+  patientDeliveryPrefence: Yup.bool()
+    .required()
+    .label("Patients prefered delivery")
+    .default(false),
 });
 
 const DistributionEventServiceForm = ({ navigation, route }) => {
   const { addDistributionEvent, updateDistributionEvent } = useART();
   const [loading, setLoading] = useState(false);
-  const [isSmartPhoneUser, setIsSmartphoneUser] = useState("yes");
+  const [wizardState, setWizardState] = useState({ step: 1 });
   const { event, delivery } = route.params;
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
@@ -69,16 +73,16 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
       console.log(response.data);
     }
   };
+
+  const next = () => {
+    setWizardState({ ...wizardState, step: wizardState.step + 1 });
+  };
+  const previous = () => {
+    setWizardState({ ...wizardState, step: wizardState.step - 1 });
+  };
   return (
     <View style={styles.screen}>
       <ScrollView>
-        <View style={styles.img}>
-          <Image
-            style={styles.img}
-            source={require("./../../assets/arrived.png")}
-            resizeMode="contain"
-          />
-        </View>
         <View style={styles.form}>
           <Form
             initialValues={
@@ -95,6 +99,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                     remiderNortificationDates:
                       delivery.remiderNortificationDates,
                     services: [],
+                    patientDeliveryPrefence: false,
                   }
                 : {
                     title: "",
@@ -103,39 +108,17 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                     remarks: "",
                     remiderNortificationDates: [],
                     services: [],
+                    patientDeliveryPrefence: false,
                   }
             }
             validationSchema={validationSchemer}
             onSubmit={handleSubmit}
           >
-            <FormItemPicker
-              name="member"
-              icon="account-group"
-              searchable
-              label="Subscriber"
-              data={event.patientSubscribers}
-              valueExtractor={({ _id }) => _id}
-              labelExtractor={({ firstName, lastName, cccNumber }) =>
-                `${firstName} ${lastName} (${cccNumber})`
-              }
-              renderItem={({ item: { firstName, lastName, cccNumber } }) => (
-                <List.Item
-                  title={`${firstName} ${lastName} (${cccNumber})`}
-                  style={styles.listItem}
-                  left={(props) => (
-                    <List.Icon {...props} icon="account-group" />
-                  )}
-                />
-              )}
-              itemContainerStyle={[
-                styles.itemContainer,
-                { borderRadius: roundness },
-              ]}
-            />
+            {wizardState.step === 1 && (
+              <DeliveryServiceStep1 event={event} onNext={next} />
+            )}
 
-            <MemberFeedBack event={event} />
-
-            <FormItemPicker
+            {/* <FormItemPicker
               name="services"
               icon="medical-bag"
               searchable
@@ -167,15 +150,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                 styles.itemContainer,
                 { borderRadius: roundness },
               ]}
-            />
-            <FormSubmitButton
-              title={delivery ? "Update ART Distribution event" : "Next"}
-              mode="contained"
-              style={styles.btn}
-              loading={loading}
-              disabled={loading}
-            />
-            <View style={{ flex: 1 }} />
+            /> */}
           </Form>
         </View>
       </ScrollView>

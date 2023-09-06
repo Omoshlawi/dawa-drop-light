@@ -33,6 +33,7 @@ const ARTGroupDetail = ({ navigation, route }) => {
     enrolledUsers,
     enrollments,
     extraSubscribers,
+    enrolledPatients,
   } = group;
   const artModel = _artModel[0];
   const user = _leadUser[0];
@@ -75,6 +76,10 @@ const ARTGroupDetail = ({ navigation, route }) => {
         });
     }
   };
+
+  const offlineEnrolledUsers = enrolledPatients.filter(
+    ({ user }) => enrolledUsers.findIndex(({ _id }) => _id === user) === -1
+  );
   return (
     <View style={styles.screen}>
       <NestedProvider>
@@ -151,7 +156,7 @@ const ARTGroupDetail = ({ navigation, route }) => {
             title="Total Members"
             left={(props) => <List.Icon {...props} icon="account-group" />}
             style={[styles.listItem, { backgroundColor: colors.surface }]}
-            description={`${enrolledUsers.length}`}
+            description={`${enrolledPatients.length}`}
           >
             {enrolledUsers.map((user, index) => {
               const {
@@ -185,6 +190,17 @@ const ARTGroupDetail = ({ navigation, route }) => {
                 />
               );
             })}
+            {offlineEnrolledUsers.map(
+              ({ firstName, lastName, phoneNumber }, index) => (
+                <List.Item
+                  key={index}
+                  title={`${firstName} ${lastName}`}
+                  style={[styles.listItem, { backgroundColor: colors.surface }]}
+                  description={phoneNumber}
+                  left={(props) => <Avatar.Icon {...props} icon="account" />}
+                />
+              )
+            )}
           </List.Accordion>
           <List.Accordion
             title="Extra subscribers"

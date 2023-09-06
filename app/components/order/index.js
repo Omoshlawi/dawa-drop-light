@@ -12,3 +12,4 @@ export { default as NewCareReceiver } from "./careReceiverForm/NewCareReceiver";
 export { default as DeliveryPersonDetails } from "./form/DeliveryPersonDetails";
 export { default as orderValidation } from "./form/validationSchema";
 export { default as MemberFeedBack } from "./deliveryServiceForm/MemberFeedBack";
+export { default as DeliveryServiceStep1 } from "./deliveryServiceForm/Step1";
