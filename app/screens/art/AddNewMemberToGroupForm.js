@@ -74,7 +74,12 @@ const AddNewMemberToGroupForm = ({ navigation, route }) => {
   return (
     <View style={styles.screen}>
       <CodeScanner label="Scan Paticipant to search" onScaned={setCode} />
-      <SearchHeader text={code} onTextChange={setCode} onSearch={handleFetch} />
+      <SearchHeader
+        text={code}
+        onTextChange={setCode}
+        onSearch={handleFetch}
+        placeholder={"Enter ccc number, national id, phone number"}
+      />
       {loading && <ActivityIndicator />}
       {!patient && !loading && (
         <Text variant="headlineLarge" style={{ alignSelf: "center" }}>
@@ -133,10 +138,24 @@ const AddNewMemberToGroupForm = ({ navigation, route }) => {
             description={patient.phoneNumber}
             left={(props) => <List.Icon {...props} icon="phone" />}
           />
+          <List.Item
+            style={[styles.listItem, { backgroundColor: colors.surface }]}
+            title="ART Distribution Model"
+            description={patient.artModel.name}
+            left={(props) => <List.Icon {...props} icon="box" />}
+          />
           <Button
             style={{ margin: 10 }}
             mode="contained"
             onPress={handleSubmit}
+            disabled={
+              ![
+                "community_art_peer",
+                "community_art_hcw",
+                "facility_art_peer",
+                "facility_art_hcw",
+              ].includes(patient.artModel.modelCode)
+            }
           >
             Add to group
           </Button>
