@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   Button,
+  HelperText,
   List,
   RadioButton,
   Text,
@@ -19,7 +20,7 @@ import MemberFeedBack from "./MemberFeedBack";
 const Step1 = ({ event, onNext }) => {
   const { colors, roundness } = useTheme();
   const { validateForm } = useFormikContext();
-  const { values, setFieldValue, setFieldTouched } = useFormikContext();
+  const { values, setFieldValue, setFieldTouched, errors } = useFormikContext();
   return (
     <View style={styles.screen}>
       <View style={styles.img}>
@@ -58,10 +59,37 @@ const Step1 = ({ event, onNext }) => {
           />
 
           <MemberFeedBack event={event} />
-
+          {values["member"] && (
+            <View style={{ marginVertical: 10 }}>
+              <Text>How do you want to perfome delivery?</Text>
+              <RadioButton.Group
+                onValueChange={(value) => setFieldValue("deliveryType", value)}
+                value={values["deliveryType"]}
+              >
+                <RadioButton.Item label="Deliver yourself " value="self" />
+                <RadioButton.Item
+                  label="Deliver through Courrier service"
+                  value="courrier"
+                />
+                <RadioButton.Item
+                  label="Deliver through Delegate"
+                  value="delegate"
+                />
+                <RadioButton.Item
+                  label="Deliver using patient preference"
+                  value="patient-preferred"
+                />
+              </RadioButton.Group>
+              {errors["deliveryType"] && (
+                <HelperText type="error" visible={errors["deliveryType"]}>
+                  {errors["deliveryType"]}
+                </HelperText>
+              )}
+            </View>
+          )}
           <Button
             onPress={async () => {
-              const fields = ["member", "patientDeliveryPrefence"];
+              const fields = ["member", "deliveryType"];
               const errors = await validateForm(values);
               const invalidFields = Object.keys(errors);
               let valid = true;

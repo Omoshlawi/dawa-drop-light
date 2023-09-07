@@ -88,12 +88,6 @@ const MemberFeedBack = ({ event }) => {
               )}
             </>
           )}
-          {feedBack.confirmedAttendance === false && (
-            <FormCheckBox
-              name="patientDeliveryPrefence"
-              label="Deliver as per patients preferences ?"
-            />
-          )}
         </>
       )}
     </View>

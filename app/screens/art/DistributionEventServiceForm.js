@@ -21,16 +21,11 @@ import { ScrollView } from "react-native";
 import { MyTestComponent } from "../../components/input";
 import ExtraSubscribersForm from "../../components/ExtraSubscribersForm";
 import VenueFormInput from "../../components/VenueFormInput";
-import { DeliveryServiceStep1, MemberFeedBack } from "../../components/order";
-
-const validationSchemer = Yup.object().shape({
-  member: Yup.string().label("Member").required(),
-  services: Yup.array().default([]).label("Ëxtra services"),
-  patientDeliveryPrefence: Yup.bool()
-    .required()
-    .label("Patients prefered delivery")
-    .default(false),
-});
+import {
+  DeliveryServiceStep1,
+  MemberFeedBack,
+  validateDeliveryForm,
+} from "../../components/order";
 
 const DistributionEventServiceForm = ({ navigation, route }) => {
   const { addDistributionEvent, updateDistributionEvent } = useART();
@@ -99,7 +94,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                     remiderNortificationDates:
                       delivery.remiderNortificationDates,
                     services: [],
-                    patientDeliveryPrefence: false,
+                    deliveryType: "self",
                   }
                 : {
                     title: "",
@@ -109,9 +104,10 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                     remiderNortificationDates: [],
                     services: [],
                     patientDeliveryPrefence: false,
+                    deliveryType: "self",
                   }
             }
-            validationSchema={validationSchemer}
+            validationSchema={validateDeliveryForm(event)}
             onSubmit={handleSubmit}
           >
             {wizardState.step === 1 && (
