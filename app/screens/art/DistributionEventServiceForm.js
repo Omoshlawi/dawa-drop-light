@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { useART } from "../../api";
+import { useART, useOrder } from "../../api";
 import Logo from "../../components/Logo";
 import {
   Form,
@@ -23,12 +23,15 @@ import ExtraSubscribersForm from "../../components/ExtraSubscribersForm";
 import VenueFormInput from "../../components/VenueFormInput";
 import {
   DeliveryServiceStep1,
+  DeliveryServiceStep2,
   MemberFeedBack,
   validateDeliveryForm,
 } from "../../components/order";
+import { useEffect } from "react";
 
 const DistributionEventServiceForm = ({ navigation, route }) => {
   const { addDistributionEvent, updateDistributionEvent } = useART();
+  const { getCourrierServices } = useOrder();
   const [loading, setLoading] = useState(false);
   const [wizardState, setWizardState] = useState({ step: 1 });
   const { event, delivery } = route.params;
@@ -39,7 +42,24 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
     } Successfully!`,
     mode: "success",
   });
+  const [fetchingDependancies, setLoadFectDependancies] = useState(false);
+
+  const [courrierServices, setCourrierServices] = useState([]);
   const { colors, roundness } = useTheme();
+
+  const handleFetch = async () => {
+    setLoadFectDependancies(true);
+    const dResp = await getCourrierServices();
+    setLoadFectDependancies(false);
+
+    if (dResp.ok) {
+      setCourrierServices(dResp.data.results);
+    }
+  };
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
 
   const handleSubmit = async (values, { setErrors, errors }) => {
     setLoading(true);
@@ -112,6 +132,12 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
           >
             {wizardState.step === 1 && (
               <DeliveryServiceStep1 event={event} onNext={next} />
+            )}
+            {wizardState.step === 2 && (
+              <DeliveryServiceStep2
+                courrierServices={courrierServices}
+                onNext={next}
+              />
             )}
 
             {/* <FormItemPicker

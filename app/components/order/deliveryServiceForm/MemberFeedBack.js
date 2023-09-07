@@ -1,11 +1,18 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import { useFormikContext } from "formik";
-import { List, useTheme, Text, Surface } from "react-native-paper";
+import {
+  List,
+  useTheme,
+  Text,
+  Surface,
+  RadioButton,
+  HelperText,
+} from "react-native-paper";
 import { FormCheckBox } from "../../forms";
 
 const MemberFeedBack = ({ event }) => {
-  const { values } = useFormikContext();
+  const { values, setFieldValue, setFieldTouched, errors } = useFormikContext();
   const { feedBacks, patientSubscribers, deliveryRequests } = event;
   const { colors, roundness } = useTheme();
 
@@ -90,6 +97,31 @@ const MemberFeedBack = ({ event }) => {
           )}
         </>
       )}
+      <View style={{ marginVertical: 10 }}>
+        <Text>How do you want to perfome delivery?</Text>
+        <RadioButton.Group
+          onValueChange={(value) => setFieldValue("deliveryType", value)}
+          value={values["deliveryType"]}
+        >
+          <RadioButton.Item label="Deliver yourself " value="self" />
+          <RadioButton.Item
+            label="Deliver through Courrier service"
+            value="courrier"
+          />
+          <RadioButton.Item label="Deliver through Delegate" value="delegate" />
+          {feedBack?.confirmedAttendance === false && (
+            <RadioButton.Item
+              label="Deliver using patient preference"
+              value="patient-preferred"
+            />
+          )}
+        </RadioButton.Group>
+        {errors["deliveryType"] && (
+          <HelperText type="error" visible={errors["deliveryType"]}>
+            {errors["deliveryType"]}
+          </HelperText>
+        )}
+      </View>
     </View>
   );
 };
