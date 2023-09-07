@@ -116,6 +116,7 @@ const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
           mode="contained"
           loading={loading}
           onPress={async () => {
+            if (values["deliveryType"] === "patient-preferred") return onNext();
             const fields = [
               "deliveryAddress",
               "courrierService",

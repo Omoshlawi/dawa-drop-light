@@ -13,7 +13,7 @@ import { Avatar, Card, useTheme } from "react-native-paper";
 import moment from "moment/moment";
 import routes from "../../navigation/routes";
 
-const ProvidorDeliveryTasks = ({ navigation }) => {
+const MyDeliveries = ({ navigation }) => {
   const { getDeliveryHistory } = useProvidor();
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,24 +27,12 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
   };
 
   const deliveryToSectionListData = (deliveries = []) => {
-    const onTransit = deliveries.filter(({ status }) => status === "pending");
-    const cancelled = deliveries.filter(({ status }) => status === "canceled");
-    const delivered = deliveries.filter(({ status }) => status === "delivered");
-    const pending = deliveries.filter(
-      ({ status }) => Boolean(status) === false
-    );
+    const delivered = deliveries.filter(({ isDelivered }) => isDelivered);
+    const pending = deliveries.filter(({ isDelivered }) => !isDelivered);
     return [
       {
         title: "Pending Deliveries",
         data: pending,
-      },
-      {
-        title: "On Transit Deliveries",
-        data: onTransit,
-      },
-      {
-        title: "Cancelled Deliveries",
-        data: cancelled,
       },
       {
         title: "Delivered Deliveries",
@@ -70,8 +58,9 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
         renderItem={({ item }) => {
           const {
             created,
-            status,
-            order: { deliveryAddress },
+            isDelivered,
+            deliveryAddress,
+            deliveryServiceRequest,
           } = item;
           return (
             <TouchableOpacity
@@ -96,14 +85,8 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
                 }`}
                 subtitle={`Date: ${moment(created).format(
                   "ddd Do MMM yyy"
-                )} | Status: ${
-                  Boolean(status) === false
-                    ? "Pending"
-                    : status === "pending"
-                    ? "On Transit"
-                    : status
-                }`}
-                left={(props) => <Avatar.Icon {...props} icon="truck" />}
+                )} | Status: ${isDelivered ? "Delivered" : "pending"}`}
+                left={(props) => <Avatar.Icon {...props} icon="truck-fast" />}
                 right={(props) => (
                   <Avatar.Icon
                     {...props}
@@ -121,7 +104,7 @@ const ProvidorDeliveryTasks = ({ navigation }) => {
   );
 };
 
-export default ProvidorDeliveryTasks;
+export default MyDeliveries;
 
 const styles = StyleSheet.create({
   title: {

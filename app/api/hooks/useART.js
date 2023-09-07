@@ -29,6 +29,11 @@ const useART = () => {
     apiClient.get(`art/distribution-events/${eventId}/confirm-attendance`);
   const addDistributionEvent = (data) =>
     apiClient.post("art/distribution-events", data);
+  const initiateDelivery = (eventId, data) =>
+    apiClient.post(
+      `art/distribution-events/${eventId}/initiate-delivery`,
+      data
+    );
   const updateDistributionEvent = (modelId, data) =>
     apiClient.put(`art/distribution-events/${modelId}`, data);
   const getDistributionDetail = (modelId) =>
@@ -55,6 +60,7 @@ const useART = () => {
     updateDistributionEvent,
     confirmDistributionEventAttendance,
     changeIdentityInGroup,
+    initiateDelivery
   };
 };
 

@@ -3,7 +3,7 @@ import * as Yup from "yup";
 const validateDeliveryForm = (event) => {
   const validationSchemer = Yup.object().shape({
     member: Yup.string().label("Member").required(),
-    services: Yup.array().default([]).label("Ëxtra services"),
+    services: Yup.array().default([]).label("Extra services"),
     deliveryType: Yup.string()
       .label("Delivery type")
       .oneOf(["self", "courrier", "delegate"])

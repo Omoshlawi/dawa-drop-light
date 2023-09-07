@@ -31,7 +31,7 @@ import {
 import { useEffect } from "react";
 
 const DistributionEventServiceForm = ({ navigation, route }) => {
-  const { addDistributionEvent, updateDistributionEvent } = useART();
+  const { initiateDelivery, updateDistributionEvent } = useART();
   const { getCourrierServices } = useOrder();
   const [loading, setLoading] = useState(false);
   const [wizardState, setWizardState] = useState({ step: 1 });
@@ -68,7 +68,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
     if (delivery) {
       response = await updateDistributionEvent(delivery._id, values);
     } else {
-      response = await addDistributionEvent(values);
+      response = await initiateDelivery(event._id, values);
     }
     setLoading(false);
     if (response.ok) {
@@ -80,7 +80,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
         setDialogInfo({
           ...dialogInfo,
           show: true,
-          success: false,
+          mode: "error",
           message: response.data.detail
             ? response.data.detail
             : "Unknow Error Occured",
@@ -106,17 +106,12 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
             initialValues={
               delivery
                 ? {
-                    distributionTime: delivery.distributionTime,
-                    distributionLocation: {
-                      latitude: delivery.distributionLocation.latitude,
-                      longitude: delivery.distributionLocation.longitude,
-                      address: delivery.distributionLocation.address,
-                    },
-                    remarks: delivery.remarks,
-                    remiderNortificationDates:
-                      delivery.remiderNortificationDates,
+                    member: "",
                     services: [],
                     deliveryType: "self",
+                    courrierService: "",
+                    deliveryPerson: null,
+                    deliveryAddress: null,
                   }
                 : {
                     member: "",
@@ -125,9 +120,6 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                     courrierService: "",
                     deliveryPerson: null,
                     deliveryAddress: null,
-                    remarks: "",
-                    remiderNortificationDates: [],
-                    patientDeliveryPrefence: false,
                   }
             }
             validationSchema={validateDeliveryForm(event)}

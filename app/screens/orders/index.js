@@ -10,7 +10,7 @@ export { default as DeliveryMethod } from "./DeliveryMethod";
 export { default as DeliveryMethodForm } from "./DeliveryMethodForm";
 export { default as OrderDetail } from "./OrderDetail";
 export { default as ProvidorDeliveryRequests } from "./ProvidorDeliveryRequests";
-export { default as ProvidorDeliveryTasks } from "./ProvidorDeliveryTasks";
+export { default as MyDeliveries } from "./MyDeliveries";
 export { default as DeliveryDetail } from "./DeliveryDetail";
 export { default as ProviderTruckDelivery } from "./ProviderTruckDelivery";
 export { default as DispenseDrugs } from "./DispenseDrugs";

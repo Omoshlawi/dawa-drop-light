@@ -20,7 +20,7 @@ import {
   PatientOrderForm,
   ProviderTruckDelivery,
   ProvidorDeliveryRequests,
-  ProvidorDeliveryTasks,
+  MyDeliveries,
   UpcomingAppointments,
 } from "../screens/orders";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -108,7 +108,7 @@ const OrdersNavigation = () => {
       />
       <Screen
         name={routes.ORDERS_PROVIDOR_DELIVERY_HISTORY_SCREEN}
-        component={ProvidorDeliveryTasks}
+        component={MyDeliveries}
         options={{ title: "Delivery History" }}
       />
       <Screen
