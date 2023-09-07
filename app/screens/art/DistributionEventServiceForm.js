@@ -103,7 +103,6 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
             initialValues={
               delivery
                 ? {
-                    title: delivery.title,
                     distributionTime: delivery.distributionTime,
                     distributionLocation: {
                       latitude: delivery.distributionLocation.latitude,
@@ -117,14 +116,15 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                     deliveryType: "self",
                   }
                 : {
-                    title: "",
-                    distributionTime: "",
-                    distributionLocation: null,
+                    member: "",
+                    services: [],
+                    deliveryType: "self",
+                    courrierService: "",
+                    deliveryPerson: null,
+                    deliveryAddress: null,
                     remarks: "",
                     remiderNortificationDates: [],
-                    services: [],
                     patientDeliveryPrefence: false,
-                    deliveryType: "self",
                   }
             }
             validationSchema={validateDeliveryForm(event)}
@@ -137,42 +137,9 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
               <DeliveryServiceStep2
                 courrierServices={courrierServices}
                 onNext={next}
+                onPrevious={previous}
               />
             )}
-
-            {/* <FormItemPicker
-              name="services"
-              icon="medical-bag"
-              searchable
-              multiple
-              label="Extra services"
-              data={[
-                { name: "FP Screening" },
-                { name: "TB Screening" },
-                { name: "STI Screening" },
-                { name: "Pregnancy Intention" },
-                { name: "Triage" },
-              ]}
-              valueExtractor={(val) => val.name}
-              labelExtractor={(val) => val.name}
-              renderItem={({ item, selected }) => (
-                <List.Item
-                  title={item.name}
-                  style={styles.listItem}
-                  left={(props) => <List.Icon {...props} icon="medical-bag" />}
-                  right={(props) => (
-                    <List.Icon
-                      {...props}
-                      icon={selected ? "radiobox-marked" : "radiobox-blank"}
-                    />
-                  )}
-                />
-              )}
-              itemContainerStyle={[
-                styles.itemContainer,
-                { borderRadius: roundness },
-              ]}
-            /> */}
           </Form>
         </View>
       </ScrollView>

@@ -27,6 +27,32 @@ const validateDeliveryForm = (event) => {
         }
         return schema;
       }),
+    courrierService: Yup.string()
+      .label("Courrier service")
+      .when("deliveryType", ([value], schema) => {
+        if (value === "courrier") {
+          return schema.required();
+        }
+        return schema;
+      }),
+    deliveryPerson: Yup.object({
+      fullName: Yup.string().required().label("Full name"),
+      nationalId: Yup.number().required().label("National Id"),
+      phoneNumber: Yup.string().label("Phone number").required(),
+      pickUpTime: Yup.date().required().label("Pick up time"),
+    })
+      .label("Delivery person")
+      .when("deliveryType", ([value], schema) => {
+        const require = ["courrier", "delegate"].includes(value);
+        if (require) return schema.required();
+        return schema;
+      })
+      .nullable(),
+    deliveryAddress: Yup.object({
+      latitude: Yup.number().label("Latitude"),
+      longitude: Yup.number().label("Longitude"),
+      address: Yup.string().label("Address"),
+    }).label("Delivery address"),
   });
   return validationSchemer;
 };
