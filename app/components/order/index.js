@@ -15,3 +15,4 @@ export { default as MemberFeedBack } from "./deliveryServiceForm/MemberFeedBack"
 export { default as DeliveryServiceStep1 } from "./deliveryServiceForm/Step1";
 export { default as validateDeliveryForm } from "./deliveryServiceForm/deliveryServiceValidator";
 export { default as DeliveryServiceStep2 } from "./deliveryServiceForm/Step2";
+export { default as ServiceConfirmationDialog } from "./deliveryServiceForm/ServiceConfirmationDialog";

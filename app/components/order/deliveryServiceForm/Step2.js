@@ -11,7 +11,7 @@ import {
 } from "../../forms";
 import { useFormikContext } from "formik";
 import DeliveryPersonDetails from "../form/DeliveryPersonDetails";
-const Step2 = ({ courrierServices, onNext, onPrevious }) => {
+const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
   const { colors, roundness } = useTheme();
   const { values, validateForm, setFieldTouched } = useFormikContext();
   return (
@@ -66,7 +66,7 @@ const Step2 = ({ courrierServices, onNext, onPrevious }) => {
           <>
             <FormItemPicker
               name="courrierService"
-              icon="truck"
+              icon="truck-fast"
               searchable
               label="Courrier Service"
               data={courrierServices}
@@ -114,7 +114,7 @@ const Step2 = ({ courrierServices, onNext, onPrevious }) => {
         </Button>
         <Button
           mode="contained"
-          //   loading={loading}
+          loading={loading}
           onPress={async () => {
             const fields = [
               "deliveryAddress",

@@ -25,6 +25,7 @@ import {
   DeliveryServiceStep1,
   DeliveryServiceStep2,
   MemberFeedBack,
+  ServiceConfirmationDialog,
   validateDeliveryForm,
 } from "../../components/order";
 import { useEffect } from "react";
@@ -90,7 +91,9 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
   };
 
   const next = () => {
-    setWizardState({ ...wizardState, step: wizardState.step + 1 });
+    if (wizardState.step === 2) {
+      setDialogInfo({ ...dialogInfo, mode: "confirm", show: true });
+    } else setWizardState({ ...wizardState, step: wizardState.step + 1 });
   };
   const previous = () => {
     setWizardState({ ...wizardState, step: wizardState.step - 1 });
@@ -138,24 +141,42 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                 courrierServices={courrierServices}
                 onNext={next}
                 onPrevious={previous}
+                loading={loading}
               />
             )}
+            <Dialog
+              visible={dialogInfo.show}
+              onRequestClose={() => {
+                if (dialogInfo.mode === "confirm")
+                  setDialogInfo({ ...dialogInfo, show: false });
+              }}
+            >
+              {["success", "error"].includes(dialogInfo.mode) && (
+                <AlertDialog
+                  mode={dialogInfo.mode}
+                  message={dialogInfo.message}
+                  onButtonPress={() => {
+                    if (dialogInfo.mode === "success")
+                      navigation.navigate(routes.ART_NAVIGATION, {
+                        screen: routes.ART_DISTRIBUTION_EVENTS_SCREEN,
+                      });
+                    else navigation.goBack();
+                  }}
+                />
+              )}
+              {dialogInfo.mode === "confirm" && (
+                <ServiceConfirmationDialog
+                  event={event}
+                  courrierServices={courrierServices}
+                  onSubmit={() => {
+                    setDialogInfo({ ...dialogInfo, show: false });
+                  }}
+                />
+              )}
+            </Dialog>
           </Form>
         </View>
       </ScrollView>
-      <Dialog visible={dialogInfo.show}>
-        <AlertDialog
-          mode={dialogInfo.mode}
-          message={dialogInfo.message}
-          onButtonPress={() => {
-            if (dialogInfo.mode === "success")
-              navigation.navigate(routes.ART_NAVIGATION, {
-                screen: routes.ART_DISTRIBUTION_EVENTS_SCREEN,
-              });
-            else navigation.goBack();
-          }}
-        />
-      </Dialog>
     </View>
   );
 };
