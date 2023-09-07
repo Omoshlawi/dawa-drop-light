@@ -1,7 +1,14 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { CardTitle } from "../../components/common";
-import { useTheme, FAB, Portal, Text, IconButton } from "react-native-paper";
+import {
+  useTheme,
+  FAB,
+  Portal,
+  Text,
+  IconButton,
+  List,
+} from "react-native-paper";
 import moment from "moment/moment";
 import QRCodeStyled from "react-native-qrcode-styled";
 import {
@@ -93,36 +100,85 @@ const DeliveryDetail = ({ navigation, route }) => {
           subText={moment(delivery.created).format("dddd Do MMMM yyy hh:mm")}
           icon="clock"
         />
+        {delivery.event.length > 0 && (
+          <CardTitle
+            text={delivery.event[0].title}
+            subText={moment(delivery.event[0].distributionTime).format(
+              "dddd Do MMMM yyyy"
+            )}
+            icon="calendar-clock"
+          />
+        )}
         <CardTitle
-          text={"Phone number"}
-          subText={delivery.order.phoneNumber}
-          icon="phone"
+          text="Delivery Type?"
+          subText={delivery["deliveryType"]}
+          icon="truck-delivery"
         />
+        {delivery.courrierService.name && (
+          <CardTitle
+            text={"Courrier Service"}
+            subText={delivery.courrierService.name}
+            icon="truck-fast"
+          />
+        )}
         <CardTitle
           text={"Delivery Status"}
-          subText={`${
-            !delivery.status
-              ? "Pending"
-              : delivery.status === "pending"
-              ? "On Transit"
-              : delivery.status
-          }`}
+          subText={`${delivery.isDelivered ? "Delivered" : "Pending"}`}
           icon="progress-clock"
         />
-        <CardTitle
-          text={"Adress"}
-          subText={`${delivery.order.deliveryAddress.address}(${delivery.order.deliveryAddress.latitude},${delivery.order.deliveryAddress.longitude})`}
-          icon="google-maps"
-        />
-
+        {delivery.deliveryAddress && (
+          <CardTitle
+            text={"Adress"}
+            subText={`${delivery.deliveryAddress.address}(${delivery.deliveryAddress.latitude},${delivery.deliveryAddress.longitude})`}
+            icon="google-maps"
+          />
+        )}
+        {delivery.deliveryPerson && (
+          <List.Accordion
+            title="Delivery Person"
+            style={{
+              backgroundColor: colors.surface,
+              marginBottom: 5,
+              borderRadius: roundness,
+            }}
+            left={(props) => <List.Icon {...props} icon="account" />}
+          >
+            <List.Item
+              style={[styles.listItem, { backgroundColor: colors.background }]}
+              title="Name"
+              description={`${delivery["deliveryPerson"].fullName}`}
+              left={(props) => <List.Icon icon="account" {...props} />}
+            />
+            <List.Item
+              style={[styles.listItem, { backgroundColor: colors.background }]}
+              title="Phone number"
+              description={`${delivery["deliveryPerson"].phoneNumber}`}
+              left={(props) => <List.Icon icon="phone" {...props} />}
+            />
+            <List.Item
+              style={[styles.listItem, { backgroundColor: colors.background }]}
+              title="National Id"
+              description={`${delivery["deliveryPerson"].nationalId}`}
+              left={(props) => <List.Icon icon="identifier" {...props} />}
+            />
+            <List.Item
+              style={[styles.listItem, { backgroundColor: colors.background }]}
+              title="Time Picked up"
+              description={`${moment(
+                delivery["deliveryPerson"].pickUpTime
+              ).format("HH: mm")} hrs`}
+              left={(props) => <List.Icon icon="identifier" {...props} />}
+            />
+          </List.Accordion>
+        )}
         <CardTitle
           text={"Delivere Through"}
-          subText={delivery.order.deliveryMode.name}
+          subText={delivery.deliveryMode?.name}
           icon="bicycle"
         />
         <CardTitle
           text={"Delivery time"}
-          subText={delivery.order.deliveryTimeSlot.label}
+          subText={delivery.deliveryTimeSlot?.label}
           icon="timelapse"
         />
       </ScrollView>
@@ -138,6 +194,7 @@ const DeliveryDetail = ({ navigation, route }) => {
           icon={open ? "close" : "dots-vertical"}
           actions={[
             {
+              visible: true,
               icon: "cart",
               onPress: () =>
                 setDialogInfo({
@@ -149,6 +206,7 @@ const DeliveryDetail = ({ navigation, route }) => {
               color: colors.secondary,
             },
             {
+              visible: true,
               icon: "square-edit-outline",
               label: "Edit",
               color:
@@ -170,6 +228,7 @@ const DeliveryDetail = ({ navigation, route }) => {
               },
             },
             {
+              visible: true,
               label: "Patient",
               icon: "account",
               onPress: () =>
@@ -182,6 +241,7 @@ const DeliveryDetail = ({ navigation, route }) => {
               color: colors.secondary,
             },
             {
+              visible: true,
               icon: "truck-delivery",
               label: "Delivery",
               onPress: () =>
@@ -195,18 +255,20 @@ const DeliveryDetail = ({ navigation, route }) => {
             },
 
             {
+              visible: true,
               icon: "cancel",
               label: "Cancel Delivery",
               color: colors.secondary,
               onPress: () => console.log("Pressed email"),
             },
             {
+              visible: true,
               icon: "phone-plus-outline",
-              label: `Call ${delivery.order.phoneNumber}`,
+              label: `Call ${delivery.phoneNumber}`,
               color: colors.secondary,
-              onPress: () => callNumber(delivery.order.phoneNumber),
+              onPress: () => callNumber(delivery.phoneNumber),
             },
-          ]}
+          ].filter(({ visible }) => visible)}
           onStateChange={onStateChange}
           onPress={() => {
             if (open) {
