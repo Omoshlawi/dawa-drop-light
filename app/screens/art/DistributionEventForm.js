@@ -24,7 +24,9 @@ import VenueFormInput from "../../components/VenueFormInput";
 
 const validationSchemer = Yup.object().shape({
   title: Yup.string().label("Evennt title").required(),
-  distributionTime: Yup.date().label("Event Date"),
+  distributionTime: Yup.date()
+    .label("Event Date")
+    .min(new Date(), "Distribution time must be in the future"),
   distributionLocation: Yup.object({
     latitude: Yup.number().label("Latitude"),
     longitude: Yup.number().label("Longitude"),
@@ -32,7 +34,11 @@ const validationSchemer = Yup.object().shape({
   }).label("Event address"),
   group: Yup.string().label("Distribution Group").required(),
   remarks: Yup.string().label("Event remarks").required(),
-  remiderNortificationDates: Yup.array().label("Reminder dates"),
+  remiderNortificationDates: Yup.array()
+    .of(
+      Yup.date().min(new Date(), "Reminder date must be in the future. ") // Ensure each date in the array is in the future
+    )
+    .label("Reminder dates"),
 });
 
 const DistributionEventForm = ({ navigation, route }) => {
@@ -162,7 +168,7 @@ const DistributionEventForm = ({ navigation, route }) => {
                 { borderRadius: roundness },
               ]}
             />
-           
+
             <FormField
               placeholder="Enter Remarks"
               label="Event Remarks"
