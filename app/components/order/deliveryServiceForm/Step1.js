@@ -112,6 +112,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   form: {
-    padding: 20,
+    // padding: 20,
   },
 });

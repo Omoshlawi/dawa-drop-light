@@ -193,7 +193,10 @@ const ItemPicker = ({
                 }}
                 style={[
                   itemContainerStyle,
-                  multiple && current.includes(item)
+                  multiple &&
+                  current.findIndex(
+                    (curr) => valueExtractor(curr) === valueExtractor(item)
+                  ) !== -1
                     ? {
                         backgroundColor: activeBackgroundColor
                           ? activeBackgroundColor
@@ -209,7 +212,11 @@ const ItemPicker = ({
                 {renderItem({
                   item,
                   index,
-                  selected: multiple && current.includes(item),
+                  selected:
+                    multiple &&
+                    current.findIndex(
+                      (curr) => valueExtractor(curr) === valueExtractor(item)
+                    ) !== -1,
                 })}
               </TouchableOpacity>
             )}
