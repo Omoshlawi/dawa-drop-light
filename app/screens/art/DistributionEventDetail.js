@@ -24,6 +24,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
     feedBacks, //fields =>event,user,confirmedAttendance, deliveryRequest, note
     subscriptions,
     patientSubscribers,
+    deliveries,
   } = event;
   const user = _leadUser[0];
   const artModel = _artModel[0];
@@ -203,6 +204,25 @@ const DistributionEventDetail = ({ navigation, route }) => {
                 />
               )
             )}
+          </List.Accordion>
+          <List.Accordion
+            title="Deliveries"
+            left={(props) => <List.Icon {...props} icon="truck-fast" />}
+            style={[styles.listItem, { backgroundColor: colors.surface }]}
+            description={`${deliveries.length}`}
+          >
+            {deliveries.map((delivery) => (
+              <List.Item
+                key={delivery._id}
+                description={delivery.deliveryAddress.address}
+                style={[styles.listItem, { backgroundColor: colors.surface }]}
+                title={`${
+                  patientSubscribers.find((fb) => fb._id === delivery.patient)
+                    ?.cccNumber
+                }`}
+                left={(props) => <List.Icon {...props} icon="truck-fast" />}
+              />
+            ))}
           </List.Accordion>
           <List.Accordion
             title="FeedBacks"

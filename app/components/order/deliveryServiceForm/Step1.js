@@ -40,7 +40,11 @@ const Step1 = ({ event, onNext }) => {
             icon="account-group"
             searchable
             label="Subscriber"
-            data={event.patientSubscribers}
+            data={event.patientSubscribers.filter(
+              //Exlude patient who have their drugs delivered already
+              (pat) =>
+                event.deliveries.findIndex((d) => d.patient === pat._id) === -1
+            )}
             valueExtractor={({ _id }) => _id}
             labelExtractor={({ firstName, lastName, cccNumber }) =>
               `${firstName} ${lastName} (${cccNumber})`
@@ -59,7 +63,7 @@ const Step1 = ({ event, onNext }) => {
           />
 
           <MemberFeedBack event={event} />
-          
+
           <Button
             onPress={async () => {
               const fields = ["member", "deliveryType"];
