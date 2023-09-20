@@ -78,8 +78,8 @@ const OrderDetail = ({ navigation, route }) => {
         )}
         <CardTitle
           text={"Delivery Preference"}
-          subText={order.deliveryMethod.name}
-          icon="truck"
+          subText={order.deliveryMethoD === "in-person" ? "In Person": "In Parcel"}
+          icon="truck-fast"
         />
         {order.deliveryPerson && (
           <>

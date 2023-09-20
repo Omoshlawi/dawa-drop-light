@@ -11,7 +11,7 @@ import { useOrder, usePatient, useUser } from "../../api";
 import { Step2, Step3, orderValidation, Step1 } from "../../components/order";
 import { Form } from "../../components/forms";
 import routes from "../../navigation/routes";
-
+import { omit } from "lodash";
 const validationSchema = orderValidation();
 
 const PatientOrderForm = ({ navigation, route }) => {
@@ -81,9 +81,18 @@ const PatientOrderForm = ({ navigation, route }) => {
     setLoading(true);
     let response;
     if (order) {
-      response = await updateOrder(order._id, values);
+      let formData = values;
+      if (wizardInfo.specific === "no")
+        formData = omit(formData, ["deliveryPerson"]);
+      response = await updateOrder(order._id, formData);
     } else {
-      response = await addOrder(values);
+      let formData = values;
+      if (
+        values["deliveryMethod"] === "in-parcel" &&
+        wizardInfo.specific === "no"
+      )
+        formData = omit(formData, ["deliveryPerson"]);
+      response = await addOrder(formData);
     }
     setLoading(false);
     if (response.ok) {

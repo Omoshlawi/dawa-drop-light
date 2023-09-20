@@ -64,45 +64,35 @@ const Orders = ({ navigation, route }) => {
   );
 
   const ordersToSectionListData = (orders = []) => {
-    // const onTransit = orders.filter(
-    //   ({ deliveries }) => getOrderStatus(deliveries) === "On Transit"
-    // );
-    // const cancelled = orders.filter(
-    //   ({ deliveries }) => getOrderStatus(deliveries) === "Canceled"
-    // );
-    // const delivered = orders.filter(
-    //   ({ deliveries }) => getOrderStatus(deliveries) === "Delivered"
-    // );
-    // const pending = orders.filter(
-    //   ({ deliveries }) => getOrderStatus(deliveries) === "Pending"
-    // );
-    return [
-      // {
-      //   title: "Pending Orders",
-      //   data: pending,
-      // },
-      // {
-      //   title: "On Transit Orders",
-      //   data: onTransit,
-      // },
-      // {
-      //   title: "Cancelled Orders",
-      //   data: cancelled,
-      // },
-      // {
-      //   title: "Delivered Orders",
-      //   data: delivered,
-      // },
-      { title: "All Orders", data: orders },
-    ];
+    const patientsByCCCNumber = orders.reduce((acc, curr) => {
+      const cccNumber = curr.patient[0].cccNumber;
+      if (!acc[cccNumber]) {
+        acc[cccNumber] = {
+          title: cccNumber,
+          data: [],
+          patientInfo: curr.patient[0], // Store patient information
+        };
+      }
+      acc[cccNumber].data.push(curr);
+      return acc;
+    }, {});
+
+    // Convert the patientsByCCCNumber object into an array of sections
+    const sections = Object.values(patientsByCCCNumber).map((section) => ({
+      title: `${section.patientInfo.firstName} ${section.patientInfo.lastName} (${section.title})'s Orders`,
+      data: section.data,
+    }));
+
+    return sections;
   };
+
   return (
     <View style={styles.screen}>
       <SectionList
         sections={ordersToSectionListData(orders)}
-        // renderSectionHeader={({ section: { title, data } }) =>
-        //   data.length ? <Text style={styles.title}>{title}</Text> : null
-        // }
+        renderSectionHeader={({ section: { title, data } }) =>
+          data.length ? <Text style={styles.title}>{title}</Text> : null
+        }
         refreshing={loading}
         onRefresh={handleFetch}
         keyExtractor={({ _id }) => _id}
