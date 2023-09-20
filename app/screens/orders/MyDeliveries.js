@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useState } from "react";
-import { useProvidor } from "../../api";
+import { useProvidor, useUser } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { SafeArea } from "../../components/layout";
 import { Avatar, Card, useTheme } from "react-native-paper";
@@ -15,10 +15,11 @@ import routes from "../../navigation/routes";
 
 const MyDeliveries = ({ navigation }) => {
   const { getDeliveryHistory } = useProvidor();
+  const { getUserId } = useUser();
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(false);
   const { colors } = useTheme();
-
+  const userId = getUserId();
   const handFetch = async () => {
     const respo = await getDeliveryHistory();
     if (respo.ok) {
@@ -27,18 +28,29 @@ const MyDeliveries = ({ navigation }) => {
   };
 
   const deliveryToSectionListData = (deliveries = []) => {
-    const delivered = deliveries.filter(({ isDelivered }) => isDelivered);
-    const pending = deliveries.filter(({ isDelivered }) => !isDelivered);
-    return [
-      {
-        title: "Pending Deliveries",
-        data: pending,
-      },
-      {
-        title: "Delivered Deliveries",
-        data: delivered,
-      },
-    ];
+    const patientsByCCCNumber = deliveries.reduce((acc, curr) => {
+      const cccNumber = curr.patient[0].cccNumber;
+      if (!acc[cccNumber]) {
+        acc[cccNumber] = {
+          title: cccNumber,
+          data: [],
+          patientInfo: curr.patient[0], // Store patient information
+        };
+      }
+      acc[cccNumber].data.push(curr);
+      return acc;
+    }, {});
+
+    // Convert the patientsByCCCNumber object into an array of sections
+    const sections = Object.values(patientsByCCCNumber).map((section) => ({
+      title:
+        section.patientInfo.user === userId
+          ? "My Deliveries"
+          : `${section.patientInfo.firstName} ${section.patientInfo.lastName} (${section.title})'s Deliveries`,
+      data: section.data,
+    }));
+
+    return sections;
   };
 
   useFocusEffect(

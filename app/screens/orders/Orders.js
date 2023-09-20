@@ -79,7 +79,10 @@ const Orders = ({ navigation, route }) => {
 
     // Convert the patientsByCCCNumber object into an array of sections
     const sections = Object.values(patientsByCCCNumber).map((section) => ({
-      title: `${section.patientInfo.firstName} ${section.patientInfo.lastName} (${section.title})'s Orders`,
+      title:
+        section.patientInfo.user === userId
+          ? "My Orders"
+          : `${section.patientInfo.firstName} ${section.patientInfo.lastName} (${section.title})'s Orders`,
       data: section.data,
     }));
 
