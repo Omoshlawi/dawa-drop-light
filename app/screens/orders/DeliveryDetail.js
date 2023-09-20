@@ -96,7 +96,7 @@ const DeliveryDetail = ({ navigation, route }) => {
         </View>
         <CardTitle text="Delivery id" subText={delivery._id} icon="cart" />
         <CardTitle
-          text={"Date accepted"}
+          text={"Delivery Date"}
           subText={moment(delivery.created).format("dddd Do MMMM yyy hh:mm")}
           icon="clock"
         />
@@ -114,7 +114,7 @@ const DeliveryDetail = ({ navigation, route }) => {
           subText={delivery["deliveryType"]}
           icon="truck-delivery"
         />
-        {delivery.courrierService.name && (
+        {delivery.courrierService && (
           <CardTitle
             text={"Courrier Service"}
             subText={delivery.courrierService.name}
@@ -172,13 +172,8 @@ const DeliveryDetail = ({ navigation, route }) => {
           </List.Accordion>
         )}
         <CardTitle
-          text={"Delivere Through"}
-          subText={delivery.deliveryMode?.name}
-          icon="bicycle"
-        />
-        <CardTitle
           text={"Delivery time"}
-          subText={delivery.deliveryTimeSlot?.label}
+          subText={"Take from feed back creation time"}
           icon="timelapse"
         />
       </ScrollView>
@@ -206,25 +201,15 @@ const DeliveryDetail = ({ navigation, route }) => {
               color: colors.secondary,
             },
             {
-              visible: true,
+              visible: !delivery.isDelivered, //TODO make sure user is not patient too
               icon: "square-edit-outline",
               label: "Edit",
-              color:
-                Boolean(delivery.status) && delivery.status === "pending"
-                  ? colors.secondary
-                  : colors.disabled,
-              labelTextColor:
-                Boolean(delivery.status) && delivery.status === "pending"
-                  ? colors.secondary
-                  : colors.disabled,
               onPress: () => {
                 // navigation.navigate(routes.ORDERS_NAVIGATION, {
                 //   screen: routes.ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN,
                 //   params: delivery,
                 // });
-                if (Boolean(delivery.status) && delivery.status === "pending") {
-                  setDialogInfo({ ...dialogInfo, show: true, mode: "form" });
-                }
+                setDialogInfo({ ...dialogInfo, show: true, mode: "form" });
               },
             },
             {
@@ -236,13 +221,13 @@ const DeliveryDetail = ({ navigation, route }) => {
                   ...dialogInfo,
                   show: true,
                   mode: "qr",
-                  message: delivery.order.patient,
+                  message: delivery.patient,
                 }),
               color: colors.secondary,
             },
             {
               visible: true,
-              icon: "truck-delivery",
+              icon: "truck-fast",
               label: "Delivery",
               onPress: () =>
                 setDialogInfo({
@@ -253,16 +238,8 @@ const DeliveryDetail = ({ navigation, route }) => {
                 }),
               color: colors.secondary,
             },
-
             {
-              visible: true,
-              icon: "cancel",
-              label: "Cancel Delivery",
-              color: colors.secondary,
-              onPress: () => console.log("Pressed email"),
-            },
-            {
-              visible: true,
+              visible: true, //show if user not delivery owner
               icon: "phone-plus-outline",
               label: `Call ${delivery.phoneNumber}`,
               color: colors.secondary,
