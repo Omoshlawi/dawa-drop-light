@@ -25,10 +25,8 @@ const PatientOrderForm = ({ navigation, route }) => {
     myAppointments,
   } = route.params;
   const { getTreatmentSurport, getUserId, getUser } = useUser();
-  const { getCourrierServices, getDeliveryTimeSlots, getDeliveryMethods } =
-    useOrder();
+  const { getCourrierServices, getDeliveryTimeSlots } = useOrder();
   const [courrierServices, setCourrierServices] = useState([]);
-  const [methods, setMethods] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
   const [supportCareGivers, seSetSurpportCareGivers] = useState([]);
   const [dialogInfo, setDialogInfo] = useState({
@@ -47,7 +45,6 @@ const PatientOrderForm = ({ navigation, route }) => {
     setLoadEligibility(true);
     const dResp = await getCourrierServices();
     const tResp = await getDeliveryTimeSlots();
-    const mResp = await getDeliveryMethods();
     const userResponse = await getUser();
     const sResp = await getTreatmentSurport({
       canPickUpDrugs: true,
@@ -60,9 +57,6 @@ const PatientOrderForm = ({ navigation, route }) => {
     }
     if (tResp.ok) {
       setTimeSlots(tResp.data.results);
-    }
-    if (mResp.ok) {
-      setMethods(mResp.data.results);
     }
     if (sResp.ok) {
       seSetSurpportCareGivers(
@@ -84,14 +78,6 @@ const PatientOrderForm = ({ navigation, route }) => {
   }, []);
 
   const handleSubmit = async (values, { setErrors, errors, setFieldValue }) => {
-    const currMethod = methods.find(
-      ({ _id }) => _id === values["deliveryMethod"]
-    );
-    if (currMethod?.blockOnTimeSlotFull === true) {
-      setFieldValue("deliveryPerson", null);
-      setFieldValue("courrierService", "");
-    }
-    if (wizardInfo.specific === "yes") setFieldValue("deliveryPerson", null);
     setLoading(true);
     let response;
     if (order) {
@@ -120,18 +106,14 @@ const PatientOrderForm = ({ navigation, route }) => {
   };
 
   const next = () => {
-    setWizardInfo({ ...wizardInfo, step: wizardInfo.step + 1 });
+    if (wizardInfo.step === 3) {
+      setDialogInfo({ ...dialogInfo, mode: "confirm", show: true });
+    } else setWizardInfo({ ...wizardInfo, step: wizardInfo.step + 1 });
   };
 
   const previous = () => {
     setWizardInfo({ ...wizardInfo, step: wizardInfo.step - 1 });
   };
-
-  useEffect(() => {
-    if (wizardInfo.step > 3) {
-      setDialogInfo({ ...dialogInfo, mode: "confirm", show: true });
-    }
-  }, [wizardInfo]);
 
   if (loadEligibility || !user) {
     return (
@@ -144,7 +126,7 @@ const PatientOrderForm = ({ navigation, route }) => {
   return (
     <View style={styles.screen}>
       <Form
-        validationSchema={orderValidation(methods, wizardInfo.specific)}
+        validationSchema={orderValidation(wizardInfo.specific)}
         initialValues={
           order
             ? {
@@ -163,7 +145,7 @@ const PatientOrderForm = ({ navigation, route }) => {
                 deliveryAddress: null,
                 // deliveryTime: "",
                 phoneNumber: user?.phoneNumber || "",
-                deliveryMethod: "",
+                deliveryMethod: "in-person",
                 deliveryPerson: null,
                 courrierService: "",
                 event: event ? event._id : "",
@@ -194,7 +176,6 @@ const PatientOrderForm = ({ navigation, route }) => {
           <Step2
             onNext={next}
             onPrevious={previous}
-            methods={methods}
             courrierServices={courrierServices}
             specific={wizardInfo.specific}
             onWizardInfoChange={setWizardInfo}
@@ -220,14 +201,13 @@ const PatientOrderForm = ({ navigation, route }) => {
           {dialogInfo.mode === "confirm" ? (
             <OrderConfirmation
               onSubmit={() => {
-                previous();
                 setDialogInfo({ ...dialogInfo, show: false });
               }}
-              deliveryMethods={methods}
               courrierServices={courrierServices}
               specific={wizardInfo.specific}
               appointment={appointment}
               event={event}
+              careReceivers={careReceivers}
             />
           ) : (
             <AlertDialog

@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-const validationSchema = (methods = [], specific) => {
+const validationSchema = (specific) => {
   const validationSchema2 = Yup.object().shape({
     deliveryAddress: Yup.object({
       latitude: Yup.number().label("Latitude"),
@@ -17,21 +17,19 @@ const validationSchema = (methods = [], specific) => {
     })
       .label("Delivery person")
       .when("deliveryMethod", ([value], schema) => {
-        const selectedMethod = methods.find(({ _id }) => _id === value);
-        const require =
-          specific === "yes" && selectedMethod?.blockOnTimeSlotFull === false;
+        const require = value === "in-person" || specific === "yes";
         if (require) return schema.required();
         return schema;
       })
       .nullable(),
     deliveryMethod: Yup.string()
+      .oneOf(["in-person", "in-parcel"])
       .required("You must specify how you want your drug delivered to you")
       .label("Delivery Method"),
     courrierService: Yup.string()
       .label("Courrier service")
       .when("deliveryMethod", ([value], schema) => {
-        const selectedMethod = methods.find(({ _id }) => _id === value);
-        const require = selectedMethod?.blockOnTimeSlotFull === false;
+        const require = value === "in-parcel";
         if (require) {
           return schema.required();
         }
@@ -52,12 +50,10 @@ const validationSchema = (methods = [], specific) => {
         "Appointment is required when Event is not provided",
         function (value) {
           const eventValue = this.resolve(Yup.ref("event")); // Get the value of the "event" field
-
           // If "event" is not provided, require "appointment"
           if (!eventValue) {
             return !!value;
           }
-
           // If "event" is provided, "appointment" is optional
           return true;
         }

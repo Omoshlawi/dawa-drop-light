@@ -39,17 +39,26 @@ const DeliveryMethodChoice = ({
         How do you want drugs delivered ?
       </Text>
       <FlatList
-        data={methods}
+        data={[
+          { _id: "in-person", name: "In Person delivery", icon: "account-outline" },
+          { _id: "in-parcel", name: "In Parcel delivery", icon: "gift" },
+        ]}
         keyExtractor={({ _id }) => _id}
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => {
-          const { _id, name, description } = item;
+          const { _id, name, icon } = item;
           return (
             <TouchableOpacity
               style={[
                 styles.card,
-                { backgroundColor: colors.background, borderRadius: roundness },
+                {
+                  backgroundColor:
+                    _id === values[fieldName]
+                      ? colors.disabled
+                      : colors.background,
+                  borderRadius: roundness,
+                },
               ]}
               onPress={() => {
                 setFieldValue(fieldName, _id);
@@ -65,7 +74,7 @@ const DeliveryMethodChoice = ({
                 color={colors.primary}
                 size={20}
               />
-              <MaterialCommunityIcons name="truck-delivery" size={40} />
+              <MaterialCommunityIcons name={icon} size={40} />
               <Text style={{ textAlign: "center" }}>{name}</Text>
             </TouchableOpacity>
           );
@@ -74,11 +83,11 @@ const DeliveryMethodChoice = ({
       {fieldName && (
         <Text style={{ color: colors.error }}>{errors[fieldName]}</Text>
       )}
-      {currMethod?.blockOnTimeSlotFull === false && (
+      {values[fieldName] === "in-parcel" && (
         <>
           <FormItemPicker
             name="courrierService"
-            icon="truck"
+            icon="truck-fast"
             searchable
             label="Courrier Service"
             data={courrierService}
@@ -135,6 +144,12 @@ const DeliveryMethodChoice = ({
               )}
             </View>
           )}
+        </>
+      )}
+      {values[fieldName] === "in-person" && (
+        <>
+          <Text>Please provide person details</Text>
+          <DeliveryPersonDetails name="deliveryPerson" />
         </>
       )}
     </View>

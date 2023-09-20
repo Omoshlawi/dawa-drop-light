@@ -45,7 +45,13 @@ const UpcomingAppointments = ({ navigation, route }) => {
                 });
               }}
               style={[styles.listItem, { backgroundColor: colors.surface }]}
-              title={`${appointment_type} appointrment`}
+              title={`${
+                type === "self"
+                  ? user.patient[0].cccNumber
+                  : user.careReceivers.find(
+                      (receiver) => receiver.cccNumber === item.cccNumber
+                    ).cccNumber
+              }'s ${appointment_type} appointrment`}
               description={moment(next_appointment_date).format(
                 "dddd Do MMMM yyyy"
               )}
