@@ -6,6 +6,7 @@ import { useFormikContext } from "formik";
 import moment from "moment/moment";
 import { screenWidth } from "../../../utils/contants";
 const ServiceConfirmationDialog = ({
+  order,
   event,
   courrierServices = [],
   onSubmit,
@@ -30,6 +31,20 @@ const ServiceConfirmationDialog = ({
           left={(props) => <List.Icon icon="calendar-clock" {...props} />}
         />
       )}
+
+      {order && (
+        <List.Item
+          style={[styles.listItem, { backgroundColor: colors.background }]}
+          left={(props) => <List.Icon {...props} icon={"cart"} />}
+          title={`${moment(order.appointment?.next_appointment_date).format(
+            "Do ddd MMM yyyy"
+          )}'s ${order.appointment?.appointment_type} Appointment`}
+          description={`${moment(order.createdAt).format(
+            "Do ddd MMM yyyy"
+          )} | ${order.patient[0]?.cccNumber}`}
+        />
+      )}
+
       <List.Item
         style={[styles.listItem, { backgroundColor: colors.background }]}
         title="Delivery Type?"

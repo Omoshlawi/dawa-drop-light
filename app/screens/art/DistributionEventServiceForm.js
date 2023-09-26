@@ -35,7 +35,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
   const { getCourrierServices } = useOrder();
   const [loading, setLoading] = useState(false);
   const [wizardState, setWizardState] = useState({ step: 1 });
-  const { event, delivery } = route.params;
+  const { event, delivery, order } = route.params;
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
     message: `ART Distribution event ${
@@ -120,13 +120,15 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                     courrierService: "",
                     deliveryPerson: null,
                     deliveryAddress: null,
+                    order: order?._id,
+                    event: event?._id,
                   }
             }
             validationSchema={validateDeliveryForm(event)}
             onSubmit={handleSubmit}
           >
             {wizardState.step === 1 && (
-              <DeliveryServiceStep1 event={event} onNext={next} />
+              <DeliveryServiceStep1 event={event} order={order} onNext={next} />
             )}
             {wizardState.step === 2 && (
               <DeliveryServiceStep2
@@ -159,6 +161,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
               {dialogInfo.mode === "confirm" && (
                 <ServiceConfirmationDialog
                   event={event}
+                  order={order}
                   courrierServices={courrierServices}
                   onSubmit={() => {
                     setDialogInfo({ ...dialogInfo, show: false });

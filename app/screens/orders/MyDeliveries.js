@@ -68,12 +68,8 @@ const MyDeliveries = ({ navigation }) => {
           data.length ? <Text style={styles.title}>{title}</Text> : null
         }
         renderItem={({ item }) => {
-          const {
-            created,
-            isDelivered,
-            deliveryAddress,
-            deliveryServiceRequest,
-          } = item;
+          const { created, feedBack, deliveryAddress, deliveryServiceRequest } =
+            item;
           return (
             <TouchableOpacity
               style={{ marginBottom: 5 }}
@@ -97,7 +93,7 @@ const MyDeliveries = ({ navigation }) => {
                 }`}
                 subtitle={`Date: ${moment(created).format(
                   "ddd Do MMM yyy"
-                )} | Status: ${isDelivered ? "Delivered" : "pending"}`}
+                )} | Status: ${feedBack.length > 0 ? "Delivered" : "pending"}`}
                 left={(props) => <Avatar.Icon {...props} icon="truck-fast" />}
                 right={(props) => (
                   <Avatar.Icon

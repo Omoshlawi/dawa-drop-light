@@ -13,17 +13,18 @@ import { FormCheckBox } from "../../forms";
 
 const MemberFeedBack = ({ event }) => {
   const { values, setFieldValue, setFieldTouched, errors } = useFormikContext();
-  const { feedBacks, patientSubscribers, deliveryRequests } = event;
+  const { feedBacks, patientSubscribers, deliveryRequests } = event || {};
   const { colors, roundness } = useTheme();
 
-  if (!values["member"]) return false;
+  if (event && !values["member"]) return false;
 
-  const feedBack = feedBacks.find(
+  const feedBack = (feedBacks || []).find(
     ({ user }) =>
       user ===
-      patientSubscribers.find(({ _id }) => _id === values["member"])?.user
+      (patientSubscribers || []).find(({ _id }) => _id === values["member"])
+        ?.user
   );
-  const deliveryRequest = deliveryRequests.find(
+  const deliveryRequest = (deliveryRequests || []).find(
     ({ _id }) => _id === feedBack?.deliveryRequest
   );
   return (
@@ -33,12 +34,12 @@ const MemberFeedBack = ({ event }) => {
         padding: 10,
       }}
     >
-      {!feedBack && (
+      {event && !feedBack && (
         <Surface style={{ padding: 10, borderRadius: roundness }}>
           <Text>No feedback from the patient</Text>
         </Surface>
       )}
-      {feedBack && (
+      {event && feedBack && (
         <>
           {feedBack.confirmedAttendance === true && (
             <Surface style={{ padding: 10, borderRadius: roundness }}>
@@ -97,8 +98,15 @@ const MemberFeedBack = ({ event }) => {
           )}
         </>
       )}
-      <View style={{ marginVertical: 10 }}>
-        <Text>How do you want to perfome delivery?</Text>
+      <View
+        style={{
+          padding: 10,
+          backgroundColor: colors.surface,
+          borderRadius: roundness,
+          marginVertical: 10,
+        }}
+      >
+        <Text variant="titleSmall">How do you want to perfome delivery?</Text>
         <RadioButton.Group
           onValueChange={(value) => setFieldValue("deliveryType", value)}
           value={values["deliveryType"]}
@@ -109,7 +117,7 @@ const MemberFeedBack = ({ event }) => {
             value="courrier"
           />
           <RadioButton.Item label="Deliver through Delegate" value="delegate" />
-          {feedBack?.confirmedAttendance === false && (
+          {(!event || feedBack?.confirmedAttendance === false) && (
             <RadioButton.Item
               label="Deliver using patient preference"
               value="patient-preferred"

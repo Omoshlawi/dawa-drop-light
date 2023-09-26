@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import { IconButton, useTheme } from "react-native-paper";
+import { IconButton, useTheme, Text } from "react-native-paper";
 import { screenWidth } from "../../utils/contants";
 import { Modal } from "react-native";
 import Scanner from "./Scanner";

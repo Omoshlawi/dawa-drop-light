@@ -1,9 +1,21 @@
-import { StyleSheet, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SearchHeader } from "../../components/input";
 import { CodeScanner } from "../../components/scanner";
 import { useProvidor } from "../../api";
-import { ActivityIndicator, Text, useTheme, FAB } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Text,
+  useTheme,
+  FAB,
+  List,
+} from "react-native-paper";
 import Logo from "../../components/Logo";
 import { CardTitle } from "../../components/common";
 import { screenWidth } from "../../utils/contants";
@@ -15,7 +27,7 @@ import routes from "../../navigation/routes";
 
 const DispenseDrugs = ({ navigation }) => {
   const [params, setParams] = useState({ search: "" });
-  const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState([]);
   const { getDrugDispenseDetail } = useProvidor();
   const [loading, setLoading] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({
@@ -28,9 +40,9 @@ const DispenseDrugs = ({ navigation }) => {
     const response = await getDrugDispenseDetail(params);
     setLoading(false);
     if (response.ok) {
-      setOrder(response.data);
+      setOrder(response.data.results);
     } else {
-      setOrder(null);
+      setOrder([]);
     }
   };
 
@@ -54,113 +66,55 @@ const DispenseDrugs = ({ navigation }) => {
         }}
       />
       {loading && <ActivityIndicator />}
-      {order && (
+      {order.length > 0 && (
         <>
-          <ScrollView style={styles.screen}>
-            <CardTitle text="Order id" subText={order._id} icon="cart" />
-            <CardTitle
-              text="Patient name"
-              subText={`${order.patient[0].firstName} ${order.patient[0].lastName} ${order.patient[0].surName}`}
-              icon="account"
-            />
-            <CardTitle
-              text="Patient CCC Number"
-              subText={order.patient[0].cccNumber}
-              icon="identifier"
-            />
-            <CardTitle
-              text="Patient Primary Clinic MFL"
-              subText={order.patient[0].primaryClinic}
-              icon="hospital"
-            />
-            <CardTitle
-              text={"Date Ordered"}
-              subText={moment(order.created).format("dddd Do MMMM yyy hh:mm")}
-              icon="clock"
-            />
-            <CardTitle
-              text={"Status"}
-              subText={getOrderStatus(order.deliveries)}
-              icon="progress-clock"
-            />
-            <CardTitle
-              text={"Dispensed"}
-              subText={order.isDispensed ? "Complete" : "Pending"}
-              icon="progress-clock"
-            />
-            <CardTitle text={"Drug ordered"} subText={order.drug} icon="pill" />
-
-            <CardTitle
-              text={"Phone number"}
-              subText={order.phoneNumber}
-              icon="phone"
-            />
-            <CardTitle
-              text={`${order.appointment.appointment_type} Appointment`}
-              subText={`${order.appointment.appointment_date}`}
-              icon="calendar"
-            />
-            <CardTitle
-              text={"Delivery Preference"}
-              subText={order.deliveryMethod.name}
-              icon="truck"
-            />
-            <CardTitle
-              text={"Adress"}
-              subText={`${order.deliveryAddress.address}(${order.deliveryAddress.latitude},${order.deliveryAddress.longitude})`}
-              icon="google-maps"
-            />
-
-            <CardTitle
-              text={"Delivere Through"}
-              subText={order.deliveryMode.name}
-              icon="bicycle"
-            />
-            <CardTitle
-              text={"Delivery time"}
-              subText={order.deliveryTimeSlot.label}
-              icon="timelapse"
-            />
-          </ScrollView>
-          <FAB
-            icon="check-all"
-            style={[styles.fab, { backgroundColor: colors.secondary }]}
-            color={colors.surface}
-            label="Dispense"
-            onPress={() => {
-              // navigation.navigate(routes.ORDERS_NAVIGATION, {
-              //   screen: routes.ORDERS_PROVIDOR_DISPENSE_DRUGS_FORM_SCREEN,
-              //   params: order,
-              // });
-              setDialogInfo({ ...dialogInfo, show: true, mode: "form" });
+          <Text variant="titleLarge" style={{ padding: 5 }}>
+            Pending Orders search Results
+          </Text>
+          <FlatList
+            data={order}
+            keyExtractor={({ _id }) => _id}
+            renderItem={({ item }) => {
+              const {
+                appointment: {
+                  appointment_type,
+                  next_appointment_date,
+                  createdAt,
+                },
+                patient: _patient,
+              } = item;
+              const patient = _patient[0];
+              return (
+                <List.Item
+                  style={[styles.listItem, { backgroundColor: colors.surface }]}
+                  onPress={() => {
+                    navigation.navigate(routes.ORDERS_NAVIGATION, {
+                      screen:
+                        routes.ORDERS_PROVIDOR_DISPENSE_DRUGS_DETAIL_SCREEN,
+                      params: item,
+                    });
+                  }}
+                  left={(props) => <List.Icon {...props} icon={"cart"} />}
+                  right={(props) => (
+                    <List.Icon {...props} icon={"chevron-right"} />
+                  )}
+                  title={`${moment(next_appointment_date).format(
+                    "Do ddd MMM yyyy"
+                  )}'s ${appointment_type} Appointment`}
+                  description={`${moment(createdAt).format(
+                    "Do ddd MMM yyyy"
+                  )} | ${patient.cccNumber}`}
+                />
+              );
             }}
           />
         </>
       )}
-      {!order && !loading && (
+      {order.length === 0 && !loading && (
         <Text variant="headlineLarge" style={{ alignSelf: "center" }}>
           No Order...
         </Text>
       )}
-      <Dialog
-        visible={dialogInfo.show}
-        swipable
-        onRequestClose={() => setDialogInfo({ ...dialogInfo, show: false })}
-      >
-        {dialogInfo.mode === "form" && (
-          <DispenseDrugForm
-            order={order}
-            onSubmit={(result) => setDialogInfo({ ...dialogInfo, ...result })}
-          />
-        )}
-        {(dialogInfo.mode === "success" || dialogInfo.mode === "error") && (
-          <AlertDialog
-            mode={dialogInfo.mode}
-            message={dialogInfo.message}
-            onButtonPress={() => setDialogInfo({ ...dialogInfo, show: false })}
-          />
-        )}
-      </Dialog>
     </View>
   );
 };
@@ -176,5 +130,8 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  listItem: {
+    marginBottom: 5,
   },
 });

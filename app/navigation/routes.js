@@ -77,6 +77,7 @@ export default Object.freeze({
   ORDERS_PROVIDOR_DELIVERY_DETAIL_SCREEN: "DeliveryDetail Screen",
   ORDERS_PROVIDOR_DELIVERY_TRUCK_SCREEN: "DeliveryTruck Screen",
   ORDERS_PROVIDOR_DISPENSE_DRUGS_SCREEN: "DispenseDrugs Screen",
+  ORDERS_PROVIDOR_DISPENSE_DRUGS_DETAIL_SCREEN: "DispenseDrugsDetail Screen",
 
   ORDERS_ORDER_FOR_ANOTHER_SCREEN: "OrderForAnother Screen",
   ORDERS_ORDER_FOR_ANOTHER_FORM_SCREEN: "OrderForAnotherForm Screen",

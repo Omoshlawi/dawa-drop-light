@@ -18,3 +18,4 @@ export { default as CareReceiverOrders } from "./CareReceiverOrders";
 export { default as CareReceiverOrderForm } from "./CareReceiverOrderForm";
 export { default as AppointmentDetail } from "./AppointmentDetail";
 export { default as UpcomingAppointments } from "./UpcomingAppointments";
+export { default as DispenseDetail } from "./DispenseDetail";

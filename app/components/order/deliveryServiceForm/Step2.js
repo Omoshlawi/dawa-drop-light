@@ -109,6 +109,19 @@ const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
           placeholder="Enter delivery address"
           label="Delivery address"
         /> */}
+        {values["deliveryType"] === "patient-preferred" && (
+          <List.Item
+            title="Using Patient Prefered delivery Information"
+            style={{ backgroundColor: colors.surface, marginVertical: 10 }}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={"radiobox-marked"}
+                color={colors.primary}
+              />
+            )}
+          />
+        )}
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous
         </Button>

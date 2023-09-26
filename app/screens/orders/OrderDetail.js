@@ -77,8 +77,15 @@ const OrderDetail = ({ navigation, route }) => {
           />
         )}
         <CardTitle
+          text={"Delivery Status"}
+          subText={order.feedBack.length > 0 ? "Delivered" : "Pending"}
+          icon="progress-check"
+        />
+        <CardTitle
           text={"Delivery Preference"}
-          subText={order.deliveryMethoD === "in-person" ? "In Person": "In Parcel"}
+          subText={
+            order.deliveryMethoD === "in-person" ? "In Person" : "In Parcel"
+          }
           icon="truck-fast"
         />
         {order.deliveryPerson && (

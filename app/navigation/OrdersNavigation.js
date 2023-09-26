@@ -22,6 +22,7 @@ import {
   ProvidorDeliveryRequests,
   MyDeliveries,
   UpcomingAppointments,
+  DispenseDetail,
 } from "../screens/orders";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
@@ -134,6 +135,11 @@ const OrdersNavigation = () => {
       <Screen
         name={routes.ORDERS_ORDER_FOR_ANOTHER_FORM_SCREEN}
         component={CareReceiverOrderForm}
+        options={{ title: "" }}
+      />
+      <Screen
+        name={routes.ORDERS_PROVIDOR_DISPENSE_DRUGS_DETAIL_SCREEN}
+        component={DispenseDetail}
         options={{ title: "" }}
       />
     </Navigator>

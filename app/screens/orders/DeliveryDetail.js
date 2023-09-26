@@ -123,7 +123,7 @@ const DeliveryDetail = ({ navigation, route }) => {
         )}
         <CardTitle
           text={"Delivery Status"}
-          subText={`${delivery.isDelivered ? "Delivered" : "Pending"}`}
+          subText={`${delivery.feedBack.length > 0 ? "Delivered" : "Pending"}`}
           icon="progress-clock"
         />
         {delivery.deliveryAddress && (

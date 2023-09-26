@@ -2,13 +2,29 @@ import * as Yup from "yup";
 
 const validateDeliveryForm = (event) => {
   const validationSchemer = Yup.object().shape({
-    member: Yup.string().label("Member").required(),
+    order: Yup.string().label("Order"),
+    event: Yup.string().label("Distribution Event"),
+    member: Yup.string()
+      .label("Member")
+      .when("order", ([value], schema) => {
+        if (!value) {
+          return schema.required();
+        }
+        return schema;
+      }),
     services: Yup.array().default([]).label("Extra services"),
     deliveryType: Yup.string()
       .label("Delivery type")
       .oneOf(["self", "courrier", "delegate"])
       .required()
       .when("member", ([value], schema) => {
+        if (!event)
+          return schema.oneOf([
+            "self",
+            "courrier",
+            "delegate",
+            "patient-preferred",
+          ]);
         const { feedBacks, patientSubscribers, deliveryRequests } = event;
         const feedBack = feedBacks.find(
           ({ user }) =>

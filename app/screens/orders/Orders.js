@@ -100,7 +100,7 @@ const Orders = ({ navigation, route }) => {
         onRefresh={handleFetch}
         keyExtractor={({ _id }) => _id}
         renderItem={({ item }) => {
-          const { _id, created, deliveryAddress } = item;
+          const { _id, created, deliveryAddress, feedBack } = item;
           return (
             <TouchableOpacity
               onPress={() =>
@@ -124,7 +124,9 @@ const Orders = ({ navigation, route }) => {
                 )}
                 subtitle={`${moment(created).format(
                   "Do dddd MMM YYYY hh:mm"
-                )} hrs`}
+                )} hrs | Status: ${
+                  feedBack.length > 0 ? "Delivered" : "Pending"
+                }`}
                 subtitleStyle={{ color: colors.disabled }}
               />
             </TouchableOpacity>
