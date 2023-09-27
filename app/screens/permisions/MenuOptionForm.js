@@ -33,7 +33,7 @@ const MenuOptionForm = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: "Menu Option Added Successfully!",
+    message: `Menu Option ${menuOption ? "Updated" : "Added"} Successfully!`,
     success: true,
   });
   const { colors } = useTheme();
@@ -41,6 +41,7 @@ const MenuOptionForm = ({ navigation, route }) => {
   const handleSubmit = async (values, { setErrors, errors }) => {
     const formData = new FormData();
     for (const key in values) {
+      console.log(values[key]);
       formData.append(
         key,
         key === "image" ? getFormFileFromUri(values[key]) : values[key]
@@ -55,7 +56,14 @@ const MenuOptionForm = ({ navigation, route }) => {
     }
     setLoading(false);
     if (response.ok) {
-      setDialogInfo({ ...dialogInfo, show: response.ok, success: response.ok });
+      setDialogInfo({
+        ...dialogInfo,
+        show: response.ok,
+        success: response.ok,
+        message: `Menu Option ${
+          menuOption ? "Updated" : "Added"
+        } Successfully!`,
+      });
     } else {
       if (response.status === 400) {
         setErrors({ ...errors, ...response.data.errors });
@@ -64,11 +72,9 @@ const MenuOptionForm = ({ navigation, route }) => {
           ...dialogInfo,
           show: true,
           success: false,
-          message: response.data.detail
-            ? response.data.detail
-            : "Unknow Error Occured",
+          message: response.data?.detail || "Unknow Error Occured",
         });
-        console.log(response.data);
+        console.log(response.problem);
       }
     }
   };
@@ -79,10 +85,12 @@ const MenuOptionForm = ({ navigation, route }) => {
           <Form
             initialValues={
               menuOption
-                ? pickX(
-                    { ...menuOption, image: getImageUrl(menuOption.image) },
-                    ["label", "description", "image", "link"]
-                  )
+                ? {
+                    label: menuOption.label,
+                    description: menuOption.description,
+                    image: getImageUrl(menuOption.image),
+                    link: menuOption.link,
+                  }
                 : {
                     label: "",
                     description: "",

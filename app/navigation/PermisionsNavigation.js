@@ -12,6 +12,8 @@ import {
   MenuOptionForm,
   UserRoles,
   UserRoleAssignmentForm,
+  SmsConfigs,
+  SmsConfigForm,
 } from "../screens/permisions";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -73,6 +75,16 @@ const PermisionsNavigation = () => {
       <Screen
         name={routes.PERMISIONS_USER_ROLES_ASSIGNMENT_SCREEN}
         component={UserRoleAssignmentForm}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name={routes.PERMISIONS_SMS_CONFIG_SCREEN}
+        component={SmsConfigs}
+        options={{ title: "Manage SMS template Configurations" }}
+      />
+      <Screen
+        name={routes.PERMISIONS_SMS_CONFIG_FORM_SCREEN}
+        component={SmsConfigForm}
         options={{ headerShown: false }}
       />
     </Navigator>

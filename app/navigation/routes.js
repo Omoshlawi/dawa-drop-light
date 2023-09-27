@@ -31,6 +31,9 @@ export default Object.freeze({
   PERMISIONS_MENU_OPTION_DETAIL_SCREEN: "MenuOptionDetail Screen",
   PERMISIONS_MENU_OPTION_FORM_SCREEN: "MenuOptionForm Screen",
 
+  PERMISIONS_SMS_CONFIG_FORM_SCREEN: "SMSConfigForm Screen",
+  PERMISIONS_SMS_CONFIG_SCREEN: "SMSConfig Screen",
+
   PERMISIONS_USER_ROLES_SCREEN: "UserRoles Screen",
   PERMISIONS_USER_ROLES_ASSIGNMENT_SCREEN: "UserRolesAssignment Screen",
 
@@ -50,7 +53,8 @@ export default Object.freeze({
   ART_DISTRIBUTION_EVENTS_FORM_SCREEN: "ARTDistributionEventForm Screen",
   ART_DISTRIBUTION_EVENTS_SCREEN: "ARTDistributionEvent Screen",
   ART_DISTRIBUTION_EVENTS_DETAIL_SCREEN: "ARTDistributonDetail Screen",
-  ART_DISTRIBUTION_EVENTS_SERVICE_FORM_SCREEN: "DistributionEventServiceForm Screen",
+  ART_DISTRIBUTION_EVENTS_SERVICE_FORM_SCREEN:
+    "DistributionEventServiceForm Screen",
 
   ORDERS_NAVIGATION: "Orders Nav",
   ORDERS_APPOINMENTS_SCREEN: "AppointmentsScreen",

@@ -81,6 +81,10 @@ const mapping = {
     route: routes.ART_NAVIGATION,
     screen: routes.ART_DISTRIBUTION_EVENTS_SCREEN,
   },
+  NotificationConfig: {
+    route: routes.PERMISIONS_NAVIGATION,
+    screen: routes.PERMISIONS_SMS_CONFIG_SCREEN,
+  },
 };
 
 export const get = (link) => {
