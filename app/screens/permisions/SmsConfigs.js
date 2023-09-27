@@ -1,14 +1,99 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useCallback, useState } from "react";
+import { useAuthorize } from "../../api";
+import { useFocusEffect } from "@react-navigation/native";
+import { SafeArea } from "../../components/layout";
+import { FlatList } from "react-native";
+import { Avatar, Card, FAB, List, useTheme } from "react-native-paper";
+import routes from "../../navigation/routes";
 
-const SmsConfigs = () => {
+const SmsConfigs = ({ navigation }) => {
+  const { getSmsConfigs } = useAuthorize();
+  const [smsConfigs, setSmsConfigs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { colors } = useTheme();
+  useFocusEffect(
+    useCallback(() => {
+      handleFetch();
+    }, [])
+  );
+
+  const handleFetch = async () => {
+    setLoading(true);
+    const pResponse = await getSmsConfigs();
+    setLoading(false);
+
+    if (pResponse.ok) {
+      setSmsConfigs(pResponse.data.results);
+    }
+  };
   return (
-    <View>
-      <Text>SmsConfigs</Text>
-    </View>
-  )
-}
+    <SafeArea>
+      <FlatList
+        refreshing={loading}
+        onRefresh={handleFetch}
+        data={smsConfigs}
+        keyExtractor={({ _id }) => _id}
+        renderItem={({ item }) => {
+          const { name, description } = item;
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(routes.PERMISIONS_NAVIGATION, {
+                  screen: routes.PERMISIONS_PRIVILEGE_DETAIL_SCREEN,
+                  params: item,
+                })
+              }
+            >
+              <Card.Title
+                style={[styles.listItem, { backgroundColor: colors.surface }]}
+                title={name}
+                titleVariant="headlineSmall"
+                subtitle={description}
+                subtitleVariant="bodyLarge"
+                subtitleNumberOfLines={3}
+                subtitleStyle={{ color: colors.disabled }}
+                left={(props) => (
+                  <Avatar.Icon {...props} icon="shield-lock-outline" />
+                )}
+                right={(props) => (
+                  <Avatar.Icon
+                    {...props}
+                    icon="chevron-right"
+                    color={colors.primary}
+                    style={{ backgroundColor: colors.surface }}
+                  />
+                )}
+              />
+            </TouchableOpacity>
+          );
+        }}
+      />
+      <FAB
+        icon="plus"
+        style={[styles.fab, { backgroundColor: colors.secondary }]}
+        onPress={() =>
+          navigation.navigate(routes.PERMISIONS_NAVIGATION, {
+            screen: routes.PERMISIONS_PRIVILEGE_FORM_SCREEN,
+          })
+        }
+        color={colors.surface}
+      />
+    </SafeArea>
+  );
+};
 
-export default SmsConfigs
+export default SmsConfigs;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  listItem: {
+    marginBottom: 5,
+    padding: 10,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+});
