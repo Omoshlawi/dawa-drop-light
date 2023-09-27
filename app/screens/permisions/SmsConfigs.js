@@ -40,7 +40,7 @@ const SmsConfigs = ({ navigation }) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate(routes.PERMISIONS_NAVIGATION, {
-                  screen: routes.PERMISIONS_PRIVILEGE_DETAIL_SCREEN,
+                  screen: routes.PERMISIONS_SMS_CONFIG_FORM_SCREEN,
                   params: item,
                 })
               }
@@ -74,7 +74,7 @@ const SmsConfigs = ({ navigation }) => {
         style={[styles.fab, { backgroundColor: colors.secondary }]}
         onPress={() =>
           navigation.navigate(routes.PERMISIONS_NAVIGATION, {
-            screen: routes.PERMISIONS_PRIVILEGE_FORM_SCREEN,
+            screen: routes.PERMISIONS_SMS_CONFIG_FORM_SCREEN,
           })
         }
         color={colors.surface}
