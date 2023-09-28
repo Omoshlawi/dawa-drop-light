@@ -32,6 +32,9 @@ const useOrder = () => {
   const addOrder = (data) => apiClient.post("orders", data);
   const updateOrder = (orderId, data) =>
     apiClient.put(`orders/${orderId}`, data);
+
+  const initiateDelivery = (data) =>
+    apiClient.post(`deliveries`, data);
   return {
     getDeliveryModes,
     updateDeliveryMode,
@@ -50,6 +53,7 @@ const useOrder = () => {
     addCourrierService,
     addOrder,
     updateOrder,
+    initiateDelivery
   };
 };
 

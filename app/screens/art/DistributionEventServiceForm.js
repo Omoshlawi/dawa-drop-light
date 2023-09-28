@@ -31,7 +31,8 @@ import {
 import { useEffect } from "react";
 
 const DistributionEventServiceForm = ({ navigation, route }) => {
-  const { initiateDelivery, updateDistributionEvent } = useART();
+  const {  updateDistributionEvent } = useART();
+  const {initiateDelivery} = useOrder()
   const { getCourrierServices } = useOrder();
   const [loading, setLoading] = useState(false);
   const [wizardState, setWizardState] = useState({ step: 1 });
@@ -68,7 +69,7 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
     if (delivery) {
       response = await updateDistributionEvent(delivery._id, values);
     } else {
-      response = await initiateDelivery(event._id, values);
+      response = await initiateDelivery(values);
     }
     setLoading(false);
     if (response.ok) {
