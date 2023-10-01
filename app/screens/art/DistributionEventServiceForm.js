@@ -31,17 +31,15 @@ import {
 import { useEffect } from "react";
 
 const DistributionEventServiceForm = ({ navigation, route }) => {
-  const {  updateDistributionEvent } = useART();
-  const {initiateDelivery} = useOrder()
+  const { updateDistributionEvent } = useART();
+  const { initiateDelivery } = useOrder();
   const { getCourrierServices } = useOrder();
   const [loading, setLoading] = useState(false);
   const [wizardState, setWizardState] = useState({ step: 1 });
   const { event, delivery, order } = route.params;
   const [dialogInfo, setDialogInfo] = useState({
     show: false,
-    message: `ART Distribution event ${
-      delivery ? "Updated" : "Added"
-    } Successfully!`,
+    message: `Delivery ${delivery ? "Updated" : "Added"} Successfully!`,
     mode: "success",
   });
   const [fetchingDependancies, setLoadFectDependancies] = useState(false);
@@ -73,7 +71,12 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
     }
     setLoading(false);
     if (response.ok) {
-      setDialogInfo({ ...dialogInfo, show: response.ok, mode: "success" });
+      setDialogInfo({
+        ...dialogInfo,
+        show: response.ok,
+        mode: "success",
+        message: `Delivery ${delivery ? "Updated" : "Added"} Successfully!`,
+      });
     } else {
       if (response.status === 400) {
         setErrors({ ...errors, ...response.data.errors });
@@ -152,8 +155,8 @@ const DistributionEventServiceForm = ({ navigation, route }) => {
                   message={dialogInfo.message}
                   onButtonPress={() => {
                     if (dialogInfo.mode === "success")
-                      navigation.navigate(routes.ART_NAVIGATION, {
-                        screen: routes.ART_DISTRIBUTION_EVENTS_SCREEN,
+                      navigation.navigate(routes.BTAB_NAVIGATION, {
+                        screen: routes.BTAB_ACTION_SCREEN,
                       });
                     else navigation.goBack();
                   }}

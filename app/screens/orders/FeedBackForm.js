@@ -56,9 +56,7 @@ const FeedBackForm = ({ navigation }) => {
           ...dialogInfo,
           show: true,
           mode: "error",
-          message: response.data.detail
-            ? response.data.detail
-            : "Unknow Error Occured",
+          message: response.data?.detail || "Unknow Error Occured",
         });
         console.log(response.data);
       }
@@ -100,9 +98,7 @@ const FeedBackForm = ({ navigation }) => {
           </Form>
         </View>
       </View>
-      <Dialog
-        visible={dialogInfo.show}
-      >
+      <Dialog visible={dialogInfo.show}>
         <AlertDialog
           message={dialogInfo.message}
           mode={dialogInfo.mode}

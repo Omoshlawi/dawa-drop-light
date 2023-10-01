@@ -189,7 +189,7 @@ const DeliveryDetail = ({ navigation, route }) => {
           icon={open ? "close" : "dots-vertical"}
           actions={[
             {
-              visible: true,
+              visible: false,
               icon: "cart",
               onPress: () =>
                 setDialogInfo({
@@ -201,7 +201,7 @@ const DeliveryDetail = ({ navigation, route }) => {
               color: colors.secondary,
             },
             {
-              visible: !delivery.isDelivered, //TODO make sure user is not patient too
+              visible: !delivery.isDelivered && false, //TODO make sure user is not patient too
               icon: "square-edit-outline",
               label: "Edit",
               onPress: () => {
@@ -213,7 +213,7 @@ const DeliveryDetail = ({ navigation, route }) => {
               },
             },
             {
-              visible: true,
+              visible: false,
               label: "Patient",
               icon: "account",
               onPress: () =>
