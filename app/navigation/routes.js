@@ -94,4 +94,7 @@ export default Object.freeze({
   TREATMENT_SURPORT_CARERECEIVER_FORM_SCREEN: "CareReceiverForm Screen",
   TREATMENT_SURPORT_DETAIL_SCREEN: "TreatmentSurportDetail Screen",
   TREATMENT_SURPORT_ACCEPT_INVITE_SCREEN: "AcceptInvitation Screen",
+
+  CHATS_NAVIGATION: "ChatsNav Screen",
+  CHATS_CONVERSATION_SCREEN: "ChatsDetailScreen Screen",
 });

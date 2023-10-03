@@ -8,6 +8,7 @@ import TreatmentSurportNavigation from "./TreatmentSurportNavigation";
 import PermisionsNavigation from "./PermisionsNavigation";
 import OrdersNavigation from "./OrdersNavigation";
 import ArtNavigation from "./ArtNavigation";
+import ChatsNavigation from "./ChatsNavigation";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -35,6 +36,7 @@ const MainStackNavigation = () => {
             name={routes.ORDERS_NAVIGATION}
             component={OrdersNavigation}
           />
+          <Screen name={routes.CHATS_NAVIGATION} component={ChatsNavigation} />
           <Screen name={routes.ART_NAVIGATION} component={ArtNavigation} />
         </>
       ) : (

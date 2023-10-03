@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1015023698810",
+    "project_id": "dawa-drop",
+    "storage_bucket": "dawa-drop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015023698810:android:03dd267a02d92448adccc3",
+        "android_client_info": {
+          "package_name": "com.omosh.dawadroplight"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7cZq0ferMMoYSfPfpWyWNVa-Zs8LYjpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

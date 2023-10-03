@@ -329,7 +329,12 @@ const DistributionEventDetail = ({ navigation, route }) => {
                 visible: true,
                 icon: "wechat",
                 label: "group chats",
-                onPress: () => {},
+                onPress: () => {
+                  navigation.navigate(routes.CHATS_NAVIGATION, {
+                    screen: routes.CHATS_CONVERSATION_SCREEN,
+                    params: { event },
+                  });
+                },
               },
               {
                 visible: user?._id === userId,
