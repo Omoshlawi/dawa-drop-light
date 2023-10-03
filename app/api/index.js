@@ -7,3 +7,4 @@ export { default as useOrder } from "./hooks/useOrder";
 export { default as useGeoService } from "./hooks/useGeoService";
 export { default as useSocket } from "./hooks/useSocket";
 export { default as useART } from "./hooks/useART";
+export { default as useChat } from "./hooks/useChat";
