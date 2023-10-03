@@ -4,6 +4,7 @@ import { FlatList } from "react-native";
 import { useChat, useUser } from "../../api";
 import ChatBuble from "../../components/ChatBuble";
 import { getImageUrl } from "../../utils/helpers";
+import ChatBottomForm from "../../components/ChatBottomForm";
 
 const ChatDetail = ({ navigation, route }) => {
   const { event } = route.params;
@@ -41,6 +42,7 @@ const ChatDetail = ({ navigation, route }) => {
           );
         }}
       />
+      <ChatBottomForm />
     </View>
   );
 };

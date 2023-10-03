@@ -7,7 +7,6 @@ import moment from "moment/moment";
 
 const ChatBubble = ({ message, createdAt, sender, isImage, isSender }) => {
   const { colors, roundness } = useTheme();
-
   return (
     <TouchableOpacity style={styles.container}>
       <View
@@ -16,14 +15,14 @@ const ChatBubble = ({ message, createdAt, sender, isImage, isSender }) => {
           {
             backgroundColor: isImage
               ? colors.surface
-              : isSender
-              ? colors.secondary
               : colors.primary,
             alignSelf: isSender ? "flex-end" : "flex-start",
           },
         ]}
       >
-        <Text variant="bodySmall">{sender}</Text>
+        <Text variant="bodySmall">
+          {sender}
+        </Text>
         {isImage ? (
           <Image
             source={{ uri: message }}
@@ -33,7 +32,10 @@ const ChatBubble = ({ message, createdAt, sender, isImage, isSender }) => {
         ) : (
           <Text style={styles.text}>{message}</Text>
         )}
-        <Text variant="labelSmall" style={{ textAlign: "right" }}>
+        <Text
+          variant="labelSmall"
+          style={{ textAlign: "right" }}
+        >
           {moment(createdAt).format("LT")}
         </Text>
       </View>

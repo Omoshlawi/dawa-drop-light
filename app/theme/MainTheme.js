@@ -21,7 +21,7 @@ const lightTheme = {
     onSurface: "#00353C",
     waningLight: "#FBF0DC",
     // onSurfaceVariant: "red",
-    surfaceVariant: "red",
+    // surfaceVariant: "red",
     backdrop: "#FFFFFFBF", //Uesd as background in modals, should have transparency to enable see what is in the back a little
   },
   roundness: 10,
@@ -39,7 +39,7 @@ const darkTheme = {
     disabled: "#666", // Mid-tone gray for disabled elements
     error: "#FF1616",
     outline: "#00353C",
-    secondary: "#E1EDED", // Light gray for secondary
+    secondary: "#00353C", // Light gray for secondary
     white: "#fff",
     surface: "#1E1E1E", // Darker surface color
     onSurface: "#E1EDED", // Light text on dark surface
