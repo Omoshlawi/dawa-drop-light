@@ -5,10 +5,25 @@ import { useEffect, useState } from "react";
 import { Home, Account, ActionsMenu } from "../screens/tab";
 import routes from "./routes";
 import { useTheme } from "react-native-paper";
+import { setUpNotificationHandler, usePushNortification } from "../../no"
+import { useAuthorize } from "../api";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 const BottomTabNavigation = () => {
   const { colors } = useTheme();
+  const { registerUserPushNotificationToken } = useAuthorize()
+  const { notification, subScribe, unsubScrible, sendPushNotification } =
+    usePushNortification();
+
+  useEffect(() => {
+    subScribe()
+      .then(registerUserPushNotificationToken)
+      .then(response => console.log(response.data))
+      .catch(error => console.error("Error:", error));
+
+    return unsubScrible;
+  }, []);
+
   return (
     <Navigator
       screenOptions={{

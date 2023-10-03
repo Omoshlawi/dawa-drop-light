@@ -9,7 +9,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { SettingsContextProvider } from "./app/context/SettingsContext";
 import ThemedNavigationContainer from "./app/navigation/ThemedNavigationContainer";
 import { Authentication } from "./app/components/localauth";
-import { usePushNortification, setUpNotificationHandler } from "./no";
 
 export default function App() {
   const [token, setToken, clearToken] = useSecureStore("jwtToken", null);
@@ -22,19 +21,17 @@ export default function App() {
     },
     theme: "light",
   });
-  const { notification, subScribe, unsubScrible, sendPushNotification } =
-    usePushNortification();
+
 
   const handleAppStateChange = (nextAppState) => {
     if (nextAppState === "active") {
       // App gains focus
       // Perform your login logic here
-      console.log("App is active, state is", appConf);
     } else if (nextAppState.match(/inactive|background/)) {
       // App goes to background or is closed
       // Perform any necessary cleanup or logout logic here
       if (appConf && appConf.privacy.enabled) {
-        console.log("App is in background or closed, state is", appConf);
+        // console.log("App is in background or closed, state is", appConf);
         setAppConf((prevAppConf) => ({
           ...prevAppConf,
           privacy: { ...prevAppConf.privacy, isAuthenticated: false },
@@ -43,10 +40,7 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    subScribe().then((toke) => console.log(toke));
-    return unsubScrible;
-  }, []);
+
   useEffect(() => {
     const subscription = AppState.addEventListener(
       "change",

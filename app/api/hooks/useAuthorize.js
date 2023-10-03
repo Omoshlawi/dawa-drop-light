@@ -3,6 +3,7 @@ import { addTokenInterceptor } from "../helpers";
 
 const useAuthorize = () => {
   addTokenInterceptor();
+  const registerUserPushNotificationToken = (data) => apiClient.post("auth/register-user-push-token", data)
   const getRoles = (params) => apiClient.get("auth/roles", params);
   const addRoles = (data) => apiClient.post("auth/roles", data);
   const addPrivilege = (data) => apiClient.post("auth/privileges", data);
@@ -43,7 +44,8 @@ const useAuthorize = () => {
     getUserAuthInfo,
     addSmsConfig,
     updateSmsConfig,
-    getSmsConfigs
+    getSmsConfigs,
+    registerUserPushNotificationToken
   };
 };
 
