@@ -2,12 +2,12 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { useChat, useUser } from "../../api";
-import { getImageUrl } from "../../utils/helpers";
+import { getFormFileFromUri, getImageUrl } from "../../utils/helpers";
 import { ChatBottomForm, ChatBuble } from "../../components/chat";
 
 const ChatDetail = ({ navigation, route }) => {
   const { event } = route.params;
-  const { getEventChats } = useChat();
+  const { getEventChats, addChat } = useChat();
   const [charts, setCharts] = useState([]);
   const { getUserId } = useUser();
   const userId = getUserId();
@@ -16,12 +16,30 @@ const ChatDetail = ({ navigation, route }) => {
     message: "",
   });
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const handleFetch = async () => {
     setLoading(true);
     const response = await getEventChats(event._id);
     setLoading(false);
     if (response.ok) {
       setCharts(response.data.results);
+    }
+  };
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    let formData;
+    if (formState.messageType === "image") {
+      formData = new FormData();
+      formData.append("messageType", formState.messageType);
+      formData.append("message", getFormFileFromUri(formState.message));
+    } else formData = formState;
+    const response = await addChat(event._id, formData);
+    setSubmitting(false);
+    if (response.ok) {
+      await handleFetch();
+      setFormState({ message: "", messageType: "text" });
+    } else {
+      console.log(response.data);
     }
   };
 
@@ -50,7 +68,12 @@ const ChatDetail = ({ navigation, route }) => {
           );
         }}
       />
-      <ChatBottomForm message={formState} onMessageChange={setFormState} />
+      <ChatBottomForm
+        message={formState}
+        onMessageChange={setFormState}
+        onSend={handleSubmit}
+        sending={submitting}
+      />
     </View>
   );
 };

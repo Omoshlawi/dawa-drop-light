@@ -6,7 +6,7 @@ import XImagePicker from "./XImagePicker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { screenWidth } from "../../utils/contants";
 
-const ChatBottomForm = ({ onMessageChange, message, onSend }) => {
+const ChatBottomForm = ({ onMessageChange, message, onSend, sending }) => {
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
@@ -88,6 +88,7 @@ const ChatBottomForm = ({ onMessageChange, message, onSend }) => {
         mode="contained"
         iconColor={"white"}
         containerColor={colors.primary}
+        disabled={!message || !message?.message || sending}
       />
     </View>
   );
