@@ -4,6 +4,7 @@ import { IconButton, useTheme } from "react-native-paper";
 import { TextInput } from "react-native-paper";
 import XImagePicker from "./XImagePicker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { screenWidth } from "../../utils/contants";
 
 const ChatBottomForm = ({ onMessageChange, message, onSend }) => {
   const { colors } = useTheme();
@@ -54,10 +55,29 @@ const ChatBottomForm = ({ onMessageChange, message, onSend }) => {
               <Image
                 source={{ uri: message.message }}
                 resizeMode="contain"
-                style={{ width: 200, height: 200, borderRadius: 12 }}
+                style={{
+                  width: screenWidth * 0.6,
+                  height: 200,
+                  borderRadius: 12,
+                  alignSelf: "center",
+                }}
               />
             ) : (
-              <MaterialCommunityIcons name="image-area" size={200} />
+              <View
+                style={{
+                  alignItems: "center",
+                  backgroundColor: colors.disabled,
+                  borderRadius: 12,
+                  paddingBottom: 10,
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="image-area"
+                  // color={colors.disabled}
+                  size={100}
+                />
+                <Text>Click Here to Pick an Image</Text>
+              </View>
             )}
           </XImagePicker>
         )}
@@ -78,7 +98,7 @@ export default ChatBottomForm;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    padding: 20,
+    padding: 10,
     alignItems: "flex-end",
   },
 });
