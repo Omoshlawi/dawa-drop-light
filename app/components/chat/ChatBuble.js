@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, StyleSheet } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
-import { screenWidth } from "../utils/contants";
+import { screenWidth } from "../../utils/contants";
 import moment from "moment/moment";
 
 const ChatBubble = ({ message, createdAt, sender, isImage, isSender }) => {
