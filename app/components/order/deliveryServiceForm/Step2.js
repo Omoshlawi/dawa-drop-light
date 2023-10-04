@@ -13,7 +13,8 @@ import { useFormikContext } from "formik";
 import DeliveryPersonDetails from "../form/DeliveryPersonDetails";
 const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
   const { colors, roundness } = useTheme();
-  const { values, validateForm, setFieldTouched } = useFormikContext();
+  const { values, validateForm, setFieldTouched, errors } = useFormikContext();
+  // console.log(errors);
   return (
     <View style={styles.container}>
       <View style={styles.img}>
@@ -99,10 +100,11 @@ const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
               <Text>Delivery Person details</Text>
               <DeliveryPersonDetails name="deliveryPerson" />
             </View>
-            <FormLocationPicker name="deliveryAddress" />
+            
           </>
         )}
 
+        
         {/* <VenueFormInput
           name="deliveryAddress"
           icon="google-maps"

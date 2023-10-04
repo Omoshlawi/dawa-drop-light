@@ -68,7 +68,39 @@ const validateDeliveryForm = (event) => {
       latitude: Yup.number().label("Latitude"),
       longitude: Yup.number().label("Longitude"),
       address: Yup.string().label("Address"),
-    }).label("Delivery address"),
+    })
+      .label("Delivery address")
+      .when("member", ([member], schema) => {
+        // If patient requested homedelivery either through?
+        // 1.EventFeedback delivery request
+        const {
+          feedBacks,
+          patientSubscribers,
+          deliveryRequests: eventBasedDeliveryRequest,
+        } = event || {};
+        const feedBack = (feedBacks || []).find(
+          ({ user }) =>
+            user === patientSubscribers.find(({ _id }) => _id === member)?.user
+        );
+        /*const eventDeliveryRequest = (eventBasedDeliveryRequest || []).find(
+          ({ _id }) => _id === feedBack?.deliveryRequest
+        );*/
+        const eventDeliveryRequest = feedBack?.confirmedAttendance === false;
+
+        // 2.Through fasttrack delivery request
+        const fastTrackDeliveryRequest = Boolean(event) === false; // If event is notprovided then there was fasttrack order
+
+        // Did user request home delivery
+        const userRequestedDelivery =
+          eventDeliveryRequest || fastTrackDeliveryRequest;
+
+        // yes Requested
+        if (userRequestedDelivery) {
+          return schema.nullable(); // Delivery location is optional
+        }
+        // No notprovided
+        return schema.required();
+      }),
   });
   return validationSchemer;
 };

@@ -9,7 +9,7 @@ import {
   RadioButton,
   HelperText,
 } from "react-native-paper";
-import { FormCheckBox } from "../../forms";
+import { FormCheckBox, FormLocationPicker } from "../../forms";
 
 const MemberFeedBack = ({ event }) => {
   const { values, setFieldValue, setFieldTouched, errors } = useFormikContext();
@@ -98,6 +98,7 @@ const MemberFeedBack = ({ event }) => {
           )}
         </>
       )}
+
       <View
         style={{
           padding: 10,
@@ -130,6 +131,9 @@ const MemberFeedBack = ({ event }) => {
           </HelperText>
         )}
       </View>
+      {!(!event || feedBack?.confirmedAttendance === false) && (
+        <FormLocationPicker name="deliveryAddress" />
+      )}
     </View>
   );
 };
