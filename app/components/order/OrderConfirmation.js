@@ -11,7 +11,7 @@ const OrderConfirmation = ({
   specific,
   appointment,
   event,
-  careReceivers,
+  careReceivers=[],
 }) => {
   const { values, handleSubmit } = useFormikContext();
   const service = courrierServices.find(
