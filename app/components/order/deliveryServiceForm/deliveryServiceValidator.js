@@ -15,7 +15,6 @@ const validateDeliveryForm = (event) => {
     services: Yup.array().default([]).label("Extra services"),
     deliveryType: Yup.string()
       .label("Delivery type")
-      .oneOf(["courrier"])
       .required()
       .when("member", ([value], schema) => {
         if (!event)
