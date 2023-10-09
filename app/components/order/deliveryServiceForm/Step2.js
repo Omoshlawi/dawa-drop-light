@@ -152,7 +152,7 @@ const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
           }}
           style={styles.btn}
         >
-          Submit
+          Confirm
         </Button>
       </View>
     </View>

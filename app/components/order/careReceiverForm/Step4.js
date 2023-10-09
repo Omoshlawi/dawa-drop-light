@@ -100,7 +100,7 @@ const Step4 = ({ onPrevious, modes, timeSlots, loading, onSubmit }) => {
             if (valid) onSubmit();
           }}
         >
-          Submit
+          Confirm
         </Button>
       </View>
     </View>

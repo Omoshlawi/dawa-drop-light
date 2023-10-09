@@ -75,7 +75,7 @@ const Step3 = ({ onNext, onPrevious, timeSlots, loading }) => {
           }}
           style={styles.btn}
         >
-          Submit
+          Confirm
         </Button>
       </View>
     </View>
