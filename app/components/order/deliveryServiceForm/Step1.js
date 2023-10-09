@@ -105,7 +105,7 @@ const Step1 = ({ event, onNext, order }) => {
 
             <Button
               onPress={async () => {
-                const fields = ["member", "deliveryType"];
+                const fields = ["member", "deliveryType", "deliveryAddress",];
                 const errors = await validateForm(values);
                 const invalidFields = Object.keys(errors);
                 let valid = true;

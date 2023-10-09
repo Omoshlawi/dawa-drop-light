@@ -83,13 +83,9 @@ const MyDeliveries = ({ navigation }) => {
               <Card.Title
                 style={{ backgroundColor: colors.surface }}
                 title={`${
-                  deliveryAddress.address
-                    ? deliveryAddress.address
-                    : "(" +
-                      deliveryAddress.latitude +
-                      ", " +
-                      deliveryAddress.longitude +
-                      ")"
+                  deliveryAddress.length > 0 
+                    ? deliveryAddress[0]
+                    : "Not specified"
                 }`}
                 subtitle={`Date: ${moment(created).format(
                   "ddd Do MMM yyy"

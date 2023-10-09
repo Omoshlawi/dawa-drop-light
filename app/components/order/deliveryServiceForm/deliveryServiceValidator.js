@@ -15,14 +15,12 @@ const validateDeliveryForm = (event) => {
     services: Yup.array().default([]).label("Extra services"),
     deliveryType: Yup.string()
       .label("Delivery type")
-      .oneOf(["self", "courrier", "delegate"])
+      .oneOf(["courrier"])
       .required()
       .when("member", ([value], schema) => {
         if (!event)
           return schema.oneOf([
-            "self",
             "courrier",
-            "delegate",
             "patient-preferred",
           ]);
         const { feedBacks, patientSubscribers, deliveryRequests } = event;
@@ -37,7 +35,6 @@ const validateDeliveryForm = (event) => {
           return schema.oneOf([
             "self",
             "courrier",
-            "delegate",
             "patient-preferred",
           ]);
         }
@@ -59,7 +56,7 @@ const validateDeliveryForm = (event) => {
     })
       .label("Delivery person")
       .when("deliveryType", ([value], schema) => {
-        const require = ["courrier", "delegate"].includes(value);
+        const require = ["courrier"].includes(value);
         if (require) return schema.required();
         return schema;
       })
@@ -93,11 +90,11 @@ const validateDeliveryForm = (event) => {
         // Did user request home delivery
         const userRequestedDelivery =
           eventDeliveryRequest || fastTrackDeliveryRequest;
-
         // yes Requested
         if (userRequestedDelivery) {
           return schema.nullable(); // Delivery location is optional
         }
+        console.log("rEQUESTED: ", userRequestedDelivery);
         // No notprovided
         return schema.required();
       }),

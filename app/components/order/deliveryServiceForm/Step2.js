@@ -87,7 +87,7 @@ const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
             />
           </>
         )}
-        {["courrier", "delegate"].includes(values["deliveryType"]) && (
+        {["courrier"].includes(values["deliveryType"]) && (
           <>
             <View
               style={{
@@ -133,7 +133,7 @@ const Step2 = ({ courrierServices, onNext, onPrevious, loading }) => {
           onPress={async () => {
             if (values["deliveryType"] === "patient-preferred") return onNext();
             const fields = [
-              "deliveryAddress",
+              
               "courrierService",
               "phoneNumber",
               "deliveryPerson",

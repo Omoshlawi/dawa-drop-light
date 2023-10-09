@@ -111,7 +111,12 @@ const SmsConfigForm = ({ navigation, route }) => {
               icon="tag-text"
               searchable
               label="Sms Template type"
-              data={[{ id: "EVENT_REMINDER", name: "Event Remider" }]}
+              data={[
+                { id: "EVENT_REMINDER", name: "Event Remider" },
+                { id: "DELIVERY_INITIATION", name: "Delivery Initiation" },
+                { id: "ORDER_SUCCESS", name: "Order successfull" },
+                { id: "DELIVERY_SUCCESS", name: "Deliver Sucesfull" },
+              ]}
               valueExtractor={(val) => val.id}
               labelExtractor={(val) => val.name}
               renderItem={({ item, selected }) => (

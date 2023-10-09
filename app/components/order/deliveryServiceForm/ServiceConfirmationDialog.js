@@ -60,7 +60,7 @@ const ServiceConfirmationDialog = ({
           left={(props) => <List.Icon icon="truck-fast" {...props} />}
         />
       )}
-      {["courrier", "delegate"].includes(values["deliveryType"]) && (
+      {["courrier"].includes(values["deliveryType"]) && (
         <>
           {values["deliveryAddress"] && (
             <>

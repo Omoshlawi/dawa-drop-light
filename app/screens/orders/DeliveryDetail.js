@@ -126,10 +126,10 @@ const DeliveryDetail = ({ navigation, route }) => {
           subText={`${delivery.feedBack.length > 0 ? "Delivered" : "Pending"}`}
           icon="progress-clock"
         />
-        {delivery.deliveryAddress && (
+        {delivery.deliveryAddress.length > 0 && (
           <CardTitle
             text={"Adress"}
-            subText={`${delivery.deliveryAddress.address}(${delivery.deliveryAddress.latitude},${delivery.deliveryAddress.longitude})`}
+            subText={`${delivery.deliveryAddress[0]}`}
             icon="google-maps"
           />
         )}

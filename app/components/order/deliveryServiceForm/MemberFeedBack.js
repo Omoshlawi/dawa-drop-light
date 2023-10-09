@@ -112,12 +112,11 @@ const MemberFeedBack = ({ event }) => {
           onValueChange={(value) => setFieldValue("deliveryType", value)}
           value={values["deliveryType"]}
         >
-          <RadioButton.Item label="Deliver yourself " value="self" />
+          {values["event"] && <RadioButton.Item label="Deliver yourself " value="self" />}
           <RadioButton.Item
             label="Deliver through Courrier service"
             value="courrier"
           />
-          <RadioButton.Item label="Deliver through Delegate" value="delegate" />
           {(!event || feedBack?.confirmedAttendance === false) && (
             <RadioButton.Item
               label="Deliver using patient preference"
