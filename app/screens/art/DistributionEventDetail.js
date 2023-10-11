@@ -25,6 +25,7 @@ const DistributionEventDetail = ({ navigation, route }) => {
     subscriptions,
     patientSubscribers,
     deliveries,
+    deliveryRequests,
   } = event;
   const user = _leadUser[0];
   const artModel = _artModel[0];
@@ -214,7 +215,12 @@ const DistributionEventDetail = ({ navigation, route }) => {
             {deliveries.map((delivery) => (
               <List.Item
                 key={delivery._id}
-                description={delivery.deliveryAddress.address}
+                description={
+                  delivery.deliveryAddress?.address ||
+                  deliveryRequests.find(
+                    (req) => req.patient === delivery.patient
+                  )?.deliveryAddress?.address || "Address not supplied"
+                }
                 style={[styles.listItem, { backgroundColor: colors.surface }]}
                 title={`${
                   patientSubscribers.find((fb) => fb._id === delivery.patient)
