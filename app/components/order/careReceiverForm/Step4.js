@@ -4,6 +4,7 @@ import { Button, List, Text, useTheme } from "react-native-paper";
 import { screenHeight } from "../../../utils/contants";
 import { FormField, FormItemPicker, FormLocationPicker } from "../../forms";
 import { useFormikContext } from "formik";
+import VenueFormInput from "../../VenueFormInput";
 
 /**
  * Delivery details and submitt
@@ -72,7 +73,13 @@ const Step4 = ({ onPrevious, modes, timeSlots, loading, onSubmit }) => {
             { borderRadius: roundness },
           ]}
         />
-        <FormLocationPicker name="deliveryAddress" />
+        {/* <FormLocationPicker name="deliveryAddress" /> */}
+        <VenueFormInput
+          name="deliveryAddress"
+          icon="google-maps"
+          placeholder="Enter delivery address"
+          label="Delivery address"
+        />
         <Button mode="contained" onPress={onPrevious} style={styles.navBtn}>
           Previous
         </Button>

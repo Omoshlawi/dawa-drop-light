@@ -10,6 +10,7 @@ import {
   HelperText,
 } from "react-native-paper";
 import { FormCheckBox, FormLocationPicker } from "../../forms";
+import VenueFormInput from "../../VenueFormInput";
 
 const MemberFeedBack = ({ event }) => {
   const { values, setFieldValue, setFieldTouched, errors } = useFormikContext();
@@ -131,7 +132,13 @@ const MemberFeedBack = ({ event }) => {
         )}
       </View>
       {!(!event || feedBack?.confirmedAttendance === false) && (
-        <FormLocationPicker name="deliveryAddress" />
+        // <FormLocationPicker name="deliveryAddress" />
+        <VenueFormInput
+          name="deliveryAddress"
+          icon="google-maps"
+          placeholder="Enter delivery address"
+          label="Delivery address"
+        />
       )}
     </View>
   );

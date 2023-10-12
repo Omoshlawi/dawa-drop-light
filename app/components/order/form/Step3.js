@@ -41,13 +41,13 @@ const Step3 = ({ onNext, onPrevious, timeSlots, loading }) => {
           label="Delivery Time"
         /> */}
 
-        <FormLocationPicker name="deliveryAddress" />
-        {/* <VenueFormInput
+        {/* <FormLocationPicker name="deliveryAddress" /> */}
+        <VenueFormInput
           name="deliveryAddress"
           icon="google-maps"
           placeholder="Enter delivery address"
           label="Delivery address"
-        /> */}
+        />
         <Button mode="contained" onPress={onPrevious} style={styles.btn}>
           Previous
         </Button>
